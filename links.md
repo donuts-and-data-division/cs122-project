@@ -1,8 +1,8 @@
-#Links to policy related content:
+##Links to policy related content:
 
 
 
 
 
-Links to technical documents:
-Google Place Search documentation https://developers.google.com/places/web-service/search
+## Links to technical documents:
+[Google Place Search documentation](https://developers.google.com/places/web-service/search)
