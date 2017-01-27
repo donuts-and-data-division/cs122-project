@@ -1,5 +1,4 @@
-# cs122-project
+# Snap map
 
 
 
-#Links
