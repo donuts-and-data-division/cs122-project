@@ -21,4 +21,8 @@
 ## Links to technical documents:
 [Google Place Search documentation](https://developers.google.com/places/web-service/search)
 
+[Google Maps API](https://developers.google.com/maps/documentation/javascript/importing_data#data)
+
 [Django Girls Deploy a website](https://tutorial.djangogirls.org/en/deploy/)
+
+
