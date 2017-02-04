@@ -25,6 +25,8 @@
 
 [Google Maps API](https://developers.google.com/maps/documentation/javascript/importing_data#data)
 
+[requests] (http://docs.python-requests.org/en/master/)
+
 [Django Girls Deploy a website](https://tutorial.djangogirls.org/en/deploy/)
 
 
