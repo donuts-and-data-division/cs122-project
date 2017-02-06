@@ -29,5 +29,3 @@
 
 [Django Girls Deploy a website](https://tutorial.djangogirls.org/en/deploy/)
 
-
-test
