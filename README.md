@@ -41,3 +41,4 @@ Selected U.S. City Average, All food items (155 total selected), Dec 2016 price,
 
 [Django Girls Deploy a website](https://tutorial.djangogirls.org/en/deploy/)
 
+[MarkDown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
