@@ -14,7 +14,7 @@ def get_markets(url, filename):
 
     market_list = []
 
-    for tag in tags[:39]:
+    for tag in tags[:42]:
         markets = tag.find_all("li")
 
         for market in markets:
