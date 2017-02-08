@@ -37,7 +37,15 @@ Selected U.S. City Average, All food items (155 total selected), Dec 2016 price,
 
 [Google Maps API](https://developers.google.com/maps/documentation/javascript/importing_data#data)
 
+[Google Autocomplete API for search field on website](https://developers.google.com/maps/documentation/javascript/places-autocomplete)
+
 [requests] (http://docs.python-requests.org/en/master/)
 
 [Django Girls Deploy a website](https://tutorial.djangogirls.org/en/deploy/)
+
+[MarkDown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+
+Django's [Geodjango tutorial](https://docs.djangoproject.com/en/1.11/ref/contrib/gis/tutorial/)
+
+Blog post on [geodjango with leaflet](http://blog.mathieu-leplatre.info/geodjango-maps-with-leaflet.html)
 
