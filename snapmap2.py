@@ -7,11 +7,11 @@ import requests
 from time import sleep
 
 
-def get_url(lat, lon, keyword, key):
+def get_url(lat, lon, keyword, radius, key):
 
     url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location\
 ={},{}&keyword={}&radius=300&key=AIzaSyCGt79JrG0sym4cyrs6YabCyy76zpnB828".\
-format(lat, lon, keyword, key)
+format(lat, lon, keyword, radius, key)
 
     return url
 
@@ -34,10 +34,7 @@ for i in range(len(IL[:100])):
     keyword = address.split()[0]
     lat = IL.loc[i]["Latitude"]
     lon = IL.loc[i]["Longitude"]
-    url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location\
-={},{}&keyword={}&radius=200&key={}".\
-format(lat, lon, keyword, key)
-    #url = get_url(lat, lon, keyword, key)
+    url = get_url(lat, lon, keyword, 200, key)
     print (url)
     r = requests.get(url)
     json = r.json()
@@ -51,7 +48,7 @@ format(lat, lon, keyword, key)
         name = IL.loc[i]["Store_Name"]
         keyword = name.split()[0]
         #keyword = "+".join(name.split())
-        url = get_url(lat, lon, keyword, key)
+        url = get_url(lat, lon, keyword, 300, key)
         print (url)
         r2 = requests.get(url)
         json = r2.json()
@@ -62,7 +59,7 @@ format(lat, lon, keyword, key)
         if json["results"] == []:
             print ("oh no again!")
             keyword = name.split()[1]
-            url = get_url(lat, lon, keyword, key)
+            url = get_url(lat, lon, keyword, 300, key)
             print(url)
             r3 = requests.get(url)
             json = r3.json()
