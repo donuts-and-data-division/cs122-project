@@ -60,10 +60,10 @@ def get_markets(url, filename):
     return f
 
 
-def get_url(name, city_state, key):
+def get_url(name, address, city_state, key):
 
     c_s = city_state.replace(',', '')
-    query_lst =  name.split() + c_s.split()
+    query_lst =  name.split() + c_s.split() + address.split()
     query = "+".join(query_lst)
 
     url = "https://maps.googleapis.com/maps/api/place/textsearch/xml?query={}&key={}".format(query, key)
