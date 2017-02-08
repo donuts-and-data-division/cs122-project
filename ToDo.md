@@ -21,12 +21,12 @@ categorize retailers when multiple types are returned
 determine foods available for each types
 design multipier algorithm (e.g. location/region, store type, google $$ etc)
 
-create updatable form => way for user to save grocery list.
-  * not doing this, may require user accounts
+
 
 ## Nice additions
 write script that automates price updating
 write script that checks for changes in SNAP list.
+create updatable form => way for user to save grocery list.
 
 ### Small things
 ~~Emma stops being Anne~~
