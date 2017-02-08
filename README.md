@@ -45,3 +45,7 @@ Selected U.S. City Average, All food items (155 total selected), Dec 2016 price,
 
 [MarkDown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
+Django's [Geodjango tutorial](https://docs.djangoproject.com/en/1.11/ref/contrib/gis/tutorial/)
+
+Blog post on [geodjango with leaflet](http://blog.mathieu-leplatre.info/geodjango-maps-with-leaflet.html)
+
