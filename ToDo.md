@@ -2,9 +2,12 @@
 
 # Big things (backend)
 ## Main map
-what to do with imperfect matches (no results, more than one result)
+finish matching all locations to google place IDs
+finish matching farmers market double value indicators to locations
+Question: What to do with imperfect matches (no results, more than one result)?
 
 set up geoquery capabilities -- how to enter info into form, get geocoded location and then query database to get view.
+Question: Suggestions on best way to do this?
 
 write script to map retailers to google place_id, longitude and latitude, price level, type
 write code to call google place API with place_id when querying (i.e. get hours information).
