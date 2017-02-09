@@ -4,6 +4,12 @@
 1) Snap Retailer Locations: https://www.fns.usda.gov/snap/retailerlocator
 Downloaded 1/10/2017
 
+2) Google Places API
+Through snapmap2.py, we connect the data downloaded from 1) to the appropriate place ID, location, address, and cost category. We do this through an inital Nearby Search using the given address, followed by Searches using the given retailer name. This information will later be used for Place Details requests that return information like formatted address and phone number.
+
+Note: Need to decide how to handle requests that return no results and requests that return more than one results. Currently, the first 100 retailers in Illinois return 8 "none" and 19 "more than one".  
+
+
 2) Food prices: https://data.bls.gov/cgi-bin/dsrv?ap
 Selected U.S. City Average, All food items (155 total selected), Dec 2016 price, filtered down to items with available pricing data
 
