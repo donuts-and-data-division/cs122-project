@@ -28,7 +28,8 @@ def get_markets(url, filename):
             market_tag = market.find_all("strong")
             market_name = market_tag[0].text
             address = re.findall("\d+.+?(?=\r)", market.text)[0]
-            city_state = re.findall('\\n(.*\,\s+[A-Z]{2})', market.text)[0]
+            city = re.findall('\\n(.*)\,\s+[A-Z]{2}', market.text)[0]
+            state = re.findall('\\n.*\,\s+([A-Z]{2})', market.text)[0]
 
             if len(re.findall("Double Value Coupons", market.text)) == 1:
                 double_value = True
@@ -39,12 +40,14 @@ def get_markets(url, filename):
             if len(re.findall("\(\d{3}\)\s\d{3}-\d{4}", market.text)) > 0:
                 phone = re.findall("\(\d{3}\)\s?\d{3}-\d{4}", market.text)[0]
 
-            market_list.append([market_name, address, city_state, zipcode, phone, double_value])
+            market_list.append([market_name, address, city, state, zipcode, phone, double_value])
+
 
     #number of markets should be 102
 
     final_list = []
-    header = ['market name', 'address', 'city/state', 'zipcode', 'phone', 'double value']
+    header = ['market name', 'address', 'city', 'state', 'zipcode', 'phone', 'double value']
+
     final_list.append(header)
 
     for row in market_list:
