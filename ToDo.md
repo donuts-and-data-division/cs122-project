@@ -31,3 +31,18 @@ create updatable form => way for user to save grocery list.
 ### Small things
 ~~Emma stops being Anne~~
 
+## Notes from check-in 2/8/17
+Farmer's market: Can turn street addresses to lat and long using google maps api
+Record linkage: How close name and addresses are, make an overall score
+
+Grocery list: 
+Field research about multipliers for store types
+Try it at one store and then do it at another store with our calculator
+
+Add crowdsourcing. 
+	If something is too far from our average, do sanity checks for outlier, or until two different users input the same price
+	If we see that there are systematic errors for a store (ex: 20% off), maybe need to recalibrate everything
+	Fuelbuddy for inspiration
+
+Geolocating - maybe just use haversine formula
+
