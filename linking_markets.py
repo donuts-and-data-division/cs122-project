@@ -10,11 +10,20 @@ def get_matches():
     pairs = initial_matches.block('City') 
 
     compare_df = rl.Compare(pairs, markets_df, snap_df)
-    compare_df.exact('City', 'City')
-    compare_df.string('Market Name', 'Store_Name', method='jarowinkler', threshold=0.85)
+    compare_df.exact('City', 'City', name='City')
+    compare_df.string('Market Name', 'Store_Name', method='jarowinkler', threshold=0.85, name='Name')
     compare_df.exact('State', 'State', name='State')
     compare_df.exact('Zipcode', 'Zip5', name='Zip')
-    #compare_df.string('Address', 'Address', method='jarowinkler', threshold=0.85)
+    compare_df.string('Address', 'Address', method='jarowinkler', threshold=0.85)
 
-    matches = compare_df.vectors[compare_df.vectors.sum(axis=1) > 3]
+    #matches = compare_df.vectors[compare_df.vectors.sum(axis=1) > 3]
+
+
+    matches = compare_df.vectors[compare_df.vectors.sum(axis=1) > 4]
+    print(matches)
     print(len(matches))
+
+    #matches.to_csv('matches.csv')
+
+    #print(matches)
+    #print(len(matches))
