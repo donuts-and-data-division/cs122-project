@@ -55,3 +55,4 @@ Django's [Geodjango tutorial](https://docs.djangoproject.com/en/1.11/ref/contrib
 
 Blog post on [geodjango with leaflet](http://blog.mathieu-leplatre.info/geodjango-maps-with-leaflet.html)
 
+Recordlinkage documentation (http://recordlinkage.readthedocs.io/en/latest/about.html)
