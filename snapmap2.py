@@ -15,8 +15,8 @@ def get_url(lat, lon, keyword, radius, key):
     return url
 
 
-def get_info():
-    IL_filename = "IL-100.csv"
+def get_info(num):
+    IL_filename = "store_locations_IL.csv"
     IL = pd.read_csv(IL_filename)
 
     developerKeys = ["AIzaSyCGt79JrG0sym4cyrs6YabCyy76zpnB828",\
@@ -24,14 +24,16 @@ def get_info():
     "AIzaSyBkWTxpnmygafi2mFETLRumyw0OlY_ftwM"]
     key = developerKeys[3]
 
-    ids = []
-    names = []
-    lats = []
-    lngs = []
-    costs = []
-    adds = []
+    ids = [0]*len(IL.index)
+    names= [0]*len(IL.index)
+    lats = [0]*len(IL.index)
+    lngs = [0]*len(IL.index)
+    costs = [0]*len(IL.index)
+    adds = [0]*len(IL.index)
+    multiple = [0]*len(IL.index)
+    how = [0]*len(IL.index)
 
-    for i in range(len(IL[:100])):
+    for i in range(len(IL[:num])):
         sleep(1)
         name = IL.loc[i]["Store_Name"]
         address = IL.loc[i]["Address"] 
@@ -43,11 +45,27 @@ def get_info():
         print (url)
         r = requests.get(url)
         json = r.json()
-        #print (json)
+        
+        multiple[i] = len(json["results"])
+        how[i] = 'address first word'
+
+       #  if len(json["results"]) > 1:
+         #   print ("more than one")
 
         if len(json["results"]) > 1:
-            sleep(1)
             print ("more than one")
+            sleep(1)
+            keyword0 = address.split()[0]
+            keyword1 = name.split()[0]
+            new_keyword = keyword0 + ' ' + keyword1
+            url = get_url(lat, lon, new_keyword, 200, key)
+            print(url)
+            r = requests.get(url)
+            json = r.json()
+
+            multiple[i] = len(json["results"])
+            how[i] = 'name first word and address first word'
+
 
         if json["results"] == []:
             sleep(1)
@@ -58,41 +76,64 @@ def get_info():
             r = requests.get(url)
             json = r.json()
 
+            multiple[i] = len(json["results"])
+            how[i] = 'name first word'
+            
             if len(json["results"]) > 1:
-                sleep(1)
                 print ("more than one")
-
-            if json["results"] == []:
                 sleep(1)
-                print ("oh no again!")
-                keyword = name.split()[1]
-                url = get_url(lat, lon, keyword, 300, key)
+                keyword0 = name.split()[0]
+                keyword1 = name.split()[1]
+                new_keyword = keyword0 + ' ' + keyword1
+                url = get_url(lat, lon, new_keyword, 200, key)
                 print(url)
                 r = requests.get(url)
                 json = r.json()
 
-                if json["results"] == []:
-                    print("NOOO")
-                    ids.append("None")
-                    names.append("None")
-                    lats.append("None")
-                    lngs.append("None")
-                    adds.append("None")
-                    costs.append("None")
-                    continue
+                multiple[i] = len(json["results"])
+                how[i] = 'name first word and second word'
+        
+        if json["results"] == []:
+            sleep(1)
+            print ("oh no again!")
+            keyword = name.split()[1]
+            url = get_url(lat, lon, keyword, 300, key)
+            print(url)
+            r = requests.get(url)
+            json = r.json()
+
+            multiple[i] = len(json["results"])
+            how[i] = 'name second word'
+
+            if len(json["results"]) > 1:
+                print ("more than one")
+
+                multiple[i] = len(json["results"])
+                how[i] = 'name second word, >1 results'
+          
+
+        if json["results"] == []:
+            print("NOOO")
+            ids[i]=None
+            names[i]=None
+            lats[i]=None
+            lngs[i]=None
+            adds[i]= None
+            costs[i] = None
+            continue
 
         #will be accurate if one results
-        ids.append(json["results"][0]["place_id"])
-        names.append(json["results"][0]["name"])
-        lats.append(json["results"][0]["geometry"]["location"]["lat"])
-        lngs.append(json["results"][0]["geometry"]["location"]["lng"])
-        adds.append(json["results"][0]["vicinity"])
+        ids[i] = json["results"][0]["place_id"]
+        names[i] = json["results"][0]["name"]
+        lats[i] = json["results"][0]["geometry"]["location"]["lat"]
+        lngs[i] = json["results"][0]["geometry"]["location"]["lng"]
+        adds[i] = json["results"][0]["vicinity"]
 
 
         if "price_level" in json["results"][0]:
-            costs.append(json["results"][0]["price_level"])
+            costs[i] = json["results"][0]["price_level"]
         else:
-            costs.append("None")
+            costs[i] = None
         #types.append(json["results"][0]["types"])
 
     #creates new column and fills each row 
@@ -102,6 +143,8 @@ def get_info():
     IL["googlelon"] = lngs
     IL["googleaddress"] = adds
     IL["cost"] = costs
+    IL['multiple'] = multiple
+    IL['how'] = how
 
     #IL["type"] = types
 
