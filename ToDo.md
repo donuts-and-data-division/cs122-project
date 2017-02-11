@@ -29,6 +29,7 @@ write script that checks for changes in SNAP list.
 create updatable form => way for user to save grocery list.
 
 ### Small things
+Organize repository
 ~~Emma stops being Anne~~
 
 ## Notes from check-in 2/8/17
