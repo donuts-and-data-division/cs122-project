@@ -153,6 +153,23 @@ def get_info(num):
 
 
 
+#make recordlinkage dataframe
+dict = {"place_id":[], "googlename": [], "googlelat": [], "googlelon":[], \
+"googleaddress": []}
+#better to run through results to get the keys? 
+#this should happen for each returned results in json  
+    dict["place_id"].append(json["results"][0]["place_id"])
+    dict["googlename"].append(json["results"][0]["name"])
+    dict["googlelat"].append(json["results"][0]["geometry"]["location"]["lat"])
+    dict["googlelon"].append(json["results"][0]["geometry"]["location"]["lng"])
+    dict["googleaddress"].append(json["results"][0]["vicinity"])
+    #dict["cost"].append(json["results"][0]["price_level"])
+
+#after running through urls
+df = pd.DataFrame(dict)
+#try to find matches
+
+
 """
 def get_text_search_url(query, key):
     query = "+".join(query.split())
@@ -160,11 +177,6 @@ def get_text_search_url(query, key):
     url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query={}&key={}".format(query,key)
     return url
 """
-
-
-
-
-
 
 
 """
