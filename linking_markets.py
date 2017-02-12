@@ -5,7 +5,7 @@ def get_matches(filename):
 
     #create dataframes
     markets_df = pd.read_csv('Farmers_Markets.csv') 
-    snap_df = pd.read_csv('store_locations_IL.csv') 
+    snap_df = pd.read_csv('store_locations_2017_01_10.csv') 
 
     snap_df['Double Value'] = False
 
@@ -50,6 +50,6 @@ def get_matches(filename):
 
             missing_markets.append(missing_market_dict)
 
-    final = snap_df.append(missing_markets)
+    final = snap_df.append(missing_markets, ignore_index=True)
     final.to_csv(filename)
 
