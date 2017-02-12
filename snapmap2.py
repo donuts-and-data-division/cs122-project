@@ -153,6 +153,23 @@ def get_info(num):
 
 
 
+#make recordlinkage dataframe
+dict = {"place_id":[], "googlename": [], "googlelat": [], "googlelon":[], \
+"googleaddress": []}
+
+for i in range(len(json["results"])):  
+    dict["place_id"].append(json["results"][i]["place_id"])
+    dict["googlename"].append(json["results"][i]["name"])
+    dict["googlelat"].append(json["results"][i]["geometry"]["location"]["lat"])
+    dict["googlelon"].append(json["results"][i]["geometry"]["location"]["lng"])
+    dict["googleaddress"].append(json["results"][i]["vicinity"])
+    #dict["cost"].append(json["results"][i]["price_level"])
+
+#after running through urls
+df = pd.DataFrame(dict)
+#try to find matches
+
+
 """
 def get_text_search_url(query, key):
     query = "+".join(query.split())
@@ -160,11 +177,6 @@ def get_text_search_url(query, key):
     url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query={}&key={}".format(query,key)
     return url
 """
-
-
-
-
-
 
 
 """
