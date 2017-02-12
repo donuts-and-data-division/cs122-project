@@ -3,6 +3,7 @@
 # Big things
 ## Main map
 write script to map retailers to google place_id, longitude and latitude, price level, type
+	take care of multiple place IDs
 finish matching farmers market double value indicators to locations
 Questions: 
 Should we use record linkage to match multiple outputs?
