@@ -21,7 +21,7 @@ def get_info(num):
 
     developerKeys = ["AIzaSyCGt79JrG0sym4cyrs6YabCyy76zpnB828",\
     "AIzaSyBUDrUeEyJyUNwQl1oVJCydSFPb5fCMQvw", "AIzaSyC9dbLTJ-aU2VL0r1Zhpzlxx99TrW-tpMM",\
-    "AIzaSyBkWTxpnmygafi2mFETLRumyw0OlY_ftwM"]
+    "AIzaSyBkWTxpnmygafi2mFETLRumyw0OlY_ftwM", "AIzaSyC-_IRZoDqHowcopoCBFvQFGG7wU9CNOPw"]
     key = developerKeys[3]
 
     ids = [0]*len(IL.index)
@@ -32,6 +32,9 @@ def get_info(num):
     adds = [0]*len(IL.index)
     multiple = [0]*len(IL.index)
     how = [0]*len(IL.index)
+
+   # If this is a farmer's market:
+   # search for market!
 
     for i in range(len(IL[:num])):
         sleep(1)
