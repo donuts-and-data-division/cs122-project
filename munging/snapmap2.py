@@ -18,13 +18,15 @@ def get_url(lat, lon, keyword, radius, key):
 
 
 def get_info(num):
-    IL_filename = "store_locations_IL.csv"
+    #IL_filename = "store_locations_IL.csv"
+    IL_filename = "Snap_With_Markets_sorted.csv"
     IL = pd.read_csv(IL_filename)
 
+    KEY_INDEX = 1
     developerKeys = ["AIzaSyCGt79JrG0sym4cyrs6YabCyy76zpnB828",\
     "AIzaSyBUDrUeEyJyUNwQl1oVJCydSFPb5fCMQvw", "AIzaSyC9dbLTJ-aU2VL0r1Zhpzlxx99TrW-tpMM",\
     "AIzaSyBkWTxpnmygafi2mFETLRumyw0OlY_ftwM", "AIzaSyC-_IRZoDqHowcopoCBFvQFGG7wU9CNOPw"]
-    key = developerKeys[3]
+    key = developerKeys[KEY_INDEX]
 
     ids = [0]*len(IL.index)
     names= [0]*len(IL.index)
@@ -39,19 +41,18 @@ def get_info(num):
 
     for i in range(len(IL[:num])):
         sleep(1)
+
         name = IL.loc[i]["Store_Name"]
         address = IL.loc[i]["Address"] 
         lat = IL.loc[i]["Latitude"]
         lon = IL.loc[i]["Longitude"]
 
         #specific search for Farmer's Market category
-        #if IL.loc[i]["Farmer's Market"] == True:
-            #keyword = "Market"
-            #see how many this works for and adjust? 
-        #else:    
-            #keyword = address.split()[0]
+        if IL.loc[i]["Farmers Market?"] == True:
+            keyword = "Market"
+        else:    
+            keyword = address.split()[0]
 
-        keyword = address.split()[0]
         url = get_url(lat, lon, keyword, 200, key)
         print (url)
         r = requests.get(url)
@@ -60,15 +61,23 @@ def get_info(num):
         multiple[i] = len(json["results"])
         how[i] = 'address first word'
 
+        if json["status"] == "OVER QUERY LIMIT":
+            KEY_INDEX += 1
+            key = developerKeys[KEY_INDEX]
+
+
        #  if len(json["results"]) > 1:
          #   print ("more than one")
 
         if len(json["results"]) > 1:
             print ("more than one")
             sleep(1)
-            keyword0 = address.split()[0]
-            keyword1 = name.split()[0]
-            new_keyword = keyword0 + ' ' + keyword1
+            if IL.loc[i]["Farmers Market?"] == True:
+                new_keyword = name.split()[0] + "Market" 
+            else: 
+                keyword0 = address.split()[0]
+                keyword1 = name.split()[0]
+                new_keyword = keyword0 + ' ' + keyword1
             url = get_url(lat, lon, new_keyword, 200, key)
             print(url)
             r = requests.get(url)
@@ -138,15 +147,22 @@ def get_info(num):
         #googfirstthree = json["results"][0]["vicinity"].split()[0] + "" + json["results"][0]["vicinity"].split()[1] \
         #+ "" + json["results"][0]["vicinity"].split()[2]
 
-        firstthree = address.split()[0] + address.split()[1] + address.split()[2]
-        googfirstthree = json["results"][0]["vicinity"].split()[0] + json["results"][0]["vicinity"].split()[1] \
-        + json["results"][0]["vicinity"].split()[2]
+        add1 = address.split()[0]
+        add2 = json["results"][0]["vicinity"].split()[0]
+
+        if len(address.split()) < 3 or len(json["results"][0]["vicinity"].split()) < 3:
+            add1 = address.split()[0] + address.split()[1] 
+            add2 = json["results"][0]["vicinity"].split()[0] + json["results"][0]["vicinity"].split()[1] 
         
-        if jellyfish.levenshtein_distance(firstthree.lower(), googfirstthree.lower()) > 0.5*len(firstthree):
+        if len(address.split()) > 3 and len(json["results"][0]["vicinity"].split()) >= 3: 
+            add1 = address.split()[0] + address.split()[1] + address.split()[2]
+            add2 = json["results"][0]["vicinity"].split()[0] + json["results"][0]["vicinity"].split()[1] + json["results"][0]["vicinity"].split()[2]
+        
+        if jellyfish.levenshtein_distance(add1.lower(), add2.lower()) > 0.5*len(add1):
             check[i] = "Double Check- Address mismatch"
 
 
-        #will be accurate if one results
+        #will be accurate if one result
         ids[i] = json["results"][0]["place_id"]
         names[i] = json["results"][0]["name"]
         lats[i] = json["results"][0]["geometry"]["location"]["lat"]
@@ -173,7 +189,7 @@ def get_info(num):
     #IL["type"] = types
 
     #return IL
-    IL.to_csv("snapresultstest2.csv")
+    IL.to_csv("snapresultstestmarket.csv")
 
 
 """
@@ -192,30 +208,6 @@ for i in range(len(json["results"])):
 #after running through urls
 possible_matches_df = pd.DataFrame(dict)
 #try to find matches
-
-
-def get_matches(filename):
-
-    #create dataframes
-    markets_df = pd.read_csv('Farmers_Markets.csv') 
-    snap_df = pd.read_csv('store_locations_2017_01_10.csv') 
-
-    snap_df['Double Value'] = False
-
-    #get pairs
-    initial_matches = rl.Pairs(markets_df, snap_df)
-    pairs = initial_matches.block('City') 
-
-    #compare
-    compare_df = rl.Compare(pairs, markets_df, snap_df)
-    compare_df.exact('City', 'City', name='City')
-    compare_df.string('Market Name', 'Store_Name', method='jarowinkler', threshold=0.85, name='Market Name')
-    compare_df.exact('State', 'State', name='State')
-    compare_df.exact('Zipcode', 'Zip5', name='Zip')
-    compare_df.string('Address', 'Address', method='jarowinkler', threshold=0.65, name="Address")
-
-    matches = compare_df.vectors[compare_df.vectors.sum(axis=1) > 4]
-
 
 
 
