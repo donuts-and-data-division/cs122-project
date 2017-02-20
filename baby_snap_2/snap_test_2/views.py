@@ -6,5 +6,6 @@ from .models import SnapLocations
 #    return render(request, 'snap_test_2/index.html',{})
 
 def index(request):
-    locations = SnapLocations.objects.all()
-    return render(request, "snap_test_2/index.html", {"qs_result":locations})
+    qs_results = SnapLocations.objects.all()
+    return render(request, "snap_test_2/index.html", 
+        {"qs_results":qs_results})

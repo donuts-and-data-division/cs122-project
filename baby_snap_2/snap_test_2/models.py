@@ -1,10 +1,11 @@
 from django.db import models
-from django.contrib.gis.db import models as gismodels
+#from django.contrib.gis.db import models as gismodels
+from djgeojson.fields import PointField
 
 # Create your models here.
-class SnapLocations(gismodels.Model):
+class SnapLocations(models.Model):
     googlename = models.CharField(max_length=100)
-    point = gismodels.PointField()
+    geom = PointField()
     googleaddress = models.CharField(max_length = 200)
     
 
