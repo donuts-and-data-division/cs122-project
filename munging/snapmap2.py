@@ -5,6 +5,8 @@ import json
 import pandas as pd
 import requests
 from time import sleep
+import recordlinkage as rl
+import jellyfish
 
 
 def get_url(lat, lon, keyword, radius, key):
@@ -32,9 +34,8 @@ def get_info(num):
     adds = [0]*len(IL.index)
     multiple = [0]*len(IL.index)
     how = [0]*len(IL.index)
+    check = [0]*len(IL.index)
 
-   # If this is a farmer's market:
-   # search for market!
 
     for i in range(len(IL[:num])):
         sleep(1)
@@ -42,6 +43,13 @@ def get_info(num):
         address = IL.loc[i]["Address"] 
         lat = IL.loc[i]["Latitude"]
         lon = IL.loc[i]["Longitude"]
+
+        #specific search for Farmer's Market category
+        #if IL.loc[i]["Farmer's Market"] == True:
+            #keyword = "Market"
+            #see how many this works for and adjust? 
+        #else:    
+            #keyword = address.split()[0]
 
         keyword = address.split()[0]
         url = get_url(lat, lon, keyword, 200, key)
@@ -67,7 +75,7 @@ def get_info(num):
             json = r.json()
 
             multiple[i] = len(json["results"])
-            how[i] = 'name first word and address first word'
+            how[i] = 'name 1 and address 1 (more than one first) '
 
 
         if json["results"] == []:
@@ -94,7 +102,7 @@ def get_info(num):
                 json = r.json()
 
                 multiple[i] = len(json["results"])
-                how[i] = 'name first word and second word'
+                how[i] = 'name 1 & 2 (none first)'
         
         if json["results"] == []:
             sleep(1)
@@ -125,13 +133,25 @@ def get_info(num):
             costs[i] = None
             continue
 
+        #check if googleaddress closely matches input address
+        #firstthree = address.split()[0] + "" + address.split()[1] + "" + address.split()[2]
+        #googfirstthree = json["results"][0]["vicinity"].split()[0] + "" + json["results"][0]["vicinity"].split()[1] \
+        #+ "" + json["results"][0]["vicinity"].split()[2]
+
+        firstthree = address.split()[0] + address.split()[1] + address.split()[2]
+        googfirstthree = json["results"][0]["vicinity"].split()[0] + json["results"][0]["vicinity"].split()[1] \
+        + json["results"][0]["vicinity"].split()[2]
+        
+        if jellyfish.levenshtein_distance(firstthree.lower(), googfirstthree.lower()) > 0.5*len(firstthree):
+            check[i] = "Double Check- Address mismatch"
+
+
         #will be accurate if one results
         ids[i] = json["results"][0]["place_id"]
         names[i] = json["results"][0]["name"]
         lats[i] = json["results"][0]["geometry"]["location"]["lat"]
         lngs[i] = json["results"][0]["geometry"]["location"]["lng"]
         adds[i] = json["results"][0]["vicinity"]
-
 
         if "price_level" in json["results"][0]:
             costs[i] = json["results"][0]["price_level"]
@@ -148,15 +168,16 @@ def get_info(num):
     IL["cost"] = costs
     IL['multiple'] = multiple
     IL['how'] = how
+    IL['check'] = check
 
     #IL["type"] = types
 
     #return IL
-    IL.to_csv("snapresults.csv")
+    IL.to_csv("snapresultstest2.csv")
 
 
-
-#make recordlinkage dataframe
+"""
+#make recordlinkage dataframe from more than one result
 dict = {"place_id":[], "googlename": [], "googlelat": [], "googlelon":[], \
 "googleaddress": []}
 
@@ -169,20 +190,45 @@ for i in range(len(json["results"])):
     #dict["cost"].append(json["results"][i]["price_level"])
 
 #after running through urls
-df = pd.DataFrame(dict)
+possible_matches_df = pd.DataFrame(dict)
 #try to find matches
 
 
+def get_matches(filename):
+
+    #create dataframes
+    markets_df = pd.read_csv('Farmers_Markets.csv') 
+    snap_df = pd.read_csv('store_locations_2017_01_10.csv') 
+
+    snap_df['Double Value'] = False
+
+    #get pairs
+    initial_matches = rl.Pairs(markets_df, snap_df)
+    pairs = initial_matches.block('City') 
+
+    #compare
+    compare_df = rl.Compare(pairs, markets_df, snap_df)
+    compare_df.exact('City', 'City', name='City')
+    compare_df.string('Market Name', 'Store_Name', method='jarowinkler', threshold=0.85, name='Market Name')
+    compare_df.exact('State', 'State', name='State')
+    compare_df.exact('Zipcode', 'Zip5', name='Zip')
+    compare_df.string('Address', 'Address', method='jarowinkler', threshold=0.65, name="Address")
+
+    matches = compare_df.vectors[compare_df.vectors.sum(axis=1) > 4]
+
+
+
+
+
+"""
 """
 def get_text_search_url(query, key):
     query = "+".join(query.split())
 
     url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query={}&key={}".format(query,key)
     return url
-"""
 
 
-"""
 service = build ('places', 'something', developerKey = developerKey[1])
 request = service. 
 response = request.execute()

@@ -48,6 +48,7 @@ def get_markets(filename):
     #manual edits
     df.loc[12, 1] = "825 18th St."
     df.loc[13, 1] = "6100 S. Blackstone Ave."
+    df.loc[13, 0] = "Experimental Station"
     df.loc[15, 1] = "W. Lake St. & N. Central Ave."
     df.loc[20, 1] = "W. Harrison St. & S. Central Ave."
     df.loc[56, 1] = "79th & South Shore Drive (corner)"
@@ -76,30 +77,11 @@ def get_markets(filename):
     lon_df = pd.DataFrame(lon_list)
 
     final_df = pd.concat([df, lat_df, lon_df], axis = 1)
-    final_df.columns = ['market name', 'address', 'city', 'state', 'zipcode', 'phone', 'double value', 'latitude', 'longitude']
+    final_df.columns = ['Market Name', 'Address', 'City', 'State', 'Zipcode', 'Phone', 'Double Value', 'Latitude', 'Longitude']
 
     final_df.to_csv(path_or_buf = filename)
-
     #number of markets should be 102
 
-    '''
-    final_list = []
-    header = ['market name', 'address', 'city', 'state', 'zipcode', 'phone', 'latitude', 'longitude', 'double value']
-
-    final_list.append(header)
-
-    for row in market_list:
-        final_list.append(row)
-
-    f = open(filename, 'wt')
-    writer = csv.writer(f)
-    for row in final_list:
-        writer.writerow(row)
-
-    f.close()
-
-    return f
-    '''
 
 def get_url(address, city, state):
 
