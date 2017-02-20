@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'snap_test',)
 
 MIDDLEWARE_CLASSES = (
@@ -51,7 +52,11 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'baby_snap.urls'
-
+"""
+TEMPLATE_DIRS = (
+    fillPath('templates'),
+)
+"""
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

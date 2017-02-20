@@ -41,30 +41,46 @@ def get_markets(filename):
             if len(re.findall("\(\d{3}\)\s\d{3}-\d{4}", market.text)) > 0:
                 phone = re.findall("\(\d{3}\)\s?\d{3}-\d{4}", market.text)[0]
 
-            url = get_url(address, city, state)
-            lat, lon = get_lat_lon(url)
+            market_list.append([market_name, address, city, state, zipcode, phone, double_value])
 
-            market_list.append([market_name, address, city, state, zipcode, phone, lat, lon, double_value])
+    df = pd.DataFrame(market_list)
+    
+    #manual edits
+    df.loc[12, 1] = "825 18th St."
+    df.loc[13, 1] = "6100 S. Blackstone Ave."
+    df.loc[13, 0] = "Experimental Station"
+    df.loc[15, 1] = "W. Lake St. & N. Central Ave."
+    df.loc[20, 1] = "W. Harrison St. & S. Central Ave."
+    df.loc[56, 1] = "79th & South Shore Drive (corner)"
+    df.loc[56, 2] = "Chicago"
+    df.loc[70, 1] = "University Place & Oak Avenue"
+    df.loc[75, 2] = "Benton"
+    df.loc[81, 1] = "11141 County Rd 300 E"
+    df.loc[83, 1] = "Corner of Cherry Lane & Meadow Rd."
 
+    #adding lat/lon
+    lat_list = []
+    lon_list = []
 
+    for row in df.values:
+        address = row[1]
+        city = row[2]
+        state = row[3]
+
+        url = get_url(address, city, state)
+        lat, lon = get_lat_lon(url)
+
+        lat_list.append(lat)
+        lon_list.append(lon)
+
+    lat_df = pd.DataFrame(lat_list)
+    lon_df = pd.DataFrame(lon_list)
+
+    final_df = pd.concat([df, lat_df, lon_df], axis = 1)
+    final_df.columns = ['Market Name', 'Address', 'City', 'State', 'Zipcode', 'Phone', 'Double Value', 'Latitude', 'Longitude']
+
+    final_df.to_csv(path_or_buf = filename)
     #number of markets should be 102
-
-    final_list = []
-    header = ['market name', 'address', 'city', 'state', 'zipcode', 'phone', 'latitude', 'longitude', 'double value']
-
-    final_list.append(header)
-
-    for row in market_list:
-        final_list.append(row)
-
-    f = open(filename, 'wt')
-    writer = csv.writer(f)
-    for row in final_list:
-        writer.writerow(row)
-
-    f.close()
-
-    return f
 
 
 def get_url(address, city, state):
