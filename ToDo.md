@@ -22,6 +22,7 @@ categorize retailers when multiple types are returned
 determine foods available for each types
 design multipier algorithm (e.g. location/region, store type, google $$ etc)
 
+adjust serving size (lb vs loaf)
 
 
 ## Nice additions
