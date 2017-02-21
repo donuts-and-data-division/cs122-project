@@ -24,7 +24,7 @@ def get_info(num):
     IL = df[df["City"] == "Chicago"]
     IL.reset_index(inplace = True)
 
-    KEY_INDEX = 0
+    KEY_INDEX = 1
     developerKeys = ["AIzaSyCGt79JrG0sym4cyrs6YabCyy76zpnB828",\
     "AIzaSyBUDrUeEyJyUNwQl1oVJCydSFPb5fCMQvw", "AIzaSyC9dbLTJ-aU2VL0r1Zhpzlxx99TrW-tpMM",\
     "AIzaSyBkWTxpnmygafi2mFETLRumyw0OlY_ftwM", "AIzaSyC-_IRZoDqHowcopoCBFvQFGG7wU9CNOPw"]
@@ -42,7 +42,7 @@ def get_info(num):
 
     types = [0]*len(IL.index)
     typeset = set()
-
+    completed = 0
 
     for i in range(len(IL[:num])):
         sleep(1)
@@ -114,11 +114,13 @@ def get_info(num):
             if len(json["results"]) > 1:
                 print ("more than one")
                 sleep(1)
-                #if len(name.split()) >= 2: 
-                keyword0 = name.split()[0]
-                keyword1 = name.split()[1]
-                new_keyword = keyword0 + ' ' + keyword1
-                url = get_url(lat, lon, new_keyword, 200, key)
+                if len(name.split()) >= 2:
+                    keyword0 = name.split()[0]
+                    keyword1 = name.split()[1]
+                    new_keyword = keyword0 + ' ' + keyword1
+                    url = get_url(lat, lon, new_keyword, 200, key)
+                else: 
+                    url = get_url(lat,loln, keyword, 200, key)
                 print(url)
                 r = requests.get(url)
                 json = r.json()
@@ -134,8 +136,11 @@ def get_info(num):
         if json["results"] == []:
             sleep(1)
             print ("oh no again!")
-            keyword = name.split()[1]
-            url = get_url(lat, lon, keyword, 300, key)
+            if len(name.split()) >= 2:
+                keyword = name.split()[1]
+                url = get_url(lat, lon, keyword, 300, key)
+            else: 
+                url = get_url(lat, lon, keyword, 400, key)
             print(url)
             r = requests.get(url)
             json = r.json()
@@ -203,6 +208,8 @@ def get_info(num):
             costs[i] = None
         
         typeset.add(tuple(json["results"][0]["types"]))
+        completed += 1
+        print (completed)
 
     #creates new column and fills each row 
     IL["place_id"] = ids
