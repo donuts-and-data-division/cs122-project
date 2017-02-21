@@ -2,15 +2,13 @@
 
 # Big things
 ## Main map
-Ari: Make "Search" Work + Research AJAX
+Ari: Make "Search" Work + Research AJAX -- write code to call google place API with place_id when querying (i.e. get hours information).
+
 Joan: Make autocomplete and html work
+
 Jazz: Continue wrangling with script to map retailers to google place_id, longitude and latitude, price level, type
 	take care of multiple place IDs
-set up geoquery capabilities -- how to enter info into form, get geocoded location and then query database to get view.
-Question: Suggestions on best way to do this? Do we need to use postgreSQL?
-
-write code to call google place API with place_id when querying (i.e. get hours information).
-design map / geoquety integration
+	
 desgin filters, write query logic for filtering
 
 
