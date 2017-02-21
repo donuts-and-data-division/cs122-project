@@ -14,6 +14,7 @@ desgin filters, write query logic for filtering
 
 ## Grocery list
 Emma: Research AJAX, conceptualize the grocery list 
+
 Jazz: categorize retailers when multiple types are returned
 
 determine foods available for each types
