@@ -7,6 +7,7 @@ import requests
 from time import sleep
 import recordlinkage as rl
 import jellyfish
+import backoff
 
 
 def get_url(lat, lon, keyword, radius, key):
@@ -16,6 +17,14 @@ def get_url(lat, lon, keyword, radius, key):
 
     return url
 
+@backoff.on_exception(backoff.expo, requests.exceptions.ConnectionError, max_tries=3)
+def get_place(lat, lon, keyword, radius, key):
+
+    url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location\
+={},{}&keyword={}&radius={}&key={}".format(lat, lon, keyword, radius, key)
+    print (url)
+    r = requests.get(url)
+    return r.json()
 
 def get_info(num):
     IL_filename = "Snap_With_Markets.csv"
@@ -24,10 +33,14 @@ def get_info(num):
     IL = df[df["City"] == "Chicago"]
     IL.reset_index(inplace = True)
 
-    KEY_INDEX = 1
+    KEY_INDEX = 0
     developerKeys = ["AIzaSyCGt79JrG0sym4cyrs6YabCyy76zpnB828",\
     "AIzaSyBUDrUeEyJyUNwQl1oVJCydSFPb5fCMQvw", "AIzaSyC9dbLTJ-aU2VL0r1Zhpzlxx99TrW-tpMM",\
-    "AIzaSyBkWTxpnmygafi2mFETLRumyw0OlY_ftwM", "AIzaSyC-_IRZoDqHowcopoCBFvQFGG7wU9CNOPw"]
+    "AIzaSyBkWTxpnmygafi2mFETLRumyw0OlY_ftwM", "AIzaSyC-_IRZoDqHowcopoCBFvQFGG7wU9CNOPw", \
+    "AIzaSyDJUsXYFdat1urw-QLkvbZu17gmEj45its", "AIzaSyDef0qoVNWFiIhSf2DIcI6s393w2ikTj2E", \
+    "AIzaSyBbj_MRDIQC-GiOLuttSbCyht4cG-CkSjU", "AIzaSyAHH7pVva_7a2Ue4kWVkIvJPoihOvGPdqY", \
+    "AIzaSyAHH7pVva_7a2Ue4kWVkIvJPoihOvGPdqY", "AIzaSyC7ukvijmGEqmfRIPZiNlFsXS436eXJs18", \
+    "AIzaSyCls1mcmSzQnNPbTjeYrLA8yyde4AsH0rU"]
     key = developerKeys[KEY_INDEX]
 
     ids = [0]*len(IL.index)
@@ -39,9 +52,10 @@ def get_info(num):
     multiple = [0]*len(IL.index)
     how = [0]*len(IL.index)
     check = [0]*len(IL.index)
-
+    category = [0]*len(IL.index)
     types = [0]*len(IL.index)
-    typeset = set()
+    
+    #typeset = set()
     completed = 0
 
     for i in range(len(IL[:num])):
@@ -58,10 +72,11 @@ def get_info(num):
         else:    
             keyword = address.split()[0]
 
-        url = get_url(lat, lon, keyword, 200, key)
-        print (url)
-        r = requests.get(url)
-        json = r.json()
+        #url = get_url(lat, lon, keyword, 200, key)
+        #print (url)
+        #r = requests.get(url)
+        #json = r.json()
+        json = get_place(lat, lon, keyword, 200, key)
         
         multiple[i] = len(json["results"])
         how[i] = 'address first word'
@@ -73,17 +88,19 @@ def get_info(num):
 
         if len(json["results"]) > 1:
             print ("more than one")
-            sleep(1)
+            sleep(1.25)
             if IL.loc[i]["Farmers Market?"] == True:
                 new_keyword = name.split()[0] + "Market" 
             else: 
                 keyword0 = address.split()[0]
                 keyword1 = name.split()[0]
                 new_keyword = keyword0 + ' ' + keyword1
-            url = get_url(lat, lon, new_keyword, 200, key)
-            print(url)
-            r = requests.get(url)
-            json = r.json()
+            #url = get_url(lat, lon, new_keyword, 200, key)
+            #print(url)
+            #r = requests.get(url)
+            #json = r.json()
+            json = get_place(lat, lon, new_keyword, 200, key)
+
 
             if json["status"] == "OVER_QUERY_LIMIT":
                 KEY_INDEX += 1
@@ -95,13 +112,15 @@ def get_info(num):
 
 
         if json["results"] == []:
-            sleep(1)
+            sleep(1.25)
             print ("oh no!") 
             keyword = name.split()[0]
-            url = get_url(lat, lon, keyword, 300, key)
-            print (url)
-            r = requests.get(url)
-            json = r.json()
+            #url = get_url(lat, lon, keyword, 300, key)
+            #print (url)
+            #r = requests.get(url)
+            #json = r.json()
+            json = get_place(lat, lon, keyword, 300, key)
+
 
             if json["status"] == "OVER_QUERY_LIMIT":
                 KEY_INDEX += 1
@@ -113,17 +132,21 @@ def get_info(num):
             
             if len(json["results"]) > 1:
                 print ("more than one")
-                sleep(1)
+                sleep(1.25)
                 if len(name.split()) >= 2:
                     keyword0 = name.split()[0]
                     keyword1 = name.split()[1]
                     new_keyword = keyword0 + ' ' + keyword1
-                    url = get_url(lat, lon, new_keyword, 200, key)
+                    #url = get_url(lat, lon, new_keyword, 200, key)
+                    json = get_place(lat, lon, new_keyword, 200, key)
+
                 else: 
-                    url = get_url(lat,loln, keyword, 200, key)
-                print(url)
-                r = requests.get(url)
-                json = r.json()
+                    #url = get_url(lat,loln, keyword, 200, key)
+                    json = get_place(lat, lon, keyword, 200, key)
+
+                #print(url)
+                #r = requests.get(url)
+                #json = r.json()
 
                 if json["status"] == "OVER_QUERY_LIMIT":
                     KEY_INDEX += 1
@@ -134,16 +157,20 @@ def get_info(num):
                 how[i] = 'name 1 & 2 (none first)'
         
         if json["results"] == []:
-            sleep(1)
+            sleep(1.25)
             print ("oh no again!")
             if len(name.split()) >= 2:
                 keyword = name.split()[1]
-                url = get_url(lat, lon, keyword, 300, key)
+                #url = get_url(lat, lon, keyword, 300, key)
+                json = get_place(lat, lon, keyword, 300, key)
+
             else: 
-                url = get_url(lat, lon, keyword, 400, key)
-            print(url)
-            r = requests.get(url)
-            json = r.json()
+                #url = get_url(lat, lon, keyword, 400, key)
+                json = get_place(lat, lon, keyword, 400, key)
+
+            #print(url)
+            #r = requests.get(url)
+            #json = r.json()
 
             if json["status"] == "OVER_QUERY_LIMIT":
                 KEY_INDEX += 1
@@ -200,14 +227,18 @@ def get_info(num):
         lats[i] = json["results"][0]["geometry"]["location"]["lat"]
         lngs[i] = json["results"][0]["geometry"]["location"]["lng"]
         adds[i] = json["results"][0]["vicinity"]
-        types[i] = categorize(json["results"][0]["types"])
+        category[i] = categorize(json["results"][0]["types"])
+        types[i] = json["results"][0]["types"]
+
+        if "restaurant" in json["results"][0]["types"]:
+            check[i] = "Double Check- invalid type"
 
         if "price_level" in json["results"][0]:
             costs[i] = json["results"][0]["price_level"]
         else:
             costs[i] = None
         
-        typeset.add(tuple(json["results"][0]["types"]))
+        #typeset.add(tuple(json["results"][0]["types"]))
         completed += 1
         print (completed)
 
@@ -232,7 +263,7 @@ def categorize(types_list):
         category = "gas station"
     #elif "liquor_store" in types_list and "convenience_store" in types_list:
         #category = "convenience store"
-    elif "convenience_store" in types_list:
+    elif "convenience_store" in types_list or "food" in types_list:
         category = "convenience store"
     elif "grocery_or_supermarket" in types_list and "convenience_store" not in types_list:
         category = "grocery"
