@@ -18,9 +18,11 @@ def get_url(lat, lon, keyword, radius, key):
 
 
 def get_info(num):
-    #IL_filename = "store_locations_IL.csv"
-    IL_filename = "Snap_With_Markets_sorted.csv"
-    IL = pd.read_csv(IL_filename)
+    IL_filename = "Snap_With_Markets.csv"
+    #IL = pd.read_csv(IL_filename)
+    df = pd.read_csv(IL_filename)
+    IL = df[df["City"] == "Chicago"]
+    IL.reset_index(inplace = True)
 
     KEY_INDEX = 1
     developerKeys = ["AIzaSyCGt79JrG0sym4cyrs6YabCyy76zpnB828",\
@@ -38,6 +40,9 @@ def get_info(num):
     how = [0]*len(IL.index)
     check = [0]*len(IL.index)
 
+    types = [0]*len(IL.index)
+    typeset = set()
+    completed = 0
 
     for i in range(len(IL[:num])):
         sleep(1)
@@ -61,13 +66,10 @@ def get_info(num):
         multiple[i] = len(json["results"])
         how[i] = 'address first word'
 
-        if json["status"] == "OVER QUERY LIMIT":
+        if json["status"] == "OVER_QUERY_LIMIT":
             KEY_INDEX += 1
             key = developerKeys[KEY_INDEX]
-
-
-       #  if len(json["results"]) > 1:
-         #   print ("more than one")
+            check[i] = "Changed Key"
 
         if len(json["results"]) > 1:
             print ("more than one")
@@ -83,6 +85,11 @@ def get_info(num):
             r = requests.get(url)
             json = r.json()
 
+            if json["status"] == "OVER_QUERY_LIMIT":
+                KEY_INDEX += 1
+                key = developerKeys[KEY_INDEX]
+                check[i] = "Changed Key"
+
             multiple[i] = len(json["results"])
             how[i] = 'name 1 and address 1 (more than one first) '
 
@@ -96,19 +103,32 @@ def get_info(num):
             r = requests.get(url)
             json = r.json()
 
+            if json["status"] == "OVER_QUERY_LIMIT":
+                KEY_INDEX += 1
+                key = developerKeys[KEY_INDEX]
+                check[i] = "Changed Key"
+
             multiple[i] = len(json["results"])
             how[i] = 'name first word'
             
             if len(json["results"]) > 1:
                 print ("more than one")
                 sleep(1)
-                keyword0 = name.split()[0]
-                keyword1 = name.split()[1]
-                new_keyword = keyword0 + ' ' + keyword1
-                url = get_url(lat, lon, new_keyword, 200, key)
+                if len(name.split()) >= 2:
+                    keyword0 = name.split()[0]
+                    keyword1 = name.split()[1]
+                    new_keyword = keyword0 + ' ' + keyword1
+                    url = get_url(lat, lon, new_keyword, 200, key)
+                else: 
+                    url = get_url(lat,loln, keyword, 200, key)
                 print(url)
                 r = requests.get(url)
                 json = r.json()
+
+                if json["status"] == "OVER_QUERY_LIMIT":
+                    KEY_INDEX += 1
+                    key = developerKeys[KEY_INDEX]
+                    check[i] = "Changed Key"
 
                 multiple[i] = len(json["results"])
                 how[i] = 'name 1 & 2 (none first)'
@@ -116,11 +136,19 @@ def get_info(num):
         if json["results"] == []:
             sleep(1)
             print ("oh no again!")
-            keyword = name.split()[1]
-            url = get_url(lat, lon, keyword, 300, key)
+            if len(name.split()) >= 2:
+                keyword = name.split()[1]
+                url = get_url(lat, lon, keyword, 300, key)
+            else: 
+                url = get_url(lat, lon, keyword, 400, key)
             print(url)
             r = requests.get(url)
             json = r.json()
+
+            if json["status"] == "OVER_QUERY_LIMIT":
+                KEY_INDEX += 1
+                key = developerKeys[KEY_INDEX]
+                check[i] = "Changed Key"
 
             multiple[i] = len(json["results"])
             how[i] = 'name second word'
@@ -150,16 +178,20 @@ def get_info(num):
         add1 = address.split()[0]
         add2 = json["results"][0]["vicinity"].split()[0]
 
-        if len(address.split()) < 3 or len(json["results"][0]["vicinity"].split()) < 3:
-            add1 = address.split()[0] + address.split()[1] 
-            add2 = json["results"][0]["vicinity"].split()[0] + json["results"][0]["vicinity"].split()[1] 
+        #if len(address.split()) < 3 or len(json["results"][0]["vicinity"].split()) < 3:
+            #add1 = address.split()[0] + address.split()[1] 
+            #add2 = json["results"][0]["vicinity"].split()[0] + json["results"][0]["vicinity"].split()[1] 
         
-        if len(address.split()) > 3 and len(json["results"][0]["vicinity"].split()) >= 3: 
-            add1 = address.split()[0] + address.split()[1] + address.split()[2]
-            add2 = json["results"][0]["vicinity"].split()[0] + json["results"][0]["vicinity"].split()[1] + json["results"][0]["vicinity"].split()[2]
+        #if len(address.split()) > 3 and len(json["results"][0]["vicinity"].split()) >= 3: 
+            #add1 = address.split()[0] + address.split()[1] + address.split()[2]
+            #add2 = json["results"][0]["vicinity"].split()[0] + json["results"][0]["vicinity"].split()[1] + json["results"][0]["vicinity"].split()[2]
         
         if jellyfish.levenshtein_distance(add1.lower(), add2.lower()) > 0.5*len(add1):
             check[i] = "Double Check- Address mismatch"
+
+        if multiple[i] > 5:
+            check[i] = "Double Check- Many results"
+
 
 
         #will be accurate if one result
@@ -168,12 +200,16 @@ def get_info(num):
         lats[i] = json["results"][0]["geometry"]["location"]["lat"]
         lngs[i] = json["results"][0]["geometry"]["location"]["lng"]
         adds[i] = json["results"][0]["vicinity"]
+        types[i] = categorize(json["results"][0]["types"])
 
         if "price_level" in json["results"][0]:
             costs[i] = json["results"][0]["price_level"]
         else:
             costs[i] = None
-        #types.append(json["results"][0]["types"])
+        
+        typeset.add(tuple(json["results"][0]["types"]))
+        completed += 1
+        print (completed)
 
     #creates new column and fills each row 
     IL["place_id"] = ids
@@ -185,11 +221,29 @@ def get_info(num):
     IL['multiple'] = multiple
     IL['how'] = how
     IL['check'] = check
+    IL["type"] = types
+    
+    #print(typeset)
+    IL.to_csv("snapresultstestChicago.csv")
 
-    #IL["type"] = types
 
-    #return IL
-    IL.to_csv("snapresultstestmarket.csv")
+def categorize(types_list):
+    if "gas_station" in types_list: 
+        category = "gas station"
+    #elif "liquor_store" in types_list and "convenience_store" in types_list:
+        #category = "convenience store"
+    elif "convenience_store" in types_list:
+        category = "convenience store"
+    elif "grocery_or_supermarket" in types_list and "convenience_store" not in types_list:
+        category = "grocery"
+    elif "bakery" in types_list or "cafe" in types_list:
+        category = "cafe or bakery"
+    else:
+        category = types_list
+
+    return category
+
+
 
 
 """
