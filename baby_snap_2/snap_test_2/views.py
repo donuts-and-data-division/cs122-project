@@ -13,6 +13,7 @@ def index(request):
     return render(request, "snap_test_2/index.html", 
         {"qs_results":qs_results})
 
+<<<<<<< HEAD
 def snapdata(request, key = "AIzaSyC-_IRZoDqHowcopoCBFvQFGG7wU9CNOPw"
 ):
     query = "Chicago, IL"
@@ -27,36 +28,11 @@ def snapdata(request, key = "AIzaSyC-_IRZoDqHowcopoCBFvQFGG7wU9CNOPw"
 
     return HttpResponse(qs_geojson, content_type='json')
 
-def gmap(request):
-    return render(request, "snap_test_2/gmap.html")
 
 def prettygmap(request):
     return render(request, "snap_test_2/prettygmap.html")
 
-
-"""### PROBABLY PUT IN DIFFERENT FILE
-import requests
-
-
-
-def get_geometry(query, key = KEY):
-    r = requests.get(make_url(query, key))
-    try:
-        return r.json()["results"][0]["geometry"]
-    except:        
-        if r.status_code != 200:
-            print("Error: failed request")
-        elif r.json()["status"] != "OK": 
-            print("Error: No such result")
-
-
-
-def make_url(query, key = KEY):
-    '''
-    Inputs: query (string)
-    Returns: url for text search 
-    '''
-    query = "+".join(query.split())
-    return "https://maps.googleapis.com/maps/api/place/textsearch/json?query={}&key={}".format(query,key)
-
-"""
+def gmap(request):
+    qs_results = SnapLocations.objects.all()
+    return render(request, "snap_test_2/gmap.html", 
+        {"qs_results":qs_results})
