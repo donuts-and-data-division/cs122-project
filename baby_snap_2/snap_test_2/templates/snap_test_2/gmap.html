@@ -268,11 +268,38 @@
         if (place.geometry) {
           map.panTo(place.geometry.location);
           map.setZoom(15);
-          search();
+          /* search();*/
+          query(); /*INSERT OUR FUNCTION*/
         } else {
           document.getElementById('autocomplete').placeholder = 'Enter a location';
         }
       }
+      
+      function query() {
+        var results = JSON.parse('{{ qs_geojson | escapejs }}');
+        clearResults();
+        clearMarkers();
+        for (var i = 0; i < results.length; i++) {
+          var markernumber = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
+          var markerIcon = MARKER_PATH + markernumber + '.png';
+          // Use marker animation to drop the icons incrementally on the map.
+          markers[i] = new google.maps.Marker({
+            position: results[i].geometry.location,
+            animation: google.maps.Animation.DROP,
+            icon: markerIcon
+          });
+          // If the user clicks a hotel marker, show the details of that hotel
+          // in an info window.
+          markers[i].placeResult = results[i];
+          google.maps.event.addListener(markers[i], 'click', showInfoWindow);
+          setTimeout(dropMarker(i), i * 100);
+          addResult(results[i], i);
+         }
+        }
+      
+      
+
+
 
       // Search for hotels in the selected city, within the viewport of the map.
       function search() {

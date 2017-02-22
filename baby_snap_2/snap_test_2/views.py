@@ -13,7 +13,6 @@ def index(request):
     return render(request, "snap_test_2/index.html", 
         {"qs_results":qs_results})
 
-<<<<<<< HEAD
 def snapdata(request, key = "AIzaSyC-_IRZoDqHowcopoCBFvQFGG7wU9CNOPw"
 ):
     query = "Chicago, IL"
@@ -26,8 +25,9 @@ def snapdata(request, key = "AIzaSyC-_IRZoDqHowcopoCBFvQFGG7wU9CNOPw"
     viewport = Polygon.from_bbox((sw_lon, sw_lat, ne_lon, ne_lat))
     qs_geojson = serialize('geojson',SnapLocations.objects.filter(geom__contained = viewport))
 
-    return HttpResponse(qs_geojson, content_type='json')
-
+    #return HttpResponse(qs_geojson, content_type='json')
+    return render(request, "snap_test_2/gmap.html", 
+        {"qs_geojson":qs_geojson})
 
 def prettygmap(request):
     return render(request, "snap_test_2/prettygmap.html")
