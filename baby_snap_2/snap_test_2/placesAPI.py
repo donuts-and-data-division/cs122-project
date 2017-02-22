@@ -2,7 +2,7 @@
 import requests
 
 # I'm guessing what we call the database
-from snap_test.models import SnapLocations
+from snap_test_2.models import SnapLocations
 KEY = "AIzaSyC-_IRZoDqHowcopoCBFvQFGG7wU9CNOPw"
 
 

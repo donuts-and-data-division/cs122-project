@@ -6,7 +6,10 @@ from . import views
 
 urlpatterns = [
     url(r'^data.geojson$', GeoJSONLayerView.as_view(model=SnapLocations), name='data'),
-    url(r'^$', views.index, name='index')
+    url(r'^$', views.index, name='index'),
+    url(r'^gmap$', views.gmap),
+    url(r'^prettygmap$', views.prettygmap),
+    url(r'^snapdata$', views.snapdata)
 ]
-
+    
 
