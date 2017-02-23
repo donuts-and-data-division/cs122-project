@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^gmap$', views.gmap),
     url(r'^prettygmap$', views.prettygmap),
+    url(r'^geojs$', views.geojs),
     url(r'^snapdata$', views.snapdata)
 ]
     
