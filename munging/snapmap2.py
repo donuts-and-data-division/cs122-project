@@ -77,13 +77,13 @@ def get_info(num):
         #r = requests.get(url)
         #json = r.json()
         json = get_place(lat, lon, keyword, 200, key)
-        
         multiple[i] = len(json["results"])
         how[i] = 'address first word'
 
         if json["status"] == "OVER_QUERY_LIMIT":
             KEY_INDEX += 1
             key = developerKeys[KEY_INDEX]
+            json = get_place(lat, lon, keyword, 200, key)
             check[i] = "Changed Key"
 
         if len(json["results"]) > 1:
@@ -105,6 +105,7 @@ def get_info(num):
             if json["status"] == "OVER_QUERY_LIMIT":
                 KEY_INDEX += 1
                 key = developerKeys[KEY_INDEX]
+                json = get_place(lat, lon, new_keyword, 200, key)
                 check[i] = "Changed Key"
 
             multiple[i] = len(json["results"])
@@ -125,6 +126,7 @@ def get_info(num):
             if json["status"] == "OVER_QUERY_LIMIT":
                 KEY_INDEX += 1
                 key = developerKeys[KEY_INDEX]
+                json = get_place(lat, lon, keyword, 300, key)
                 check[i] = "Changed Key"
 
             multiple[i] = len(json["results"])
@@ -253,6 +255,7 @@ def get_info(num):
     IL['how'] = how
     IL['check'] = check
     IL["type"] = types
+    IL["category"] = category
     
     #print(typeset)
     IL.to_csv("snapresultstestChicago.csv")
