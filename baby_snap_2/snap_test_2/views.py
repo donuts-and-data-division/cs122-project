@@ -26,7 +26,7 @@ def snapdata(request, key = "AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU"):
 
     return HttpResponse(qs_geojson, content_type='json')
     #return render(request, "snap_test_2/gmap.html", 
-     #  {"qs_geojson":qs_geojson})
+        #{"qs_geojson":qs_geojson})
 
 def prettygmap(request):
     return render(request, "snap_test_2/prettygmap.html")
@@ -47,5 +47,6 @@ def geojs(request, key = "AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU"):
     
 def gmap(request):
     qs_results = SnapLocations.objects.all()
+    qs_results = serialize('geojson', qs_results)
     return render(request, "snap_test_2/gmap.html", 
         {"qs_results":qs_results})
