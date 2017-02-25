@@ -19,10 +19,8 @@ with open(csv_file) as f:
     lon_index = ls[0].index('googlelon')
     googleaddress_index = ls[0].index('googleaddress')
     place_id_index = ls[0].index('place_id')
-    print(lat_index, lon_index)
 
     for line in ls[1:]:
-        print("ok",line)
         if line[place_id_index]:
             googlename = line[name_index]
             geom = Point(float(line[lon_index]), float(line[lat_index]))
