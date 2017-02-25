@@ -35,5 +35,14 @@ def prettygmap(request):
 def gmap(request):
     qs_results = SnapLocations.objects.all()
     qs_results = serialize('geojson', qs_results)
+    
     return render(request, "snap_test_2/gmap.html", 
         {"qs_results":qs_results})
+    
+
+
+def gmapdata(request):
+    qs_results = SnapLocations.objects.all()
+    qs_results = serialize('geojson', qs_results)
+    return HttpResponse(qs_results, content_type= 'json')
+    
