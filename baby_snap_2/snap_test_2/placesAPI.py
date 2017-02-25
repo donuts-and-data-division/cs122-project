@@ -9,6 +9,7 @@ KEY = "AIzaSyC-_IRZoDqHowcopoCBFvQFGG7wU9CNOPw"
 def get_geometry(query, key = KEY):
     r = requests.get(make_url(query, key))
     try:
+
         return r.json()["results"][0]["geometry"]
     except:        
         if r.status_code != 200:
