@@ -183,55 +183,85 @@
           map.panTo(place.geometry.location);
           map.setZoom(15);
           /*search();*/
-          id_search();
+          query2();
         } else {
           document.getElementById('autocomplete').placeholder = 'Enter a location';
         }
       }
       
-      function query() {
-        var results = JSON.parse('{{ qs_results | escapejs }}');
+      function query2() {
         clearResults();
         clearMarkers();
-        for (var i = 0; i < results.length; i++) {
+        var locations = JSON.parse('{{ qs_results | escapejs }}');
+        var ls = [];
+        /* loop through queryset to get place details for each place_id*/
+        for (var i = 0; i < locations.features.length; i++) {
+          
+          var place_id = locations.features[i].properties.place_id;
+          console.log(place_id)
+          places.getDetails({placeId: place_id}, function(results, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            ls[i] = results;
+            }
+          })
+        };
+        /* loop through ls to plot locations and present results*/
+        for (var i = 0; i < ls.length; i++) {
           var markernumber = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
           var markerIcon = MARKER_PATH + markernumber + '.png';
-          var latlng = new google.maps.LatLng(results[i].geometry.coordinates[1], results[i].geometry.coordinates[0]);
           // Use marker animation to drop the icons incrementally on the map.
           markers[i] = new google.maps.Marker({
-            position: latlng,
+            position: ls[i].geometry.location,
             animation: google.maps.Animation.DROP,
             icon: markerIcon
           });
           // If the user clicks a hotel marker, show the details of that hotel
           // in an info window.
-          markers[i].placeResult = results[i];
+          markers[i].placeResult = ls[i];
           google.maps.event.addListener(markers[i], 'click', showInfoWindow);
           setTimeout(dropMarker(i), i * 100);
-          addResult(results[i], i);
-         }
+          addResult(ls[i], i);
         }
-        
+      }    
+
+      function query() {
+        var locations = JSON.parse('{{ qs_results | escapejs }}');
+        clearResults();
+        clearMarkers();
+        for (var i = 0; i < locations.features.length; i++) {
+          var markernumber = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
+          var markerIcon = MARKER_PATH + markernumber + '.png';
+          var place_id = locations.features[i].properties.place_id;
+          console.log(place_id)
+          places.getDetails({placeId: place_id}, function(results, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+          
+            markers[i] = new google.maps.Marker({
+              position: results.geometry.location,
+              animation: google.maps.Animation.DROP,
+              icon: markerIcon
+            });
+            
+            markers[i].placeResult = results;
+            
+            google.maps.event.addListener(markers[i], 'click', showInfoWindow);
+            setTimeout(dropMarker(i), i * 100);
+            addResult(results, i);
+            }
+          });
+        }
+      }
+
       function id_search() {
       /* we will need to write a loop to do this below getDetails search for every placeID in queryset json (placeIDs are a result of the filters selected by user)*/
-        var locations = JSON.parse('{{ qs_results | escapejs }}');
         places.getDetails({ placeId: 'ChIJi56wdwC8D4gRLndKqR68Gms'}, function(results, status) {
           if (status === google.maps.places.PlacesServiceStatus.OK) {
             clearResults();
             clearMarkers();
             // Create a marker for each hotel found, and
             // assign a letter of the alphabetic to each marker icon.
-
-            for (var i = 0; i < locations.length; i++) {
-              var markernumber = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
-              var markerIcon = MARKER_PATH + markernumber + '.png';
-              // Use marker animation to drop the icons incrementally on the map.
-              markers[i] = new google.maps.Marker({
-                position: results[i].geometry.location,
-                animation: google.maps.Animation.DROP,
-                icon: markerIcon
-              });
-              
+            
+            // Use marker animation to drop the icons incrementally on the map.
             markers[0] = new google.maps.Marker({
               position: results.geometry.location,
               animation: google.maps.Animation.DROP,
@@ -395,5 +425,6 @@
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU&libraries=places&callback=initMap"
         async defer></script>
+
   </body>
 </html>
