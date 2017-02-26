@@ -93,13 +93,22 @@
   </head>
 
   <body>
-
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+            {{ message }}
+        </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
     <div id="findlocations">
       Find SNAP retailers near:
     </div>
 
     <div id="locationField">
-      <input id="autocomplete" placeholder="Enter a location" type="text" />
+      <input id="autocomplete" name = 'autocomplete' placeholder="Enter a location" type="text" />
     </div>
     
     <div id="map"></div>
@@ -149,6 +158,7 @@
 
       var map, places, infoWindow;
       var markers = [];
+      /*var ls = [];*/
       var autocomplete;
       var MARKER_PATH = 'https://developers.google.com/maps/documentation/javascript/images/marker_green';
       var hostnameRegexp = new RegExp('^https?://.+?/');
@@ -183,38 +193,47 @@
           map.panTo(place.geometry.location);
           map.setZoom(15);
           /*search();*/
-          query2();
+          query();
         } else {
           document.getElementById('autocomplete').placeholder = 'Enter a location';
         }
+      }
+
+      function callback(results, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            ls.push(results);
+            console.log(ls)
+          }
+          /*console.log(ls.length)*/
+      }
+
+      function clearList() {
+        ls = [];
       }
       
       function query2() {
         clearResults();
         clearMarkers();
+        clearList();
         var locations = JSON.parse('{{ qs_results | escapejs }}');
-        var ls = [];
         /* loop through queryset to get place details for each place_id*/
         for (var i = 0; i < locations.features.length; i++) {
-          
           var place_id = locations.features[i].properties.place_id;
-          console.log(place_id)
-          places.getDetails({placeId: place_id}, function(results, status) {
-          if (status === google.maps.places.PlacesServiceStatus.OK) {
-            ls[i] = results;
-            }
-          })
-        };
+          places.getDetails({placeId: place_id}, callback);
+        }
+        console.log(ls.length)
         /* loop through ls to plot locations and present results*/
         for (var i = 0; i < ls.length; i++) {
           var markernumber = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
           var markerIcon = MARKER_PATH + markernumber + '.png';
           // Use marker animation to drop the icons incrementally on the map.
+          console.log('hi2');
           markers[i] = new google.maps.Marker({
             position: ls[i].geometry.location,
             animation: google.maps.Animation.DROP,
             icon: markerIcon
           });
+          console.log(markers[i]);
           // If the user clicks a hotel marker, show the details of that hotel
           // in an info window.
           markers[i].placeResult = ls[i];
@@ -235,7 +254,6 @@
           console.log(place_id)
           places.getDetails({placeId: place_id}, function(results, status) {
           if (status === google.maps.places.PlacesServiceStatus.OK) {
-          
             markers[i] = new google.maps.Marker({
               position: results.geometry.location,
               animation: google.maps.Animation.DROP,
