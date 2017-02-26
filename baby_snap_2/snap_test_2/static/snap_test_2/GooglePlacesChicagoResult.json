@@ -1,0 +1,41 @@
+{
+   "html_attributions" : [],
+   "results" : [
+      {
+         "formatted_address" : "Chicago, IL, USA",
+         "geometry" : {
+            "location" : {
+               "lat" : 41.8781136,
+               "lng" : -87.6297982
+            },
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 42.023131,
+                  "lng" : -87.52404399999999
+               },
+               "southwest" : {
+                  "lat" : 41.6443349,
+                  "lng" : -87.9402669
+               }
+            }
+         },
+         "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/geocode-71.png",
+         "id" : "53eeb015d61056c54245a909c79862532fc953ad",
+         "name" : "Chicago",
+         "photos" : [
+            {
+               "height" : 2988,
+               "html_attributions" : [
+                  "\u003ca href=\"https://maps.google.com/maps/contrib/115775535991144365106/photos\"\u003eDonald Dowd\u003c/a\u003e"
+               ],
+               "photo_reference" : "CoQBdwAAAExLP2FVJk6yAQ9gj7Wna8m39EWSEettLwoIUqwcue0WIdM0VI6dy1nuDX-UF8ECDa-oOmAA_DEwXF1gFHyYfSzW_sG7XMA5QYf9iqACpVUEfaW3UXnJhkAHr0SDV3uNbXzbHRZ1_HdCAisftCs1g7QmbF-BjacIFW-PMEz1igC4EhChh-kElNmHWxyvKOlSfng7GhQVbhRnf6iPir4EnolucV_ckpyVlg",
+               "width" : 5312
+            }
+         ],
+         "place_id" : "ChIJ7cv00DwsDogRAMDACa2m4K8",
+         "reference" : "CmRbAAAAokiP_J_jvUdE4aahPHRugQVau5L5GbmCWnpnKmNaO2GKct5OkStci26tgMGv-Ylk9I8IC_OKeBcHEEM_HVBv8JZPV1ZjDk7ZHrFVyKKnm9C3N0gWB6RldnEb7sISjIauEhAmeV7BD4t1zsSxap_bdpZvGhRHRaLyOIUhVWBJoLa38zozHCerhg",
+         "types" : [ "locality", "political" ]
+      }
+   ],
+   "status" : "OK"
+}

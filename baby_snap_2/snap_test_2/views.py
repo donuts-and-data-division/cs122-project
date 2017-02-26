@@ -50,3 +50,20 @@ def gmap(request):
     qs_results = serialize('geojson', qs_results)
     return render(request, "snap_test_2/gmap.html", 
         {"qs_results":qs_results})
+
+
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic.edit import CreateView
+
+class SignUpView(CreateView):
+    template_name = 'snap_test_2/signup.html'
+    form_class = UserCreationForm
+
+from django.http import JsonResponse
+
+def validate_username(request):
+    username = request.GET.get('username', None)
+    data = {
+        'is_taken': User.objects.filter(username__iexact=username).exists()
+    }
+    return JsonResponse(data)
