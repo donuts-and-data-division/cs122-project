@@ -4,7 +4,7 @@ from .models import SnapLocations
 from django.core.serializers import serialize
 from . import placesAPI
 from django.contrib.gis.geos import Polygon
-
+from django.contrib import messages
 #def index(request):
 #    return render(request, 'snap_test_2/index.html',{})
 
@@ -48,8 +48,10 @@ def geojs(request, key = "AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU"):
 def gmap(request):
     qs_results = SnapLocations.objects.all()
     qs_results = serialize('geojson', qs_results)
+    
     return render(request, "snap_test_2/gmap.html", 
         {"qs_results":qs_results})
+
 
 
 from django.contrib.auth.forms import UserCreationForm
@@ -67,3 +69,25 @@ def validate_username(request):
         'is_taken': User.objects.filter(username__iexact=username).exists()
     }
     return JsonResponse(data)
+
+def gmapdata(request):
+    qs_results = SnapLocations.objects.all()
+    qs_results = serialize('geojson', qs_results)
+    return HttpResponse(qs_results, content_type= 'json')
+    
+def autocomplete_selection(request):
+    
+    if request.method == "POST":
+        location = request.POST.get('autocomplete')
+        messages.add_message(request, messages.INFO, 'Hello World')
+    else: 
+        location = ''
+    return render(request, "snap_test_2/gmap.html", {'location': location})
+
+def auto(request):
+    return render(request, 'snap_test_2/auto.html', {})
+    
+def capture_loc(request):
+    location = request.Get.get('location', None)
+
+    return JsonResponse(location)

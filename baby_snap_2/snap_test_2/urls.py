@@ -9,10 +9,13 @@ urlpatterns = [
     url(r'^data.geojson$', GeoJSONLayerView.as_view(model=SnapLocations), name='data'),
     url(r'^$', views.index, name='index'),
     url(r'^gmap$', views.gmap),
+    url(r'^gmapdata$', views.gmapdata),
     url(r'^prettygmap$', views.prettygmap),
     url(r'^geojs$', views.geojs),
     url(r'^snapdata$', views.snapdata),
     url(r'^signup/$', views.SignUpView.as_view(), name='signup'),
     url(r'^ajax/validate_username/$', views.validate_username, name='validate_username'),
+    url(r'^auto$', views.auto),
+    url(r'^/ajax/capture_loc/$', views.capture_loc)
 ]
 
