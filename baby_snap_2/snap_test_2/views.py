@@ -14,8 +14,26 @@ def index(request):
         {"qs_results":qs_results})
 
 def snapdata(request, key = "AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU"):
-    query = "Chicago, IL"
-    geometry = placesAPI.get_geometry(query, key)
+    #query = "Chicago, IL"
+    #geometry = placesAPI.get_geometry(query, key)
+
+    geometry =  {
+                            "location" : {
+                               "lat" : 41.8781136,
+                               "lng" : -87.6297982
+                            },
+                            "viewport" : {
+                               "northeast" : {
+                                  "lat" : 50.023131,
+                                  "lng" : -82.02404399999999
+                               },
+                               "southwest" : {
+                                  "lat" : 39.6443349,
+                                  "lng" : -98.9402669
+                               }
+                            }
+                        }
+
     sw_lat = geometry["viewport"]['southwest']['lat']
     sw_lon = geometry["viewport"]['southwest']['lng']
     ne_lat = geometry["viewport"]['northeast']['lat']
@@ -34,16 +52,17 @@ def prettygmap(request):
 def geojs(request, key = "AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU"):
     #query = "Peoria, IL"
     #geometry = placesAPI.get_geometry(query, key)
-    sw_lat = 40#geometry["viewport"]['southwest']['lat']
-    sw_lon = -88#geometry["viewport"]['southwest']['lng']
-    ne_lat = 42#geometry["viewport"]['northeast']['lat']
-    ne_lon = -86#geometry["viewport"]['northeast']['lng']
+
+    
+    sw_lat = geometry["viewport"]['southwest']['lat']
+    sw_lon = geometry["viewport"]['southwest']['lng']
+    ne_lat = geometry["viewport"]['northeast']['lat']
+    ne_lon = geometry["viewport"]['northeast']['lng']
 
     viewport = Polygon.from_bbox((sw_lon, sw_lat, ne_lon, ne_lat))
     qs_geojson = serialize('geojson',SnapLocations.objects.filter(geom__contained = viewport))
 
-    return render(request, "snap_test_2/geojson.html", 
-      {"qs_geojson":qs_geojson})
+    return render(request, "snap_test_2/geojson.html",  {"qs_geojson":qs_geojson})
     
 def gmap(request):
     qs_results = SnapLocations.objects.all()
@@ -90,3 +109,19 @@ def auto(request):
 def capture_loc(request):
     location = request.Get.get('location', None)
     return JsonResponse(location)
+
+
+"""
+def geoquery(request, key = "AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU"):
+    query = "Chicago, IL"
+    geometry = placesAPI.get_geometry(query, key)
+    sw_lat = geometry["viewport"]['southwest']['lat']
+    sw_lon = geometry["viewport"]['southwest']['lng']
+    ne_lat = geometry["viewport"]['northeast']['lat']
+    ne_lon = geometry["viewport"]['northeast']['lng']
+    viewport = Polygon.from_bbox((sw_lon, sw_lat, ne_lon, ne_lat))
+    snap_locations=SnapLocations.objects.filter(geom__contained = viewport))
+
+"""
+
+
