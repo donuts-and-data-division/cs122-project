@@ -22,24 +22,71 @@
   <body>
     <form action = '/search_retailers' method = "get" id="locationField">
       <label for = "search_retailers"> Enter location: </label>
-      <input id="autocomplete" type="text"></input>
-      <input type = "submit" value = "GO!">
+      <input id="autocomplete" name="autocomplete" type="text"></input>
+      <input type = "submit" id="addbutton" name="addbutton" value = "GO!">
     </form>
-    
+    <div id="results"></div>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&sensor=true"></script>
     <script>
       
 
-      var placeSearch, autocomplete;
-      
+    var placeSearch, autocomplete;
+    
+    $("#autocomplete").on('focus', function () {
+     geolocate();
+      });
 
-      var onLoaded = function() {
-        var location_input = document.getElementById('autocomplete');
-        var autocomplete = new google.maps.places.Autocomplete(location_input);
-        console.log(autocomplete);
-        }
-      
+
+    function initialize() {
+    // Create the autocomplete object
+       autocomplete = new google.maps.places.Autocomplete(
+        document.getElementById('autocomplete'));
+        // When the user selects an address from the dropdown,
+       // populate the address fields in the form.
+      google.maps.event.addListener(autocomplete, 'place_changed', function () {
+        var place = autocomplete.getPlace();
+        console.log("Works? ", place);
+      });
+      }
+
+      function geolocate() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            var geolocation = new google.maps.LatLng(
+            position.coords.latitude, position.coords.longitude);
+
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            document.getElementById("latitude").value = latitude;
+            document.getElementById("longitude").value = longitude;
+
+            autocomplete.setBounds(new google.maps.LatLngBounds(geolocation, geolocation));
+        });
+      }}
+
+    /*  
+    $('#addbutton').click(function () {
+      console.log( $('#id_food').val() );
+
+      var food_id = $('#id_food').val();
+    
+      $.ajax({
+        url: '/ajax/cash_register/',
+        data: {'location': autocomplete},
+        dataType: 'json',
+        success: function(data) {
+            alert("Hey");
+            }
+        });
+    });*/
+
+    initialize();
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU&libraries=places&callback=onLoaded"
-        async defer></script>
+
+    <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU&libraries=places&callback=onLoaded"
+        async defer></script> -->
   </body>
 </html>

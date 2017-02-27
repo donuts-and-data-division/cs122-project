@@ -6,6 +6,8 @@ from . import placesAPI
 from django.contrib.gis.geos import Polygon
 from django.contrib import messages
 from .forms import SearchNearby
+from django.http import JsonResponse
+
 #def index(request):
 #    return render(request, 'snap_test_2/index.html',{})
 
@@ -73,20 +75,17 @@ def gmap(request):
         {"qs_results":qs_results})
 
 
+def get_places(request):
+    geometry = request.GET.get('places', None)
+    sw_lat = geometry["viewport"]['southwest']['lat']
+    sw_lon = geometry["viewport"]['southwest']['lng']
+    ne_lat = geometry["viewport"]['northeast']['lat']
+    ne_lon = geometry["viewport"]['northeast']['lng']
+    viewport = Polygon.from_bbox((sw_lon, sw_lat, ne_lon, ne_lat))
+    snap_locations = SnapLocations.objects.filter(geom__contained = viewport)
 
-from django.contrib.auth.forms import UserCreationForm
-from django.views.generic.edit import CreateView
-
-class SignUpView(CreateView):
-    template_name = 'snap_test_2/signup.html'
-    form_class = UserCreationForm
-
-from django.http import JsonResponse
-
-def validate_username(request):
-    username = request.GET.get('username', None)
     data = {
-        'is_taken': User.objects.filter(username__iexact=username).exists()
+        'snap_locations': snap_locations
     }
     return JsonResponse(data)
 
@@ -109,22 +108,6 @@ def search_retailers(request):
     return render(request, 'snap_test_2/gmap2.html', {'qs_results': qs_results, 'location': location})
 
     
-def capture_loc(request):
-    location = request.Get.get('location', None)
-    return JsonResponse(location)
 
-
-"""
-def geoquery(request, key = "AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU"):
-    query = "Chicago, IL"
-    geometry = placesAPI.get_geometry(query, key)
-    sw_lat = geometry["viewport"]['southwest']['lat']
-    sw_lon = geometry["viewport"]['southwest']['lng']
-    ne_lat = geometry["viewport"]['northeast']['lat']
-    ne_lon = geometry["viewport"]['northeast']['lng']
-    viewport = Polygon.from_bbox((sw_lon, sw_lat, ne_lon, ne_lat))
-    snap_locations=SnapLocations.objects.filter(geom__contained = viewport))
-
-"""
 
 
