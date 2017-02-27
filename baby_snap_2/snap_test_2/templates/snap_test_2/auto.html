@@ -1,55 +1,44 @@
-<style>
-#locationField {
-position: absolute;
-width: 190px;
-height: 25px;
-left: 108px;
-top: 0px;
-z-index: 5;
-background-color: #fff;
-}
-#autocomplete {
-width: 100%;
-}
-</style>
 
-<div>
-    <div id="locationField">
-      <input id="autocomplete" name = 'autocomplete' placeholder="Enter a location" type="text" />
-    </div>
-</div>
+<!-- http://howcanisolve.com/33907/django-google-place-autocomplete-address-form -->
 
-<script>
-var autocomplete;
-/*function init_auto() {*/
-    autocomplete = new google.maps.places.Autocomplete(
-            /** @type {!HTMLInputElement} */ (
-                document.getElementById('autocomplete')) 
-            );
-    /*autocomplete.addListener('place_changed', onPlaceChanged);*/
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Place Autocomplete Address Form</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+  </head>
 
+  <body>
+    <form action = '/search_retailers' method = "get" id="locationField">
+      <label for = "search_retailers"> Enter location: </label>
+      <input id="autocomplete" type="text"></input>
+      <input type = "submit" value = "GO!">
+    </form>
+    
+    <script>
+      
 
-$("#autocomplete").change(function () {
-    var place = autocomplete.getPlace();
-    if (place.geometry) {
-        var location = place.geometry.location
-        $.ajax({
-            url: '/ajax/capture_loc/',
-            data: {
-                'location': location
-            },
-            dataType: 'json', 
-            success: function (data) {
-                alert('yay');
-            }
-        });
-    } else {
-      document.getElementById('autocomplete').placeholder = 'Enter a location';
-    }
-});
+      var placeSearch, autocomplete;
+      
 
-</script>
-
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU&libraries=places&callback=init_auto"
+      var onLoaded = function() {
+        var location_input = document.getElementById('autocomplete');
+        var autocomplete = new google.maps.places.Autocomplete(location_input);
+        }
+      
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU&libraries=places&callback=onLoaded"
         async defer></script>
+  </body>
+</html>

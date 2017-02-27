@@ -13,7 +13,7 @@ urlpatterns = [
     url(r'^geojs$', views.geojs),
     url(r'^snapdata$', views.snapdata),
     url(r'^auto$', views.auto),
-    url(r'^/ajax/capture_loc/$', views.capture_loc)
+    url(r'^search_retailers$', views.search_retailers),
 ]
     
 

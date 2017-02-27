@@ -5,6 +5,7 @@ from django.core.serializers import serialize
 from . import placesAPI
 from django.contrib.gis.geos import Polygon
 from django.contrib import messages
+from .forms import SearchNearby
 #def index(request):
 #    return render(request, 'snap_test_2/index.html',{})
 
@@ -56,20 +57,16 @@ def gmapdata(request):
     qs_results = SnapLocations.objects.all()
     qs_results = serialize('geojson', qs_results)
     return HttpResponse(qs_results, content_type= 'json')
-    
-def autocomplete_selection(request):
-    
-    if request.method == "POST":
-        location = request.POST.get('autocomplete')
-        messages.add_message(request, messages.INFO, 'Hello World')
-    else: 
-        location = ''
-    return render(request, "snap_test_2/gmap.html", {'location': location})
 
 def auto(request):
     return render(request, 'snap_test_2/auto.html', {})
-    
-def capture_loc(request):
-    location = request.Get.get('location', None)
 
-    return JsonResponse(location)
+def search_retailers(request):
+    if request.method == 'POST': # If the form has been submitted...
+        location = SearchNearby(request.POST) # A form bound to the POST data   
+    else:
+        location = SearchNearby()
+    # DO FILTERING HERE
+    qs_results = SnapLocations.objects.all()
+    qs_results = serialize('geojson', qs_results)
+    return render(request, 'snap_test_2/gmap2.html', {'qs_results': qs_results, 'location': location})
