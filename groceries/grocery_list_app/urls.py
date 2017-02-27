@@ -3,4 +3,5 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.submit_grocery_list, name='grocery_list'),
+    url(r'^ajax/cashregister/$', views.grocery_money)
 ]

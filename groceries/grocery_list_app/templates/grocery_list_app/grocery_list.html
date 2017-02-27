@@ -6,7 +6,24 @@
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+         <script>
+            $("#id_food_name").change(function () {
+              //var food_name = $(this).val();
+              console.log( $(this).val() );
+              /*$.ajax({
+                url: '/ajax/cashregister/',
+                data: {
+                  'food_name': food_name
+                },
+                dataType: 'json',
+                success: function (data) {
+                    alert("A user with this username already exists.");*/
+            });
+          </script> 
     </head>
+
+
     <body>
         <div class="page-header">
             <a href="{% url 'grocery_list' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
@@ -17,9 +34,12 @@
                 <div class="col-md-8">
                     {% block content %}
                         <h1>New post</h1>
-                        <form method="POST" class="grocery-form">{% csrf_token %}
+                        <form method="POST" class="grocery-form">
+                            {% csrf_token %}
                             {{ form.as_p }}
-                            <button type="submit" class="save btn btn-default">Save</button>
+                            <button type="submit" class="save btn btn-default">
+                                Save
+                            </button>
                         </form>
                     {% endblock %}
                 </div>

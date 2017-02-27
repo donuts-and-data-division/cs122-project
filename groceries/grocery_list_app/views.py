@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .forms import GroceryForm
-
+from django.http import JsonResponse
 # Create your views here.
 #def grocery_list(request):
 #    return render(request, 'grocery_list_app/grocery_list.html', {})
@@ -18,3 +18,14 @@ def submit_grocery_list(request):
     else:
         form = GroceryForm()
     return render(request, 'grocery_list_app/grocery_list.html', {'form': form})
+
+
+
+def grocery_money(request):
+    food_name = request.GET.get('food_name', None)
+    data = {
+            'food_price': FoodPrices.objects.filter(food_name=food_name)
+            #['food_price']
+        }
+
+    return JsonResponse(data)

@@ -16,6 +16,6 @@ urlpatterns = [
     url(r'^signup/$', views.SignUpView.as_view(), name='signup'),
     url(r'^ajax/validate_username/$', views.validate_username, name='validate_username'),
     url(r'^auto$', views.auto),
-    url(r'^/ajax/capture_loc/$', views.capture_loc)
+    url(r'^ajax/capture_loc/$', views.capture_loc)
 ]
 

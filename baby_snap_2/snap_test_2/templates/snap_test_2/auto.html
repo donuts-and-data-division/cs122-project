@@ -1,38 +1,43 @@
 <style>
-#locationField {
-position: absolute;
-width: 190px;
-height: 25px;
-left: 108px;
-top: 0px;
-z-index: 5;
-background-color: #fff;
-}
-#autocomplete {
-width: 100%;
-}
+    #locationField {
+    position: absolute;
+    width: 190px;
+    height: 25px;
+    left: 108px;
+    top: 0px;
+    z-index: 5;
+    background-color: #fff;
+    }
+    #autocomplete {
+    width: 100%;
+    }
 </style>
 
 <div>
     <div id="locationField">
-      <input id="autocomplete" name = 'autocomplete' placeholder="Enter a location" type="text" />
+      <input id="autocomplete" placeholder="Enter a location" type="text" />
     </div>
 </div>
 
-<script>
-var autocomplete;
-/*function init_auto() {*/
-    autocomplete = new google.maps.places.Autocomplete(
-            /** @type {!HTMLInputElement} */ (
-                document.getElementById('autocomplete')) 
-            );
-    /*autocomplete.addListener('place_changed', onPlaceChanged);*/
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU&libraries=places&callback=init_auto"
+        async defer></script>
 
+<script>
+var autocomplete, placeSearch;
+console.log("Starting")
+function init_auto() {
+    autocomplete = new google.maps.places.Autocomplete(
+                (document.getElementById('autocomplete')) 
+            );}
 
 $("#autocomplete").change(function () {
+    var place, location;
     var place = autocomplete.getPlace();
+
     if (place.geometry) {
-        var location = place.geometry.location
+        var location = place.geometry;
+        console.log(location);
         $.ajax({
             url: '/ajax/capture_loc/',
             data: {
@@ -49,7 +54,3 @@ $("#autocomplete").change(function () {
 });
 
 </script>
-
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU&libraries=places&callback=init_auto"
-        async defer></script>

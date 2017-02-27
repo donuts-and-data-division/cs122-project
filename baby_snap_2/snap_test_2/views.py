@@ -89,5 +89,4 @@ def auto(request):
     
 def capture_loc(request):
     location = request.Get.get('location', None)
-
     return JsonResponse(location)
