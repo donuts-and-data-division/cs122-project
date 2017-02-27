@@ -86,8 +86,7 @@ def search_retailers(request):
     else:
         location = SearchNearby()
     # DO FILTERING HERE
-    qs_results = SnapLocations.objects.all()
-    qs_results = serialize('geojson', qs_results)
+    qs_results = SnapLocations.objects.values_list('googlename',  flat=True)
     return render(request, 'snap_test_2/gmap2.html', {'qs_results': qs_results, 'location': location})
 
     

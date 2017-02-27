@@ -9,18 +9,21 @@
 </head> 
 <body>
   <div id="map" style="width: 500px; height: 400px;"></div>
-  console.log('hi')
+  
   <script type="text/javascript">
-    var qs_results = JSON.parse('{{ qs_results | escapejs }}');
     
     var locations = [
     {% for point in qs_results %}
-      {% if point.geom == None %}
+      
+      {% if point.place_id == None %}
+
       {% else %}
+        console.log(point)
         [{{ point.googlename }}, {{ point.googleaddress}}, {{ point.place_id }}, 1],
       {% endif %}
     {% endfor %}
     ];
+    
 /*
     var locations = [
       ['Bondi Beach', -33.890542, 151.274856, 4],
@@ -32,7 +35,7 @@
 */
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 10,
-      center: new google.maps.LatLng(41.8781, 87.6298),
+      center: new google.maps.LatLng(41.913154, -87.633311),
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
 
