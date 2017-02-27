@@ -1,33 +1,62 @@
 {% load staticfiles %}
 <html>
     <head>
-        <title>Django Girls blog</title>
+        <title>Create your list</title>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
         <link rel="stylesheet" href="{% static 'css/blog.css' %}">
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-         <script>
-            $("#id_food_name").change(function () {
-              //var food_name = $(this).val();
-              console.log( $(this).val() );
-              /*$.ajax({
-                url: '/ajax/cashregister/',
-                data: {
-                  'food_name': food_name
-                },
-                dataType: 'json',
-                success: function (data) {
-                    alert("A user with this username already exists.");*/
+      
+
+
+        <script>
+            $('#grocery-form').on('submit', function(event){
+            event.preventDefault();
+            console.log("form submitted!")  // sanity check
+            addListItem()
+        });
+
+            function addListItem() {
+                 var write = $('#newItem').val();
+                 var list = $('#itemList');
+                 var item = $('<span class="list">' + write + '</span><button class="delete">X</button></li>');
+                 var newItem = $("#newItem");
+                
+                list.append(item);
+                $(newItem).val('');
+            }
+
+
+            function deleteItem() {
+                $(this).parent().remove();
+            }
+
+
+            $(function() {
+                var add = $('#addItem');
+                var newItem = $('#newItem');
+                var list = $('#itemList');
+                
+                add.on('click', addListItem);
+                list.on('click', '.delete', deleteItem);
+                newItem.on('keypress', function (e) {
+                    if (e.which == 13) {
+                        addListItem();
+                    }
+                });
             });
-          </script> 
+
+        </script>
+
+
     </head>
 
 
     <body>
         <div class="page-header">
-            <a href="{% url 'grocery_list' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
-            <h1><a href="/">Django Girls Blog</a></h1>
+            <h1>Create your list</h1>
         </div>
         <div class="content container">
             <div class="row">
@@ -40,10 +69,48 @@
                             <button type="submit" class="save btn btn-default">
                                 Save
                             </button>
+
+                <div class="col-md-6">
+                    <div id="form">
+
+                        <form method="GET" class="grocery-form" id="newItem">
+
+                            {% csrf_token %}
+                            {{ form.as_p }}
+
+                            <button type="submit" class="save btn btn-default" id="addItem">+</button>
+
                         </form>
-                    {% endblock %}
+                    </div>
                 </div>
             </div>
+
+            <div id="bottom">
+            <div class="items">
+                <ul id="itemList">
+                </ul>
+            </div>
+            </div>    
+        
         </div>
+        
+        
+
     </body>
+   <script>
+            $("#id_food").change(function () {
+              //var food_name = $(this).val();
+              console.log( $(this).val() );
+              /*$.ajax({
+                url: '/ajax/cash_registersssssssssssssss',
+                data: {
+                  'food_name': food_name
+                },
+                dataType: 'json',
+                success: function (data) {
+                    alert("A user with this username already exists.");*/
+            });
+          </script> 
 </html>
+</div>
+</div>

@@ -1,0 +1,76 @@
+
+<form name ='nameform' class="grocery-form" method='POST'>
+
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <input type="submit" onclick='addFood(); return false' value="Add item">
+
+</form>
+
+<ul id='food_list'></ul>
+<p>Total = </p>
+
+
+    <ul>
+            <li>{{ data }}</li>
+
+    </ul>
+
+
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<script>
+
+//these resources were helpful in writing the following javascript:
+//https://www.youtube.com/watch?v=o6ueQBrcKrs
+//http://stackoverflow.com/questions/23504528/dynamically-remove-items-from-list-javascript
+
+var lastid = 0
+var list = document.getElementById('food_list');
+
+function addFood() {
+
+    //get the input value
+    var food_select = document.getElementById("id_food");
+    var food_text = food_select.options[food_select.selectedIndex].text;
+
+    //create new list item and add it to the list placed at the bottom of the html template
+    var li = document.createElement("li");
+    li.appendChild(document.createTextNode(food_text));
+    li.setAttribute('id', 'item'+lastid);
+
+    var button = document.createElement("button");
+    button.innerHTML = "Remove item";
+    button.setAttribute('onClick','removeFood("'+'item'+lastid+'")');
+    
+    li.appendChild(button);
+    lastid+=1
+    list.appendChild(li);
+}
+
+
+function removeFood(itemid){
+    var item = document.getElementById(itemid);
+    list.removeChild(item);
+}
+
+</script>
+<script>
+            $("#id_food").change(function () {
+              var food_id = $(this).val();
+              console.log( $(this).val() );
+              $.ajax({
+                url: '/ajax/cash_register/',
+                data: {
+                  'food_id': food_id
+                },
+                dataType: 'json',
+                success: function(data) {
+                    alert(data.food_price);
+            }
+        });
+        });
+</script> 
+
