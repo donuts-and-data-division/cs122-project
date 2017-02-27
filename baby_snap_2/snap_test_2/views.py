@@ -53,6 +53,24 @@ def gmap(request):
     return render(request, "snap_test_2/gmap.html", 
         {"qs_results":qs_results})
 
+
+
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic.edit import CreateView
+
+class SignUpView(CreateView):
+    template_name = 'snap_test_2/signup.html'
+    form_class = UserCreationForm
+
+from django.http import JsonResponse
+
+def validate_username(request):
+    username = request.GET.get('username', None)
+    data = {
+        'is_taken': User.objects.filter(username__iexact=username).exists()
+    }
+    return JsonResponse(data)
+
 def gmapdata(request):
     qs_results = SnapLocations.objects.all()
     qs_results = serialize('geojson', qs_results)
@@ -60,6 +78,7 @@ def gmapdata(request):
 
 def auto(request):
     return render(request, 'snap_test_2/auto.html', {})
+
 
 def search_retailers(request):
     if request.method == 'POST': # If the form has been submitted...
@@ -70,3 +89,8 @@ def search_retailers(request):
     qs_results = SnapLocations.objects.all()
     qs_results = serialize('geojson', qs_results)
     return render(request, 'snap_test_2/gmap2.html', {'qs_results': qs_results, 'location': location})
+
+    
+def capture_loc(request):
+    location = request.Get.get('location', None)
+    return JsonResponse(location)

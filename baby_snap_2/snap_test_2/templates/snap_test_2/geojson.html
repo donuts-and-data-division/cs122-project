@@ -21,7 +21,22 @@
         background-color: #fff;
         font-family: Roboto;
       }
-       #autocomplete {
+      /*#autocomplete {
+        width: 100%;
+      }
+      */
+      #buttonField {
+        margin: 10px 10px 0 0;
+        position: absolute;
+        width: 250px;
+        height: 25px;
+        left: 388px;
+        top: 0px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+        font-family: Roboto;
+      }
+      #ajaxButton {
         width: 100%;
       }
       /* Optional: Makes the sample page fill the window. */
@@ -38,6 +53,38 @@
     <div id="locationField">
       <input id="autocomplete" placeholder="Enter a location" type="text" />
     </div>
+    <div id="buttonField"> 
+      <span id="ajaxButton" style="cursor: pointer; text-decoration: underline">
+    Make a request
+    </span></div>
+    <script type="text/javascript">
+    (function() {
+      var httpRequest;
+      document.getElementById("ajaxButton").onclick = function() { makeRequest('gmap.html'); };
+
+      function makeRequest(url) {
+        httpRequest = new XMLHttpRequest();
+
+        if (!httpRequest) {
+          alert('Giving up :( Cannot create an XMLHTTP instance');
+          return false;
+        }
+        httpRequest.onreadystatechange = alertContents;
+        httpRequest.open('GET', url);
+        httpRequest.send();
+      }
+
+      function alertContents() {
+        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+          if (httpRequest.status === 200) {
+            alert(httpRequest.responseText);
+          } else {
+            alert('There was a problem with the request.');
+          }
+        }
+      }
+    })();
+    </script>
     <script>
       var autocomplete;
       var map;
