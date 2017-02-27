@@ -33,7 +33,9 @@ def submit_grocery_list(request):
 def cash_register(request):
     food_id = request.GET.get('food_id', None)
     data = {
-            'food_price': FoodPrices.objects.get(id=food_id).food_price
+            'food_price': FoodPrices.objects.get(id=food_id).food_price,
+            'food_quantity': FoodPrices.objects.get(id=food_id).food_quantity,
+            'food_name': FoodPrices.objects.get(id=food_id).food_name
             }
 
     return JsonResponse(data)
