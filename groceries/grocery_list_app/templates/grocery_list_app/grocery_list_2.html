@@ -1,22 +1,20 @@
 
-<form name ='nameform' class="grocery-form" method='POST'>
+<form name ='nameform' class="grocery-form" method='POST' onsubmit='return false'>
 
     {% csrf_token %}
     {{ form.as_p }}
 
-    <input type="submit" onclick='addFood(); return false' value="Add item">
+    <!-- <input type="submit" onclick='addFoodtoTable(); return false' value="Add item"> -->
+    <input type="submit" id="addbutton" name="addbutton" value="Add item">
 
 </form>
 
-<ul id='food_list'></ul>
-<p>Total = </p>
+<!-- <ul id='food_list'></ul> -->
 
+<table id="food_list_table"></table>
 
-    <ul>
-            <li>{{ data }}</li>
-
-    </ul>
-
+<p id>Total:</p>
+<p id='total'></p>
 
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -25,52 +23,59 @@
 
 //these resources were helpful in writing the following javascript:
 //https://www.youtube.com/watch?v=o6ueQBrcKrs
-//http://stackoverflow.com/questions/23504528/dynamically-remove-items-from-list-javascript
+//https://www.w3schools.com/jsref/met_table_insertrow.asp
 
-var lastid = 0
-var list = document.getElementById('food_list');
+var total = 0
+function addFoodtoTable(data) {    
 
-function addFood() {
+    // Access the table
+    var table = document.getElementById("food_list_table");
 
-    //get the input value
-    var food_select = document.getElementById("id_food");
-    var food_text = food_select.options[food_select.selectedIndex].text;
+    // Create empty row at beginning of table:
+    var row = table.insertRow(0);
 
-    //create new list item and add it to the list placed at the bottom of the html template
-    var li = document.createElement("li");
-    li.appendChild(document.createTextNode(food_text));
-    li.setAttribute('id', 'item'+lastid);
+    // Insert cells into the row
+    var food = row.insertCell(0);
+    var price = row.insertCell(1);
+    var button = row.insertCell(2);
 
-    var button = document.createElement("button");
-    button.innerHTML = "Remove item";
-    button.setAttribute('onClick','removeFood("'+'item'+lastid+'")');
+    // Create a remove button
+    var removeButton = document.createElement("button");
+    removeButton.innerHTML = "Remove item";
+
+    // Add content to the new cells:
+    food.innerHTML = data.food_name;
+    price.innerHTML = data.food_price + '/' + data.food_quantity;
+    button.appendChild(removeButton)
+
+    var updatedtotal = document.getElementById('total')
+    total += data.food_price
+    updatedtotal.innerHTML = '$' + Math.round(total * 100) / 100
+
+}
+
+//remove table row on click
+$('#food_list_table').on('click', 'button', function () {
+    $(this).closest('tr').remove();
+    //total -= data.food_price
+    //updatedtotal.innerHTML =  '$' + Math.round(total * 100) / 100
+});
+
+
+$('#addbutton').click(function () {
+    console.log( $('#id_food').val() );
+
+    var food_id = $('#id_food').val();
     
-    li.appendChild(button);
-    lastid+=1
-    list.appendChild(li);
-}
-
-
-function removeFood(itemid){
-    var item = document.getElementById(itemid);
-    list.removeChild(item);
-}
-
-</script>
-<script>
-            $("#id_food").change(function () {
-              var food_id = $(this).val();
-              console.log( $(this).val() );
-              $.ajax({
-                url: '/ajax/cash_register/',
-                data: {
-                  'food_id': food_id
-                },
-                dataType: 'json',
-                success: function(data) {
-                    alert(data.food_price);
+    $.ajax({
+        url: '/ajax/cash_register/',
+        data: {'food_id': food_id},
+        dataType: 'json',
+        success: function(data) {
+            addFoodtoTable(data);
             }
         });
-        });
+});
+
 </script> 
 
