@@ -1,21 +1,20 @@
 
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
 <form name ='nameform' class="grocery-form" method='POST' onsubmit='return false'>
 
     {% csrf_token %}
     {{ form.as_p }}
 
-    <!-- <input type="submit" onclick='addFoodtoTable(); return false' value="Add item"> -->
     <input type="submit" id="addbutton" name="addbutton" value="Add item">
 
 </form>
 
-<!-- <ul id='food_list'></ul> -->
-
 <table id="food_list_table"></table>
 
 <p id>Total:</p>
-<p id='total'></p>
-
+<p id='total'>$0.00</p>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
@@ -25,40 +24,79 @@
 //https://www.youtube.com/watch?v=o6ueQBrcKrs
 //https://www.w3schools.com/jsref/met_table_insertrow.asp
 
-var total = 0
 function addFoodtoTable(data) {    
 
-    // Access the table
+    //access the table
     var table = document.getElementById("food_list_table");
 
-    // Create empty row at beginning of table:
+    //create empty row at beginning of table:
     var row = table.insertRow(0);
 
-    // Insert cells into the row
+    //insert cells into the row
     var food = row.insertCell(0);
-    var price = row.insertCell(1);
-    var button = row.insertCell(2);
+    var price_per_quantity = row.insertCell(1);
+    var total_price = row.insertCell(2);
+    var button = row.insertCell(3);
 
-    // Create a remove button
+    //create a remove button
     var removeButton = document.createElement("button");
     removeButton.innerHTML = "Remove item";
 
-    // Add content to the new cells:
+    //add content to the new cells:
+
+    var input_quantity = document.getElementById('id_quantity').value
+
+    //assume dollar sign information is passed in a dictionary called store_type:
+    //var multiplier = store_type['dollar_sign']
+    //var price = (data.food_price * multiplier).toFixed(2)
+    //price_per_quantity.innerHTML = '$' + price + '/' + data.food_quantity;
+    //total_price = (price_per_quantity * input_quantity).toFixed(2)
+
     food.innerHTML = data.food_name;
-    price.innerHTML = data.food_price + '/' + data.food_quantity;
-    button.appendChild(removeButton)
+    price_per_quantity.innerHTML = '$' + (data.food_price).toFixed(2) + '/' + data.food_quantity;
+    total_price.innerHTML = '$' + (data.food_price * input_quantity).toFixed(2);
+    button.appendChild(removeButton);
+    
+    //recalculate total price
+    var table_rows = document.getElementById('food_list_table').rows;
+    var new_total = 0
+      
+    for (var i = 0; i < table_rows.length; ++i) {
 
-    var updatedtotal = document.getElementById('total')
-    total += data.food_price
-    updatedtotal.innerHTML = '$' + Math.round(total * 100) / 100
+        table_cells = table_rows[i].cells;
+        item_amount = table_cells[2].innerHTML;
+        float_amount = parseFloat(item_amount.slice(1));
+        new_total += float_amount;
 
+    document.getElementById('total').innerHTML = '$' + new_total.toFixed(2);
+    
+    }   
 }
 
-//remove table row on click
+//remove table row and update price on remove button click
 $('#food_list_table').on('click', 'button', function () {
+    
+    //remove row
     $(this).closest('tr').remove();
-    //total -= data.food_price
-    //updatedtotal.innerHTML =  '$' + Math.round(total * 100) / 100
+
+    //recalculate total price
+    var table_rows = document.getElementById('food_list_table').rows;
+    var new_total = 0
+
+    if (table_rows.length == 0) {
+    document.getElementById('total').innerHTML = '$' + parseFloat(0.00);
+    }
+      
+    for (var i = 0; i < table_rows.length; ++i) {
+
+        table_cells = table_rows[i].cells;
+        item_amount = table_cells[2].innerHTML;
+        float_amount = parseFloat(item_amount.slice(1));
+        new_total += float_amount;
+
+    document.getElementById('total').innerHTML = '$' + new_total.toFixed(2);
+
+      }   
 });
 
 

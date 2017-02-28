@@ -16,6 +16,8 @@ QUANTITY_CHOICES = (
 
 class GroceryForm(forms.ModelForm):
 
+    #instead of .all we need to filter by store type to adjust the dropdown menu
+    #store type will come from the view maybe ?
     food = forms.ModelChoiceField(queryset=FoodPrices.objects.all(), 
         empty_label="Select a food item")
 
