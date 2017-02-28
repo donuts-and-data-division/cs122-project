@@ -193,7 +193,7 @@
           map.panTo(place.geometry.location);
           map.setZoom(15);
           /*search();*/
-          query();
+          query2();
         } else {
           document.getElementById('autocomplete').placeholder = 'Enter a location';
         }
@@ -216,6 +216,7 @@
         clearMarkers();
         clearList();
         var locations = JSON.parse('{{ qs_results | escapejs }}');
+        console.log("locations", locations)
         /* loop through queryset to get place details for each place_id*/
         for (var i = 0; i < locations.features.length; i++) {
           var place_id = locations.features[i].properties.place_id;
