@@ -5,7 +5,8 @@ from django.core.serializers import serialize
 from . import placesAPI
 from django.contrib.gis.geos import Polygon
 from django.contrib import messages
-from .forms import SearchNearby
+from .forms import SearchForm
+
 #def index(request):
 #    return render(request, 'snap_test_2/index.html',{})
 
@@ -76,20 +77,33 @@ def gmapdata(request):
     qs_results = serialize('geojson', qs_results)
     return HttpResponse(qs_results, content_type= 'json')
 
-def auto(request):
-    return render(request, 'snap_test_2/auto.html', {})
+#def auto(request):
+ #   return render(request, 'snap_test_2/auto.html', {})
 
 
-def search_retailers(request):
-    if request.method == 'POST': # If the form has been submitted...
-        location = SearchNearby(request.POST) # A form bound to the POST data   
+def auto2(request):
+
+    if request.method == 'POST': 
+        form = SearchForm(request.POST)        
+        if form.is_valid():
+            location = form.cleaned_data['location']
+            retailer_type = form.cleaned_data['retailer_type']
+            price = form.cleaned_data['price']
+            radius = form.cleaned_data['radius']
+            
+            # qs_results = SnapLocations.objects.filter(=price).filter(=retailer_type)
+            # fill in filters with model fields after jazz updates
+            qs_results = SnapLocations.objects.all()
+            qs_results = serialize('geojson', qs_results)
     else:
-        location = SearchNearby()
-    # DO FILTERING HERE
-    qs_results = SnapLocations.objects.values_list('googlename',  flat=True)
-    return render(request, 'snap_test_2/gmap2.html', {'qs_results': qs_results, 'location': location})
+        form = SearchForm()
+        qs_results = {}
+        qs_results = serialize('geojson', qs_results)
+    
+    return render(request, 'snap_test_2/auto2.html', {'form': form, 'qs_results': qs_results})
 
     
 def capture_loc(request):
     location = request.Get.get('location', None)
     return JsonResponse(location)
+
