@@ -47,8 +47,16 @@
           zoom: 10,
           center: new google.maps.LatLng(41.913154, -87.633311),
           });
-
+      google.maps.event.addListener(map, 'idle', function(ev){
+        var bounds = map.getBounds().toJSON();
+        var places = autocomplete.getPlace();
+        var geo = places.geometry.viewport.toJSON();
+        console.log("HEY", bounds)
+    });
         }
+
+ 
+
     function initialize() {
     // Create the autocomplete object
        autocomplete = new google.maps.places.Autocomplete(
@@ -57,35 +65,33 @@
        // populate the address fields in the form.
       google.maps.event.addListener(autocomplete, 'place_changed', function () {
         var place = autocomplete.getPlace();
-
+        console.log("Autocomplete returns: ", place);
 
         if (place.geometry) {
           map.panTo(place.geometry.location);
           map.setZoom(15);}
           
 
-        console.log("Autocomplete returns: ", place);
+        
         get_places();
         });
       }
       //console.log("Autocomplete returns outside: ", place);
    
+      //https://simpleisbetterthancomplex.com/tutorial/2016/08/29/how-to-work-with-ajax-request-with-django.html
+      // This site taught us how to use ajax with django.
       function get_places() {
         var place = autocomplete.getPlace();
-
         var bounds = place.geometry;
         var name = $("#autocomplete").val();
-        console.log("In the JAX", name);
+        
         $.ajax({
           url: '/ajax/get_places/',
           data: {'name':name},
           dataType: 'json',
           success: function(data) {
-            console.log(data);
+            //console.log(data);
             var results = JSON.parse(data.data).features;
-            console.log(results);
-            console.log(results[1].geometry);
-            console.log(results[1].geometry.coordinates[0]);
             placeMarkers(results);
             }
           });
