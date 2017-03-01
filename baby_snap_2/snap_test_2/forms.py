@@ -20,4 +20,8 @@ class SearchForm(forms.Form):
     stars = [('1 star', '1 star'),('2 stars', '2 stars'),('3 stars', '3 stars'), ('4 stars', '4 stars'), ('5 stars', '5 stars')]
     rating = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=stars, label='Radius', required = False)
     
-    # Need to remove bullet points from check boxes with CSS
+    sw_lat = forms.FloatField( widget=forms.HiddenInput(attrs={'id':'sw_lat'}))
+    sw_lon = forms.FloatField( widget=forms.HiddenInput(attrs={'id':'sw_lon'}))
+    ne_lat = forms.FloatField( widget=forms.HiddenInput(attrs={'id':'ne_lat'}))
+    ne_lon = forms.FloatField( widget=forms.HiddenInput(attrs={'id':'ne_lon'}))
+   # Need to remove bullet points from check boxes with CSS
