@@ -11,14 +11,15 @@
   <div id="map" style="width: 500px; height: 400px;"></div>
   
   <script type="text/javascript">
-    
+    var test = {{ 'address' }}
+    console.log(address)
     var locations = [
     {% for point in qs_results %}
       
       {% if point.place_id == None %}
 
       {% else %}
-        console.log(point)
+        
         [{{ point.googlename }}, {{ point.googleaddress}}, {{ point.place_id }}, 1],
       {% endif %}
     {% endfor %}
