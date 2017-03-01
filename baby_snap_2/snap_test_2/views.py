@@ -5,12 +5,8 @@ from django.core.serializers import serialize
 from . import placesAPI as pa
 from django.contrib.gis.geos import Polygon
 from django.contrib import messages
-<<<<<<< HEAD
 from .forms import SearchForm
-=======
-from .forms import SearchNearby
 from django.http import JsonResponse
->>>>>>> 96e9a47047818ae19002cd359f4b4799a6a25c57
 
 #def index(request):
 #    return render(request, 'snap_test_2/index.html',{})
@@ -85,7 +81,9 @@ def gmapdata(request):
 
 
 def auto2(request):
-
+    qs_results = {}
+    qs_results = serialize('geojson', qs_results)
+    
     if request.method == 'POST': 
         form = SearchForm(request.POST)        
         if form.is_valid():
@@ -93,29 +91,19 @@ def auto2(request):
             retailer_type = form.cleaned_data['retailer_type']
             price = form.cleaned_data['price']
             radius = form.cleaned_data['radius']
+            sw_lat = form.cleaned_data['sw_lat']
+            sw_lon = form.cleaned_data['sw_lon']
+            ne_lat = form.cleaned_data['ne_lat']
+            ne_lon = form.cleaned_data['ne_lon']
             
-            # qs_results = SnapLocations.objects.filter(=price).filter(=retailer_type)
+            viewport = pa.get_viewport_poly((sw_lon, sw_lat, ne_lon, ne_lat))
+            #qs_results = SnapLocations.objects.filter(=price).filter(=retailer_type)
             # fill in filters with model fields after jazz updates
-            qs_results = SnapLocations.objects.all()
+            qs_results = SnapLocations.objects.filter(geom__contained = viewport)
             qs_results = serialize('geojson', qs_results)
     else:
         form = SearchForm()
-        qs_results = {}
-        qs_results = serialize('geojson', qs_results)
-    
+        
     return render(request, 'snap_test_2/auto2.html', {'form': form, 'qs_results': qs_results})
 
-    
-def capture_loc(request):
-    location = request.Get.get('location', None)
-    return JsonResponse(location)
-
-        location = SearchNearby()
-    # DO FILTERING HERE
-    qs_results = SnapLocations.objects.all()
-    #values_list('googlename',  flat=True)
-    return JsonResponse(qs_results)
-    #return render(request, 'snap_test_2/gmap2.html', {'qs_results': qs_results, 'location': location})
-
-    
 
