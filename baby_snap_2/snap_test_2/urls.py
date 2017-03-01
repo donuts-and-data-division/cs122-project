@@ -18,5 +18,9 @@ urlpatterns = [
     url(r'^auto2$', views.auto2),
     #url(r'^search_retailers$', views.search_retailers),
     url(r'^ajax/capture_loc/$', views.capture_loc)
+    url(r'^auto$', views.auto),
+    url(r'^search_retailers$', views.search_retailers),
+    url(r'^ajax/get_places/$', views.get_places)
+
 ]
 
