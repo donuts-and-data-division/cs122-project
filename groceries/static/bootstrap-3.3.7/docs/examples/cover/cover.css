@@ -1,0 +1,209 @@
+
+/*
+ * Base structure
+ */
+
+html,
+body {
+  height: 100%;
+  background-color: #f2f2f2;
+  background: url(http://i.imgur.com/P6LtMn4.jpg) no-repeat fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-position: 50% 0%;
+}
+
+body {
+  color: #3b561f;
+  text-align: center;
+}
+
+.site-wrapper {
+  display: table;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  -webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+          box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+}
+
+.site-wrapper-inner {
+  display: table-cell;
+  vertical-align: top;
+}
+
+.cover-container {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: auto;
+}
+
+.inner {
+  padding: 30px;
+}
+
+
+/*
+ * Header
+ */
+
+.masthead-nav > li {
+  display: inline-block;
+}
+
+.masthead-nav > li + li {
+  margin-left: 20px;
+}
+
+.masthead-nav > li > a {
+  padding-right: 0;
+  padding-left: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #3c3c3c;
+  font-family: 'PT Sans', sans-serif;
+  background-color: transparent;
+  transition: color 1s ease;
+}
+
+.masthead-nav > li > a:hover,
+.masthead-nav > li > a:focus {
+  color: #8d0a16;
+  border-bottom-color: #8d0a16;
+  background-color: transparent;
+}
+
+.masthead-nav > .active > a,
+.masthead-nav > .active > a:hover,
+.masthead-nav > .active > a:focus {
+  color: #8d0a16;
+  border-bottom-color: #8d0a16;
+  background-color: transparent;
+}
+
+@media (min-width: 768px) {
+  .masthead-brand {
+    float: left;
+  }
+
+  .masthead-nav {
+    float: right;
+  }
+
+.dropdown-menu li a {
+  font-family: 'PT Sans', sans-serif;
+  padding-left: 0px;
+}
+
+.dropdown-menu li a:hover {
+  color: #8d0a16;
+  background-color: transparent;
+}
+
+.dropdown .dropdown-menu {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  -webkit-transition: all 1.5s;
+  -moz-transition: all 1.5s;
+  -ms-transition: all 1.5s;
+  -o-transition: all 1.5s;
+  transition: all 1.5s;
+
+  max-height: 0;
+  display: block;
+  overflow: hidden;
+  opacity: 0;
+  margin-top: 0px
+}
+
+.dropdown.open .dropdown-menu {
+    max-height: 300px;
+    opacity: 1;
+    background-color: transparent;
+}
+
+
+/*
+ * Cover
+ */
+
+.cover {
+  padding: 0 20px;
+
+}
+.cover .btn-lg {
+  padding: 10px 20px;
+  font-weight: bold;
+}
+
+.cover-heading {
+  font-family: 'Playfair Display SC', serif;
+  font-size: 100px;
+  margin-bottom: 10px;
+  text-shadow: 3px 1px 11px rgba(150, 150, 150, 1);
+}
+
+.btn-primary {
+  background-color: #d82131;
+  font-family: 'PT Sans', sans-serif;
+  transition: background-color 2s ease;
+  border-color: transparent;
+}
+
+.btn-primary:hover {
+  background-color: #830d19;
+  border-color: transparent;
+}
+
+.form-control {
+  border-radius: 0px
+  width: 300px;
+}
+
+
+
+/*
+ * Footer
+ */
+
+.mastfoot {
+  color: #d7cec7; /* IE8 proofing */
+}
+
+
+/*
+ * Affix and center
+ */
+
+@media (min-width: 768px) {
+  /* Pull out the header and footer */
+  .masthead {
+    position: fixed;
+    top: 0;
+  }
+  .mastfoot {
+    position: fixed;
+    bottom: 0;
+  }
+  /* Start the vertical centering */
+  .site-wrapper-inner {
+    vertical-align: middle;
+  }
+  /* Handle the widths */
+  .masthead,
+  .mastfoot,
+  .cover-container {
+    width: 100%; /* Must be percentage or pixels for horizontal alignment */
+  }
+}
+
+@media (min-width: 992px) {
+  .masthead,
+  .mastfoot,
+  .cover-container {
+    width: 700px;
+  }
+}
