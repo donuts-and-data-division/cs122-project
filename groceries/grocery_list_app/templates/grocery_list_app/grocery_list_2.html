@@ -2,7 +2,7 @@
 <style>
 
 body {
-    color: #777;
+    background-color: rgba(235, 235, 235, 0.56);
 }
 
 
@@ -50,6 +50,7 @@ body {
 #main {
     margin-left: 450;
     margin-top: 85;
+
 }
 
 .menu-header {
@@ -59,10 +60,10 @@ body {
     text-decoration: none;
     font-size: 30px;
     margin-top: 50px;
-    -o-transition:.5s;
-    -ms-transition:.5s;
-    -moz-transition:.5s;
-    -webkit-transition:.5s;
+    -o-transition:1s;
+    -ms-transition:1s;
+    -moz-transition:1s;
+    -webkit-transition:1s;
 
 }
 
@@ -76,13 +77,11 @@ body {
 }
 
 .addbutton {
-  -webkit-border-radius: 60;
-  -moz-border-radius: 60;
   border-radius: 60px;
   font-family: 'Source Sans Pro', sans-serif;
   color: #ffffff;
   font-size: 22px;
-  background: #cda34f;
+  background: #843849;
   padding: 10px 16px 10px 16px;
   border:none;
   font-weight: 900;
@@ -93,17 +92,16 @@ body {
 }
 
 .addbutton:hover {
-  background: #9f792d;
+  background: #ba0f51;
+  cursor: pointer;
 }
 
 #removebutton {
-  -webkit-border-radius: 60;
-  -moz-border-radius: 60;
   border-radius: 60px;
   font-family: 'Source Sans Pro', sans-serif;
   color: #ffffff;
   font-size: 14px;
-  background: #cda34f;
+  background: #636b46;
   border:none;
   -o-transition:.5s;
   -ms-transition:.5s;
@@ -111,6 +109,10 @@ body {
   -webkit-transition:.5s;
 }
 
+#removebutton:hover{
+    background-color: #000000;
+    cursor:pointer;
+}
 
 #id_food, #id_quantity {
     color: #1d1f20;
@@ -119,52 +121,40 @@ body {
 .datagrid table { 
     border-collapse: collapse; 
     text-align: left; 
-    width: 700px;
     font-family: 'Source Sans Pro', sans-serif;
 } 
 
 .datagrid {
     font-family: 'Source Sans Pro', sans-serif;
-    background: #fff; 
-    overflow: hidden; 
-    }
+    width: 700px;
+}
 
 .datagrid table td, .datagrid table th { 
     padding: 3px 10px; 
-    }
+}
 
 .datagrid table thead th {
-    background-color:#636b46; 
-    color:#FFFFFF; 
+    color:#1d1f20; 
     font-size: 15px; 
-    font-weight: #1d1f20; 
-    } 
-
-.datagrid table thead th:first-child { 
-    border: none; }
+} 
 
 .datagrid table tbody td { 
     color: #000000; 
     font-size: 16px;
-    font-weight: normal; }
-
-.datagrid table tbody .alt td { 
-    background: #E0E0E0; 
-    color: #000000; }
-
-.datagrid table tbody td:first-child { 
-    border-left: none; }
-
-.datagrid table tbody tr:last-child td { 
-    border-bottom: none; }
+}
 
 .bottom {
     font-family: 'Pacifico', cursive;
     font-size:20px;
+    color:#1d1f20;
+    margin-left: 6px;
+    margin-top: 15px;
 }
 
 #total{
     font-family: 'Source Sans Pro', sans-serif;
+
+
 }
     
 </style>
@@ -310,7 +300,6 @@ $('#food_list_table').on('click', 'button', function () {
 
 
 $('#addbutton').click(function () {
-    console.log( $('#id_food').val() );
 
     var food_id = $('#id_food').val();
     
