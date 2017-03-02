@@ -7,6 +7,7 @@ from django.contrib.gis.geos import Polygon
 from django.contrib import messages
 from .forms import SearchForm, GroceriesForm, PricesForm
 from .tables import ResultsTable
+from .forms import SearchForm, FilterForm
 from django.http import JsonResponse
 from django_tables2 import RequestConfig
 
@@ -52,7 +53,7 @@ def gmapdata(request):
     return HttpResponse(qs_results, content_type= 'json')
 
 def auto(request):
-    form = SearchForm()
+    form = FilterForm()
     return render(request, 'snap_test_2/auto.html', {'form':form})
 
 def auto2(request):
