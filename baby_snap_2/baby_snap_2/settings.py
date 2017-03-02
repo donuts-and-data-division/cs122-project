@@ -40,8 +40,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'snap_test_2',
-    'leaflet',
     'djgeojson',
+    'django_tables2'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -68,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },

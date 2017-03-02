@@ -5,8 +5,10 @@ from django.core.serializers import serialize
 from . import placesAPI as pa
 from django.contrib.gis.geos import Polygon
 from django.contrib import messages
-from .forms import SearchForm
+from .forms import SearchForm, GroceriesForm, PricesForm
+from .tables import ResultsTable
 from django.http import JsonResponse
+from django_tables2 import RequestConfig
 
 #def index(request):
 #    return render(request, 'snap_test_2/index.html',{})
@@ -55,7 +57,7 @@ def auto(request):
 
 def auto2(request):
     qs_results = {}
-    qs_results = serialize('geojson', qs_results)
+    qs_results_ser = serialize('geojson', qs_results)
     
     if request.method == 'POST': 
         form = SearchForm(request.POST)        
@@ -73,10 +75,32 @@ def auto2(request):
             #qs_results = SnapLocations.objects.filter(=price).filter(=retailer_type)
             # fill in filters with model fields after jazz updates
             qs_results = SnapLocations.objects.filter(geom__contained = viewport)
-            qs_results = serialize('geojson', qs_results)
+            qs_results_ser = serialize('geojson', qs_results)
     else:
         form = SearchForm()
-        
-    return render(request, 'snap_test_2/auto2.html', {'form': form, 'qs_results': qs_results})
+    
+    table = ResultsTable(qs_results)
+    RequestConfig(request).configure(table)
+    return render(request, 'snap_test_2/auto2.html', {'table': table, 'form': form, 'qs_results': qs_results_ser})
+
+
+def prices(request):
+    if request.method == "POST":
+        prices = PricesForm(request.POST)
+    else:
+        prices = PricesForm()
+    return render(request, "snap_test_2/prices.html", {'prices': prices})
+
+
+def groceries(request):
+    if request.method == "POST":
+        groceries = GroceriesForm(request.POST)
+        if groceries.is_valid():
+            name = groceries.cleaned_data['name']
+            retailer_type = groceries.cleaned_data['retailer_type']
+            price = groceries.cleaned_data['price']
+    else:
+        groceries = GroceriesForm()
+    return render(request, "snap_test_2/groceries.html", {'groceries': groceries})
 
 

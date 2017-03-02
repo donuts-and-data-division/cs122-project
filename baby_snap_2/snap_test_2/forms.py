@@ -6,7 +6,7 @@ def types_list(lst):
 
 
 class SearchForm(forms.Form):
-    '''location = forms.CharField(widget = forms.TextInput(), label='Near', max_length=100)
+    location = forms.CharField(widget = forms.TextInput(), label='Near', max_length=100)
     
     types = [('Grocery', 'Grocery'), 
         ('Convenience Store', "Convenience Store"),
@@ -39,3 +39,15 @@ class SearchForm(forms.Form):
     rating = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=stars, label='Average Rating', required = False)
 
 
+class GroceriesForm(forms.Form):
+    name = forms.CharField( widget=forms.HiddenInput(attrs={'id':'name'}))
+    retailer_type = forms.CharField( widget=forms.HiddenInput(attrs={'id':'retailer_type'}))
+    price = forms.CharField( widget=forms.HiddenInput(attrs={'id':'price'}))
+
+class PricesForm(forms.Form):
+    name = forms.CharField( widget=forms.HiddenInput(attrs={'id':'name'}))
+    retailer_type = forms.CharField( widget=forms.HiddenInput(attrs={'id':'retailer_type'}))
+    price = forms.CharField( widget=forms.HiddenInput(attrs={'id':'price'}))
+    place_id = forms.CharField( widget=forms.HiddenInput(attrs={'id':'place_id'}))
+
+    

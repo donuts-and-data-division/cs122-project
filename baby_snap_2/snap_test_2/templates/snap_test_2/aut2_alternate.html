@@ -1,14 +1,19 @@
 <!-- http://howcanisolve.com/33907/django-google-place-autocomplete-address-form -->
-
+{% load render_table from django_tables2 %}
+{% load static %}
 <!DOCTYPE html>
-
 <html>
   <head>
     <title>Place Autocomplete Address Form</title>
-   
+    <link rel="stylesheet" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <style>
+      .table-container {
+        position: absolute;
+        left: 1100px;
+        top: 20px;
+      }
       #form { 
         width: 200px;
         height: 600px;}
@@ -102,18 +107,22 @@
     
     <div id="map"></div>
 
+     
+    {% render_table table %}
+    <!--
     <div id="listing">
       <table id="resultsTable">
         <tbody id="results"></tbody>
       </table>
     </div>
+
      
     <div style="display: none">
       <div id="info-content">
         <table>
-          <tr id="iw-name-row" class="iw_table_row">
-            <td class="iw_attribute_name">Name:</td>
-            <td id="iw-name"></td>
+          <tr id="iw-url-row" class="iw_table_row">
+            <td id="iw-icon" class="iw_table_icon"></td>
+            <td id="iw-url"></td>
           </tr>
           <tr id="iw-address-row" class="iw_table_row">
             <td class="iw_attribute_name">Address:</td>
@@ -130,25 +139,17 @@
           <tr id="iw-website-row" class="iw_table_row">
             <td class="iw_attribute_name">Website:</td>
             <td id="iw-website"></td>
-          <tr>
-            <td>
-            <form id="groceries" action='groceries' method="post">
-              {% csrf_token %}
-              {{ groceries.as_p }}
-              <input type="submit" id = "submit_groceries" name = "submit_groceries" value="Build Grocery List" />
-            </form>
-            </td>
           </tr>
-
         </table>
       </div>
     </div>
+    -->
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script type = "text/javascript">
       var hostnameRegexp = new RegExp('^https?://.+?/');
       var markers = [];
-      var autocomplete, places, infoWindow;
+      var autocomplete, places;
       var MARKER_PATH = 'https://developers.google.com/maps/documentation/javascript/images/marker_green';
 
       function onLoaded () {
@@ -176,9 +177,8 @@
         document.getElementById('ne_lon').value = ne_lon;
         });
         
-        infoWindow = new google.maps.InfoWindow({
-          content: document.getElementById('info-content')
-        });
+        var infowindow = new google.maps.InfoWindow();
+
         var marker, i;
 
         var results = JSON.parse('{{ qs_results | escapejs }}');
@@ -254,24 +254,63 @@
 
       function showInfoWindow() {
         var marker = this;
-        infoWindow.open(map, marker);
-        var place = marker.placeResult.properties;
-        buildIWContent(place);
-        
-        $('#submit_groceries').click(function () {
-        var name = place.googlename;
-        
-        var retailer_type = place.googlename;/* need update!*/
-        var price = place.googlename; /* need update!*/
-        document.getElementById('name').value = name;
-        document.getElementById('retailer_type').value = retailer_type;
-        document.getElementById('price').value = price;
-        });
+        places.getDetails({placeId: marker.properties.place_id},
+            function(place, status) {
+              if (status !== google.maps.places.PlacesServiceStatus.OK) {
+                return;
+              }
+              infoWindow.open(map, marker);
+              buildIWContent(place);
+            });
       }
 
       function buildIWContent(place) {
-        document.getElementById('iw-name').textContent = place.googlename;
-        document.getElementById('iw-address').textContent = place.googleaddress;
+        document.getElementById('iw-icon').innerHTML = '<img class="hotelIcon" ' +
+            'src="' + place.icon + '"/>';
+        document.getElementById('iw-url').innerHTML = '<b><a href="' + place.url +
+            '">' + place.name + '</a></b>';
+        document.getElementById('iw-address').textContent = place.vicinity;
+
+        if (place.formatted_phone_number) {
+          document.getElementById('iw-phone-row').style.display = '';
+          document.getElementById('iw-phone').textContent =
+              place.formatted_phone_number;
+        } else {
+          document.getElementById('iw-phone-row').style.display = 'none';
+        }
+
+        // Assign a five-star rating to the hotel, using a black star ('&#10029;')
+        // to indicate the rating the hotel has earned, and a white star ('&#10025;')
+        // for the rating points not achieved.
+        if (place.rating) {
+          var ratingHtml = '';
+          for (var i = 0; i < 5; i++) {
+            if (place.rating < (i + 0.5)) {
+              ratingHtml += '&#10025;';
+            } else {
+              ratingHtml += '&#10029;';
+            }
+          document.getElementById('iw-rating-row').style.display = '';
+          document.getElementById('iw-rating').innerHTML = ratingHtml;
+          }
+        } else {
+          document.getElementById('iw-rating-row').style.display = 'none';
+        }
+
+        // The regexp isolates the first part of the URL (domain plus subdomain)
+        // to give a short URL for displaying in the info window.
+        if (place.website) {
+          var fullUrl = place.website;
+          var website = hostnameRegexp.exec(place.website);
+          if (website === null) {
+            website = 'http://' + place.website + '/';
+            fullUrl = website;
+          }
+          document.getElementById('iw-website-row').style.display = '';
+          document.getElementById('iw-website').textContent = website;
+        } else {
+          document.getElementById('iw-website-row').style.display = 'none';
+        }
       }
 
     </script>
