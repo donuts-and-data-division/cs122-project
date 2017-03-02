@@ -18,7 +18,7 @@ class SearchForm(forms.Form):
     radius = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=distances, label='Radius', required = False)
     
     stars = [('1 star', '1 star'),('2 stars', '2 stars'),('3 stars', '3 stars'), ('4 stars', '4 stars'), ('5 stars', '5 stars')]
-    rating = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=stars, label='Radius', required = False)
+    rating = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=stars, label='Average Rating', required = False)
     
     sw_lat = forms.FloatField( widget=forms.HiddenInput(attrs={'id':'sw_lat'}))
     sw_lon = forms.FloatField( widget=forms.HiddenInput(attrs={'id':'sw_lon'}))
