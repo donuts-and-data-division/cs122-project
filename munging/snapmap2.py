@@ -10,15 +10,14 @@ import jellyfish
 import backoff
 
 
-def get_url(lat, lon, keyword, radius, key):
+#def get_url(lat, lon, keyword, radius, key):
 
-    url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location\
-={},{}&keyword={}&radius={}&key={}".format(lat, lon, keyword, radius, key)
-
-    return url
+    #url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location\
+#={},{}&keyword={}&radius={}&key={}".format(lat, lon, keyword, radius, key)
+    #return url
 
 @backoff.on_exception(backoff.expo, requests.exceptions.ConnectionError, max_tries=3)
-def get_place(lat, lon, keyword, radius, key):
+def get_place_url(lat, lon, keyword, radius, key):
 
     url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location\
 ={},{}&keyword={}&radius={}&key={}".format(lat, lon, keyword, radius, key)
@@ -26,7 +25,14 @@ def get_place(lat, lon, keyword, radius, key):
     r = requests.get(url)
     return r.json()
 
-def get_info(num):
+def get_place_details_url(placeid, key):
+
+    url = "https://maps.googleapis.com/maps/api/place/details/json?\
+    placeid={}&key={}".format(placeid, key)
+    r = requests.get(url)
+    return r.json()
+
+def get_places_info(num):
     IL_filename = "Snap_With_Markets.csv"
     #IL = pd.read_csv(IL_filename)
     df = pd.read_csv(IL_filename)
@@ -66,7 +72,7 @@ def get_info(num):
         lat = IL.loc[i]["Latitude"]
         lon = IL.loc[i]["Longitude"]
 
-        #specific search for Farmer's Market category
+        #specific search for Farmer's Market locations
         if IL.loc[i]["Farmers Market?"] == True:
             keyword = "Market"
         else:    
@@ -76,14 +82,14 @@ def get_info(num):
         #print (url)
         #r = requests.get(url)
         #json = r.json()
-        json = get_place(lat, lon, keyword, 200, key)
+        json = get_place_url(lat, lon, keyword, 200, key)
         multiple[i] = len(json["results"])
         how[i] = 'address first word'
 
         if json["status"] == "OVER_QUERY_LIMIT":
             KEY_INDEX += 1
             key = developerKeys[KEY_INDEX]
-            json = get_place(lat, lon, keyword, 200, key)
+            json = get_place_url(lat, lon, keyword, 200, key)
             check[i] = "Changed Key"
 
         if len(json["results"]) > 1:
@@ -99,13 +105,13 @@ def get_info(num):
             #print(url)
             #r = requests.get(url)
             #json = r.json()
-            json = get_place(lat, lon, new_keyword, 200, key)
+            json = get_place_url(lat, lon, new_keyword, 200, key)
 
 
             if json["status"] == "OVER_QUERY_LIMIT":
                 KEY_INDEX += 1
                 key = developerKeys[KEY_INDEX]
-                json = get_place(lat, lon, new_keyword, 200, key)
+                json = get_place_url(lat, lon, new_keyword, 200, key)
                 check[i] = "Changed Key"
 
             multiple[i] = len(json["results"])
@@ -126,7 +132,7 @@ def get_info(num):
             if json["status"] == "OVER_QUERY_LIMIT":
                 KEY_INDEX += 1
                 key = developerKeys[KEY_INDEX]
-                json = get_place(lat, lon, keyword, 300, key)
+                json = get_place_url(lat, lon, keyword, 300, key)
                 check[i] = "Changed Key"
 
             multiple[i] = len(json["results"])
@@ -140,11 +146,11 @@ def get_info(num):
                     keyword1 = name.split()[1]
                     new_keyword = keyword0 + ' ' + keyword1
                     #url = get_url(lat, lon, new_keyword, 200, key)
-                    json = get_place(lat, lon, new_keyword, 200, key)
+                    json = get_place_url(lat, lon, new_keyword, 200, key)
 
                 else: 
                     #url = get_url(lat,loln, keyword, 200, key)
-                    json = get_place(lat, lon, keyword, 200, key)
+                    json = get_place_url(lat, lon, keyword, 200, key)
 
                 #print(url)
                 #r = requests.get(url)
@@ -164,11 +170,11 @@ def get_info(num):
             if len(name.split()) >= 2:
                 keyword = name.split()[1]
                 #url = get_url(lat, lon, keyword, 300, key)
-                json = get_place(lat, lon, keyword, 300, key)
+                json = get_place_url(lat, lon, keyword, 300, key)
 
             else: 
                 #url = get_url(lat, lon, keyword, 400, key)
-                json = get_place(lat, lon, keyword, 400, key)
+                json = get_place_url(lat, lon, keyword, 400, key)
 
             #print(url)
             #r = requests.get(url)
@@ -229,7 +235,10 @@ def get_info(num):
         lats[i] = json["results"][0]["geometry"]["location"]["lat"]
         lngs[i] = json["results"][0]["geometry"]["location"]["lng"]
         adds[i] = json["results"][0]["vicinity"]
-        category[i] = categorize(json["results"][0]["types"])
+        if IL.loc[i]["Farmers Market?"] == True:
+            category[i] = "Farmer's Market"
+        else: 
+            category[i] = categorize(json["results"][0]["types"])
         types[i] = json["results"][0]["types"]
 
         if "restaurant" in json["results"][0]["types"]:
@@ -240,11 +249,16 @@ def get_info(num):
         else:
             costs[i] = None
         
+
+        #USE ID TO GET PLACES INFO
+        get_details_info(json["results"][0]["place_id"])
+
+
         #typeset.add(tuple(json["results"][0]["types"]))
         completed += 1
         print (completed)
 
-    #creates new column and fills each row 
+    #Add collected info to dataframe
     IL["place_id"] = ids
     IL["googlename"] = names
     IL["googlelat"] = lats
@@ -259,6 +273,20 @@ def get_info(num):
     
     #print(typeset)
     IL.to_csv("snapresultstestChicago.csv")
+
+def get_details_info(place_id):
+    #create new lists somewhere and add elements
+    json = get_place_details_url
+
+    json["result"]["formatted_address"]
+    json["result"]["formatted_phone_number"]
+    if ["website"] in json["result"]:
+        json["result"]["website"]
+    #"open now" omitted 
+    json["result"]["opening_hours"]["weekday_text"]
+
+    rating and reviews? 
+
 
 
 def categorize(types_list):
@@ -276,6 +304,11 @@ def categorize(types_list):
         category = types_list
 
     return category
+
+
+
+
+
 
 
 
@@ -298,19 +331,4 @@ possible_matches_df = pd.DataFrame(dict)
 #try to find matches
 
 
-
-
 """
-"""
-def get_text_search_url(query, key):
-    query = "+".join(query.split())
-
-    url = "https://maps.googleapis.com/maps/api/place/textsearch/json?query={}&key={}".format(query,key)
-    return url
-
-
-service = build ('places', 'something', developerKey = developerKey[1])
-request = service. 
-response = request.execute()
- 
-""" 
