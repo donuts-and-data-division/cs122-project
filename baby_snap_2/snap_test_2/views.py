@@ -5,7 +5,7 @@ from django.core.serializers import serialize
 from . import placesAPI as pa
 from django.contrib.gis.geos import Polygon
 from django.contrib import messages
-from .forms import SearchForm
+from .forms import SearchForm, FilterForm
 from django.http import JsonResponse
 
 #def index(request):
@@ -50,7 +50,7 @@ def gmapdata(request):
     return HttpResponse(qs_results, content_type= 'json')
 
 def auto(request):
-    form = SearchForm()
+    form = FilterForm()
     return render(request, 'snap_test_2/auto.html', {'form':form})
 
 def auto2(request):
