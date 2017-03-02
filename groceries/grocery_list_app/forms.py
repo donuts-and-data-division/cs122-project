@@ -2,6 +2,9 @@ from django import forms
 from .models import FoodPrices
 
 QUANTITY_CHOICES = (
+    (0.25, 0.25),
+    (0.5, 0.5),
+    (0.75, 0.75),
     (1, 1),
     (2, 2),
     (3, 3),
