@@ -8,101 +8,211 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <style>
-      
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
       /* Optional: Makes the sample page fill the window. */
       html, body {
         height: 100%;
         margin: 0;
         padding: 0;
       }
+      #description {
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+      }
+
+      #infowindow-content .title {
+        font-weight: bold;
+      }
+
+      #infowindow-content {
+        display: none;
+      }
+
+      #map #infowindow-content {
+        display: inline;
+      }
+
+      .pac-card {
+        margin: 10px 10px 0 0;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+        font-family: Roboto;
+      }
+
+      #pac-container {
+        padding-bottom: 12px;
+        margin-right: 12px;
+      }
+
+      .pac-controls {
+        display: inline-block;
+        padding: 5px 11px;
+      }
+
+      .pac-controls label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
+
+      #pac-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 400px;
+      }
+
+      #pac-input:focus {
+        border-color: #4d90fe;
+      }
+
+      #title {
+        color: #fff;
+        background-color: #4d90fe;
+        font-size: 25px;
+        font-weight: 500;
+        padding: 6px 12px;
+      }
+      ul {
+        list-style-type: none;
+      }
+
+
     </style>
     <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
   </head>
 
   <body>
-    <!--<form action = '/search_retailers' method = "get" id="locationField">-->
-  <form onsubmit='return false', method = "get">
-      <label for = "search_retailers"> Enter location: </label>
-      <input id="autocomplete" name="autocomplete" type="text"></input>
-      <input type = "submit" id="addbutton" name="addbutton" value = "GO!">
-    </form>
-    <div id="results"></div>
-    <div id="map" style="width: 500px; height: 400px;"></div>
+    <div class="pac-card" id="pac-card">
+      <div>
+        <div id="title">
+          Find locations near:
+        </div>
+        <p></p>
+        <div id="pac-container">
+        <input id="pac-input" type="text"
+            placeholder="Enter a location">
+        </div>
+
+        <!--<form form id="form" class="SearchForm" method="POST" onsubmit='return false'>
+         -->
+           <form id="form" onsubmit='return false'>
+                {% csrf_token %}
+                <table class="form">
+                {{ form }}
+                </table>
+                <input type="submit"  value="Filter results" />
+            </form>
+         
+
+      
+      </div>
+      </div>
+    <div id="map"></div>
+    
+    <!--     SCRIPTS BEGIN  -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU&libraries=places"></script>
     <script>
-      
     var map
     var placeSearch, autocomplete;
+    
     var markers = [];
     var MARKER_PATH = 'https://developers.google.com/maps/documentation/javascript/images/marker_green';
 
-
     $("#autocomplete").on('focus', function () {
-     geolocate();
-      });
-
-    function initMap() {
+          geolocate();
+        });
+    
+    function initialize() {
+       console.log("I JUST RESET THE MAP")
         map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 10,
+          zoom: 12,
           center: new google.maps.LatLng(41.913154, -87.633311),
           });
-      google.maps.event.addListener(map, 'idle', function(ev){
-        var bounds = map.getBounds().toJSON();
-        var places = autocomplete.getPlace();
-        var geo = places.geometry.viewport.toJSON();
-        console.log("HEY", bounds)
-    });
-        }
 
- 
-
-    function initialize() {
-    // Create the autocomplete object
+        var card = document.getElementById('pac-card');
+        var input = document.getElementById('pac-input');
+        var types = document.getElementById('type-selector');
+        var strictBounds = document.getElementById('strict-bounds-selector');
+        var resultsBox = document.getElementById('listing');
+        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
+        
+      // Create the autocomplete object
        autocomplete = new google.maps.places.Autocomplete(
-        document.getElementById('autocomplete'));
+        document.getElementById('pac-input'));
+        
         // When the user selects an address from the dropdown,
        // populate the address fields in the form.
-      google.maps.event.addListener(autocomplete, 'place_changed', function () {
-        var place = autocomplete.getPlace();
-        console.log("Autocomplete returns: ", place);
-
-        if (place.geometry) {
-          map.panTo(place.geometry.location);
-          map.setZoom(15);}
-          
-
-        
-        get_places();
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+          var place = autocomplete.getPlace();
+          console.log("Autocomplete returns: ", place);
+        //from google
+          if (place.geometry.viewport) {
+            map.fitBounds(place.geometry.viewport);
+          } else {
+            map.setCenter(place.geometry.location);
+            map.setZoom(17);  
+          }
+                get_places();
         });
+
+      
+        $("#form").on("submit", function(){
+          var data = $(this).serializeArray();
+          console.log("serialized filter data: ", data);
+          get_places(data);
+        });
+
       }
-      //console.log("Autocomplete returns outside: ", place);
-   
-      //https://simpleisbetterthancomplex.com/tutorial/2016/08/29/how-to-work-with-ajax-request-with-django.html
-      // This site taught us how to use ajax with django.
-      function get_places() {
-        var place = autocomplete.getPlace();
-        var bounds = place.geometry;
-        var name = $("#autocomplete").val();
         
-        $.ajax({
-          url: '/ajax/get_places/',
-          data: {'name':name},
-          dataType: 'json',
-          success: function(data) {
-            //console.log(data);
+      //https://simpleisbetterthancomplex.com/tutorial/2016/08/29/how-to-work-with-ajax-request-with-django.http
+      // This site taught us how to use ajax with django.
+      function get_places(data) {
+          var bounds = map.getBounds().toJSON();
+          var sw_lat = bounds.south;
+          var sw_lon = bounds.west;
+          var ne_lat = bounds.north;
+          var ne_lon = bounds.east;  
+          
+      
+          console.log("You are passing", data)
+          
+          $.ajax({
+            url: '/ajax/get_places/',
+            data: { 'data': data,
+                    'sw_lat':sw_lat,
+                    'sw_lon':sw_lon,
+                    'ne_lat':ne_lat,
+                    'ne_lon':ne_lon
+                  },
+            dataType: 'json',
+            success: function(data) {
+            console.log(data);
+
             var results = JSON.parse(data.data).features;
             placeMarkers(results);
             }
           });
         }
       
+      function get_filtered_places(){
 
-      // Access the table
-      function showresults(data) { 
-        var table = document.getElementById("results");
+
       }
-
       function placeMarkers(results){
         clearMarkers();
         // Create a marker for each hotel found, and
@@ -122,13 +232,11 @@
           // in an info window.
           markers[i].placeResult = results[i];
           //google.maps.event.addListener(markers[i], 'click', showInfoWindow);
-          setTimeout(dropMarker(i), i * 100);
+         setTimeout(dropMarker(i),0)
           //addResult(results[i], i);
             }
         }
   
-
-
       function clearMarkers() {
         for (var i = 0; i < markers.length; i++) {
           if (markers[i]) {
@@ -138,32 +246,26 @@
             markers = [];
         }
 
-    function dropMarker(i) {
+      function dropMarker(i) {
         return function() {
           markers[i].setMap(map);
-        };
-      }
-
+        };}
 
       function geolocate() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            var geolocation = new google.maps.LatLng(
-            position.coords.latitude, position.coords.longitude);
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+              var geolocation = new google.maps.LatLng(
+              position.coords.latitude, position.coords.longitude);
 
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-            document.getElementById("latitude").value = latitude;
-            document.getElementById("longitude").value = longitude;
+              var latitude = position.coords.latitude;
+              var longitude = position.coords.longitude;
+              document.getElementById("latitude").value = latitude;
+              document.getElementById("longitude").value = longitude;
+              autocomplete.setBounds(new google.maps.LatLngBounds(geolocation, geolocation));
+        });}
+          }
 
-            autocomplete.setBounds(new google.maps.LatLngBounds(geolocation, geolocation));
-        });
-      }}
     initialize();
-    initMap();
     </script>
-
-    <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU&libraries=places&callback=onLoaded"
-        async defer></script> -->
   </body>
 </html>

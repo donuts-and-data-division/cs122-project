@@ -12,11 +12,8 @@ urlpatterns = [
     url(r'^gmapdata$', views.gmapdata),
     url(r'^prettygmap$', views.prettygmap),
     url(r'^geojs$', views.geojs),
-    url(r'^snapdata$', views.snapdata),
+    url(r'^auto$', views.auto),
     url(r'^auto2$', views.auto2),
-   # url(r'^auto$', views.auto),
-    #url(r'^search_retailers$', views.search_retailers),
     url(r'^ajax/get_places/$', views.get_places)
-
 ]
 
