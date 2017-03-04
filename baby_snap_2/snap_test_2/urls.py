@@ -12,5 +12,6 @@ urlpatterns = [
     url(r'^prices$', views.prices),
     url(r'^groceries$', views.submit_grocery_list, name='grocery_list'),
     url(r'^ajax/cash_register/$', views.cash_register, name='cash_register'),
+    url(r'^submit-prices$', views.submit_prices, name='submit_prices'),
 ]
 
