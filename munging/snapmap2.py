@@ -18,7 +18,6 @@ import backoff
 
 @backoff.on_exception(backoff.expo, requests.exceptions.ConnectionError, max_tries=3)
 def get_place_url(lat, lon, keyword, radius, key):
-
     url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location\
 ={},{}&keyword={}&radius={}&key={}".format(lat, lon, keyword, radius, key)
     print (url)
@@ -26,18 +25,18 @@ def get_place_url(lat, lon, keyword, radius, key):
     return r.json()
 
 def get_place_details_url(placeid, key):
-
     url = "https://maps.googleapis.com/maps/api/place/details/json?\
-    placeid={}&key={}".format(placeid, key)
+placeid={}&key={}".format(placeid, key)
+    print (url)
     r = requests.get(url)
     return r.json()
 
-def get_places_info(num):
+def get_info(num):
     IL_filename = "Snap_With_Markets.csv"
     #IL = pd.read_csv(IL_filename)
     df = pd.read_csv(IL_filename)
     IL = df[df["City"] == "Chicago"]
-    IL.reset_index(inplace = True)
+    IL.reset_index(drop = True, inplace = True)
 
     KEY_INDEX = 0
     developerKeys = ["AIzaSyCGt79JrG0sym4cyrs6YabCyy76zpnB828",\
@@ -60,6 +59,12 @@ def get_places_info(num):
     check = [0]*len(IL.index)
     category = [0]*len(IL.index)
     types = [0]*len(IL.index)
+    form_adds = [0]*len(IL.index)
+    phone = [0]*len(IL.index)
+    hours = [0]*len(IL.index)
+    website = [0]*len(IL.index)
+    url = [0]*len(IL.index)
+    rating = [0]*len(IL.index)
     
     #typeset = set()
     completed = 0
@@ -78,10 +83,6 @@ def get_places_info(num):
         else:    
             keyword = address.split()[0]
 
-        #url = get_url(lat, lon, keyword, 200, key)
-        #print (url)
-        #r = requests.get(url)
-        #json = r.json()
         json = get_place_url(lat, lon, keyword, 200, key)
         multiple[i] = len(json["results"])
         how[i] = 'address first word'
@@ -95,18 +96,15 @@ def get_places_info(num):
         if len(json["results"]) > 1:
             print ("more than one")
             sleep(1.25)
+
             if IL.loc[i]["Farmers Market?"] == True:
                 new_keyword = name.split()[0] + "Market" 
             else: 
                 keyword0 = address.split()[0]
                 keyword1 = name.split()[0]
                 new_keyword = keyword0 + ' ' + keyword1
-            #url = get_url(lat, lon, new_keyword, 200, key)
-            #print(url)
-            #r = requests.get(url)
-            #json = r.json()
-            json = get_place_url(lat, lon, new_keyword, 200, key)
 
+            json = get_place_url(lat, lon, new_keyword, 200, key)
 
             if json["status"] == "OVER_QUERY_LIMIT":
                 KEY_INDEX += 1
@@ -122,12 +120,8 @@ def get_places_info(num):
             sleep(1.25)
             print ("oh no!") 
             keyword = name.split()[0]
-            #url = get_url(lat, lon, keyword, 300, key)
-            #print (url)
-            #r = requests.get(url)
-            #json = r.json()
-            json = get_place(lat, lon, keyword, 300, key)
 
+            json = get_place_url(lat, lon, keyword, 300, key)
 
             if json["status"] == "OVER_QUERY_LIMIT":
                 KEY_INDEX += 1
@@ -145,16 +139,10 @@ def get_places_info(num):
                     keyword0 = name.split()[0]
                     keyword1 = name.split()[1]
                     new_keyword = keyword0 + ' ' + keyword1
-                    #url = get_url(lat, lon, new_keyword, 200, key)
                     json = get_place_url(lat, lon, new_keyword, 200, key)
 
                 else: 
-                    #url = get_url(lat,loln, keyword, 200, key)
                     json = get_place_url(lat, lon, keyword, 200, key)
-
-                #print(url)
-                #r = requests.get(url)
-                #json = r.json()
 
                 if json["status"] == "OVER_QUERY_LIMIT":
                     KEY_INDEX += 1
@@ -169,16 +157,10 @@ def get_places_info(num):
             print ("oh no again!")
             if len(name.split()) >= 2:
                 keyword = name.split()[1]
-                #url = get_url(lat, lon, keyword, 300, key)
                 json = get_place_url(lat, lon, keyword, 300, key)
 
             else: 
-                #url = get_url(lat, lon, keyword, 400, key)
                 json = get_place_url(lat, lon, keyword, 400, key)
-
-            #print(url)
-            #r = requests.get(url)
-            #json = r.json()
 
             if json["status"] == "OVER_QUERY_LIMIT":
                 KEY_INDEX += 1
@@ -194,7 +176,6 @@ def get_places_info(num):
                 multiple[i] = len(json["results"])
                 how[i] = 'name second word, >1 results'
           
-
         if json["results"] == []:
             print("NOOO")
             ids[i]=None
@@ -228,7 +209,6 @@ def get_places_info(num):
             check[i] = "Double Check- Many results"
 
 
-
         #will be accurate if one result
         ids[i] = json["results"][0]["place_id"]
         names[i] = json["results"][0]["name"]
@@ -241,8 +221,8 @@ def get_places_info(num):
             category[i] = categorize(json["results"][0]["types"])
         types[i] = json["results"][0]["types"]
 
-        if "restaurant" in json["results"][0]["types"]:
-            check[i] = "Double Check- invalid type"
+        #if "restaurant" in json["results"][0]["types"]:
+            #check[i] = "Double Check- invalid type"
 
         if "price_level" in json["results"][0]:
             costs[i] = json["results"][0]["price_level"]
@@ -251,8 +231,13 @@ def get_places_info(num):
         
 
         #USE ID TO GET PLACES INFO
-        get_details_info(json["results"][0]["place_id"])
-
+        add_d, phone_d, hours_d, website_d, url_d, rating_d = get_details_info(json["results"][0]["place_id"], key)
+        form_adds[i] = add_d
+        phone[i] = phone_d
+        hours[i] = hours_d
+        website[i] = website_d
+        url[i] = url_d
+        rating[i] = rating_d
 
         #typeset.add(tuple(json["results"][0]["types"]))
         completed += 1
@@ -269,41 +254,73 @@ def get_places_info(num):
     IL['how'] = how
     IL['check'] = check
     IL["type"] = types
-    IL["category"] = category
+    IL["address"] = form_adds
+    IL["phone number"] = phone
+    IL["hours"] = hours
+    IL["website"] = website
+    IL["url"] = url
+    IL["rating"] = rating
     
     #print(typeset)
-    IL.to_csv("snapresultstestChicago.csv")
+    IL.to_csv("snapresultstestChicago1.csv")
 
-def get_details_info(place_id):
-    #create new lists somewhere and add elements
-    json = get_place_details_url
+def get_details_info(place_id, key):
+    json = get_place_details_url(place_id, key)
+    form_add = json["result"]["formatted_address"]
+    phone = json["result"]["formatted_phone_number"]
+    if "opening_hours" in json["result"]:
+        hours = json["result"]["opening_hours"]["weekday_text"]
+    else: 
+        hours = "None"
+    if "website" in json["result"]:
+        website = json["result"]["website"]
+    else:
+        website = "None"
+    url = json["result"]["url"]
+    if "rating" in json["result"]:
+        rating = json["result"]["rating"]
+    else:
+        rating = "None"
+    return form_add, phone, hours, website, url, rating
 
-    json["result"]["formatted_address"]
-    json["result"]["formatted_phone_number"]
+"""
+def get_details_info(i, place_id, key, forms_adds, phone, hours, website, url, rating):
+    print (form_adds)
+    json = get_place_details_url(place_id, key)
+
+    form_adds[i] = json["result"]["formatted_address"]
+    phone[i] = json["result"]["formatted_phone_number"]
+    hours[i] = json["result"]["opening_hours"]["weekday_text"]
     if ["website"] in json["result"]:
-        json["result"]["website"]
-    #"open now" omitted 
-    json["result"]["opening_hours"]["weekday_text"]
-
-    rating and reviews? 
-
-
-
+        website[i] = json["result"]["website"]
+    url[i] = json["result"]["url"]
+    rating[i] = json["result"]["rating"]
+"""
+    
 def categorize(types_list):
     if "gas_station" in types_list: 
         category = "gas station"
-    #elif "liquor_store" in types_list and "convenience_store" in types_list:
-        #category = "convenience store"
-    elif "convenience_store" in types_list or "food" in types_list:
+    elif "convenience_store" in types_list or "liquor_store" in types_list:
         category = "convenience store"
     elif "grocery_or_supermarket" in types_list and "convenience_store" not in types_list:
         category = "grocery"
     elif "bakery" in types_list or "cafe" in types_list:
         category = "cafe or bakery"
+    elif "types_list" == 0:
+        category = "unknown"
     else:
-        category = types_list
+        category = "other"
 
     return category
+
+def best_result(json, name):
+    best = 0
+    for i in range(len(json["results"])):
+        goog_name = json["results"][i]["name"]
+        if jellyfish.jaro_distance(goog_name, name) > best:
+            json = json["results"][i]
+
+    return json
 
 
 
