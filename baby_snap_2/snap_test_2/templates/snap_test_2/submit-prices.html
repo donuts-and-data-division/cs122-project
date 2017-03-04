@@ -1,0 +1,309 @@
+<head>
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+<style>
+
+body {
+    background-color: rgba(235, 235, 235, 0.56);
+}
+
+
+.header {
+     margin: 0;
+     color: #1d1f20;
+     text-align: center;
+     padding: 1em 0;
+     border-bottom: 1px solid #eee;
+     font-family: 'Slabo 27px', serif;
+ }
+    .header h1 {
+        margin: 0.2em 0;
+        font-size: 3em;
+        font-weight: 300;
+    }
+     .header h2 {
+        font-weight: 300;
+        color: #ccc;
+        padding: 0;
+        margin-top: 0;
+        font-family: 'Source Sans Pro', sans-serif;
+    }
+
+.menu {
+    width: 400px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: url('http://i.imgur.com/FPnuTwT.jpg');
+    background-position: 50% 95%;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 900;
+    font-size: 16px;
+}
+
+.grocery-form {
+    margin-left: 30px;
+    margin-top: 35px;
+
+}
+
+#main {
+    margin-left: 450;
+    margin-top: 85;
+
+}
+
+.menu-header {
+    margin-left: 30px;
+    font-family: 'Pacifico', cursive;
+    color: #636b46;
+    text-decoration: none;
+    font-size: 30px;
+    margin-top: 50px;
+    -o-transition:1s;
+    -ms-transition:1s;
+    -moz-transition:1s;
+    -webkit-transition:1s;
+    letter-spacing: 4px
+
+}
+
+.menu-header:hover {
+    color: #ffffff;
+    letter-spacing: 10px
+}
+
+#removebutton {
+  border-radius: 50px;
+  width: 25px;
+  height: 25px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 900;
+  color: #698C3C;
+  font-size: 20px;
+  border:none;
+  background:transparent;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+}
+
+#removebutton:hover {
+  color: #737373;
+  cursor: pointer;
+}
+
+#id_food {
+   height: 30px;
+   width: 340px;
+   -webkit-border-radius: 5px;
+   -moz-border-radius: 5px;
+   border-radius: 5px;
+   background-color: rgba(255, 255, 255, 0.6);
+   border:none;
+   padding-left: 5px;
+    -o-transition:1s;
+  -ms-transition:1s;
+  -moz-transition:1s;
+  -webkit-transition:1s;
+}
+
+#id_food:hover{
+    background-color: rgba(255, 255, 255, 1);
+    cursor: pointer;
+}
+
+
+.grocery-form select {
+    -webkit-appearance:none;
+    -moz-appearance:none;
+}
+
+.grocery-form:after {
+    content: '>';
+    font: 13px "Consolas", monospace;
+    color: #333;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+    left: 349px;
+    top: 95px;
+    position: absolute;
+
+}
+
+
+.grid table { 
+    border-collapse: collapse; 
+    text-align: left; 
+    font-family: 'Source Sans Pro', sans-serif;
+    width: 660px;
+} 
+
+.grid {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.grid table td, .grid table th { 
+    padding: 3px 10px; 
+}
+
+.grid table thead th {
+    color:#1d1f20; 
+    font-size: 16px; 
+} 
+
+.grid table tbody td { 
+    color: #000000; 
+    font-size: 14px;
+}
+
+.bottom {
+    font-family: 'Pacifico', cursive;
+    font-size:20px;
+    color:#1d1f20;
+    margin-left: 6px;
+    margin-top: 15px;
+}
+
+#total{
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+#checkmark{
+  border-radius: 50px;
+  width: 25px;
+  height: 25px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 900;
+  color: #698C3C;
+  font-size: 20px;
+  border:none;
+  background:transparent;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+}
+
+#checkmark:hover {
+  color: #636b46;
+  cursor: pointer;
+}
+
+
+    
+</style>
+
+<link href="https://fonts.googleapis.com/css?family=Pacifico|Slabo+27px|Source+Sans+Pro:400,900" rel="stylesheet"></head>
+
+        <div class="menu">
+            <a class="menu-header" href="#">snapmap</a>
+
+            <form name ='nameform' class="grocery-form" method='POST' onsubmit='return false' value="Select a food">
+
+                {% csrf_token %}
+                {{ form.as_p }}
+
+            </form>
+        </div>
+
+    <div id="main">
+                <div class="grid">
+                    <table>
+                        <col width="300">
+                        <col width="145">
+                        <col width="115">
+                        <col width="110">
+                        <thead>
+                            <tr>
+                                <th>Food</th>
+                                <th>Current Price</th>
+                                <th>Your Price</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                
+                <div class="grid">
+                    <table id="food_list_table">
+                        <col width="300">
+                        <col width="145">
+                        <col width="115">
+                        <col width="110">
+                        </table>
+                </div>
+
+                </div>
+            </p>
+  
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<script>
+
+//these resources were helpful in writing the following javascript:
+//https://www.youtube.com/watch?v=o6ueQBrcKrs
+//https://www.w3schools.com/jsref/met_table_insertrow.asp
+
+function addFoodtoTable(data) {    
+
+    //access the table
+    var table = document.getElementById("food_list_table");
+
+    //create empty row at beginning of table:
+    var row = table.insertRow();
+
+    //insert cells into the row
+    var food = row.insertCell(0);
+    var price_per_quantity = row.insertCell(1);
+    var input_price = row.insertCell(2);
+    var button = row.insertCell(3);
+
+
+    //create a remove button
+    var removeButton = document.createElement("button");
+    removeButton.innerHTML = "&times;";
+    removeButton.id = 'removebutton';
+
+    var checkmark = document.createElement('button');
+    checkmark.innerHTML = '&#10003;'
+    checkmark.id = "checkmark"
+
+    //add content to the new cells:
+    var input_quantity = 1
+    food.innerHTML = data.food_name;
+    price_per_quantity.innerHTML = '$' + (data.food_price).toFixed(2) + '/' + data.food_quantity;
+    input_price.innerHTML = '<input type = "text" size=4 id="price_input">'
+
+    button.appendChild(checkmark);
+    button.appendChild(removeButton);
+}
+
+
+$('#food_list_table').on('click', '#removebutton', function() {
+    $(this).closest('tr').remove();
+})
+
+
+$('#id_food').change(function () {
+
+    var food_id = $('#id_food').val();
+    
+    $.ajax({
+        url: '/ajax/cash_register/',
+        data: {'food_id': food_id},
+        dataType: 'json',
+        success: function(data) {
+            addFoodtoTable(data);
+            }
+        });
+});
+
+</script> 
