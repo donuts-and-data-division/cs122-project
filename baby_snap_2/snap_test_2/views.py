@@ -6,10 +6,8 @@ from . import placesAPI as pa
 from django.contrib.gis.geos import Polygon
 from django.contrib import messages
 from .forms import SearchForm, GroceriesForm, PricesForm, GroceryForm
-from .tables import ResultsTable
 from .forms import SearchForm, FilterForm
 from django.http import JsonResponse
-from django_tables2 import RequestConfig
 
 #def index(request):
 #    return render(request, 'snap_test_2/index.html',{})
