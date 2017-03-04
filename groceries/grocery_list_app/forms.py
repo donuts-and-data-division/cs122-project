@@ -22,12 +22,12 @@ class GroceryForm(forms.ModelForm):
     #instead of .all we need to filter by store type to adjust the dropdown menu
     #store type will come from the view maybe ?
 
-    food = forms.ModelChoiceField(queryset=FoodPrices.objects.all())
-
-    quantity = forms.CharField(max_length=3, 
-        widget=forms.Select(choices=QUANTITY_CHOICES))
+    food = forms.ModelChoiceField(queryset=FoodPrices.objects.all(), empty_label = "Build your list", label="")
+    #quantity = forms.CharField(max_length=3, 
+        #widget=forms.Select(choices=QUANTITY_CHOICES))
 
     class Meta:
         model = FoodPrices
-        exclude = ['food_name', 'food_quantity', 'food_price', 'date_last_updated']
+        exclude = ['food_name', 'food_quantity', 'food_price', 'date_last_updated', 'food_type']
+
 

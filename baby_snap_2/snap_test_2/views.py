@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import SnapLocations
+from .models import SnapLocations, FoodPrices
 from django.core.serializers import serialize
 from . import placesAPI as pa
 from django.contrib.gis.geos import Polygon
 from django.contrib import messages
-from .forms import SearchForm, GroceriesForm, PricesForm
+from .forms import SearchForm, GroceriesForm, PricesForm, GroceryForm
 from .tables import ResultsTable
 from .forms import SearchForm, FilterForm
 from django.http import JsonResponse
@@ -43,7 +43,6 @@ def auto(request):
 def auto2(request):
     qs_results = {}
     qs_results_ser = serialize('geojson', qs_results)
-    
     if request.method == 'POST': 
         form = SearchForm(request.POST)        
         if form.is_valid():
@@ -61,12 +60,12 @@ def auto2(request):
             # fill in filters with model fields after jazz updates
             qs_results = SnapLocations.objects.filter(geom__contained = viewport)
             qs_results_ser = serialize('geojson', qs_results)
+        
     else:
         form = SearchForm()
-    
-    table = ResultsTable(qs_results)
-    RequestConfig(request).configure(table)
-    return render(request, 'snap_test_2/auto2.html', {'table': table, 'form': form, 'qs_results': qs_results_ser})
+    # put this in different view?!!
+
+    return render(request, 'snap_test_2/auto2.html', {'form': form, 'qs_results': qs_results_ser})
 
 
 def prices(request):
@@ -78,14 +77,44 @@ def prices(request):
 
 
 def groceries(request):
+    data = {}
     if request.method == "POST":
         groceries = GroceriesForm(request.POST)
         if groceries.is_valid():
             name = groceries.cleaned_data['name']
             retailer_type = groceries.cleaned_data['retailer_type']
             price = groceries.cleaned_data['price']
+            data = {'name': name, 'retailer_type': retailer_type, 'price': price}
     else:
         groceries = GroceriesForm()
-    return render(request, "snap_test_2/groceries.html", {'groceries': groceries})
+    return render(request, "snap_test_2/grocery_list_2.html", {'groceries': groceries, 'data': data})
 
 
+def submit_grocery_list(request):
+    
+    if request.method == "POST":
+        form = GroceryForm(request.POST)     
+
+    else:
+        form = GroceryForm()
+
+    #this view will actually be coming from the map part, and will redirect to the grocery list page
+    #make a dictionary with dollar sign info and list of foods available at that type of store?
+    #add that dictionary to the render thing
+    #somehow edit the dropdown menu on the form based on the list of foods...
+
+    return render(request, 'snap_test_2/grocery_list_2.html', {'form': form})
+
+
+def cash_register(request):
+    food_id = request.GET.get('food_id', None)
+    data = {
+            'food_price': FoodPrices.objects.get(id=food_id).food_price,
+            'food_quantity': FoodPrices.objects.get(id=food_id).food_quantity,
+            'food_name': FoodPrices.objects.get(id=food_id).food_name
+            }
+
+    #probably add dollar signs to this dictionary
+    #e.g. 'dollar_sign': 1
+
+    return JsonResponse(data)

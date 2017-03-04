@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^auto2$', views.auto2),
     url(r'^ajax/get_places/$', views.get_places),
     url(r'^prices$', views.prices),
-    url(r'^groceries$', views.groceries),
+    url(r'^groceries$', views.submit_grocery_list, name='grocery_list'),
+    url(r'^ajax/cash_register/$', views.cash_register, name='cash_register'),
 ]
 
