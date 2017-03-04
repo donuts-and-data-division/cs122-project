@@ -19,22 +19,6 @@ def index(request):
     return render(request, "snap_test_2/index.html", 
         {"qs_results":qs_results})
 
-
-def prettygmap(request):
-    return render(request, "snap_test_2/prettygmap.html")
-
-def geojs(request, key = "AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU"):
-
-    return render(request, "snap_test_2/geojson.html",  {"qs_geojson":qs_geojson})
-    
-def gmap(request):
-    qs_results = SnapLocations.objects.all()
-    qs_results = serialize('geojson', qs_results)
-
-    return render(request, "snap_test_2/gmap.html", 
-        {"qs_results":qs_results})
-
-
 def get_places(request):
     #place_name = request.GET.get("name", None)
     #bounds = pa.get_geometry(place_name) #Relies on API
