@@ -132,7 +132,7 @@
             <td id="iw-website"></td>
           <tr>
             <td>
-            <form id="groceries" action='groceries' method="post">
+            <form id="groceries" action='groceries' method="get">
               {% csrf_token %}
               {{ groceries.as_p }}
               <input type="submit" id = "submit_groceries" name = "submit_groceries" value="Build Grocery List" />
