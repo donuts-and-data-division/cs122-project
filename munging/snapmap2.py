@@ -97,6 +97,7 @@ def get_info(num):
             print ("more than one")
             sleep(1.25)
 
+            """
             if IL.loc[i]["Farmers Market?"] == True:
                 new_keyword = name.split()[0] + "Market" 
             else: 
@@ -105,11 +106,14 @@ def get_info(num):
                 new_keyword = keyword0 + ' ' + keyword1
 
             json = get_place_url(lat, lon, new_keyword, 200, key)
-
+            """
+            json["results"][0] = best_result(json, name)
+            
             if json["status"] == "OVER_QUERY_LIMIT":
                 KEY_INDEX += 1
                 key = developerKeys[KEY_INDEX]
-                json = get_place_url(lat, lon, new_keyword, 200, key)
+                json["results"][0] = best_result(json, name)
+                #json = get_place_url(lat, lon, new_keyword, 200, key)
                 check[i] = "Changed Key"
 
             multiple[i] = len(json["results"])
@@ -135,6 +139,7 @@ def get_info(num):
             if len(json["results"]) > 1:
                 print ("more than one")
                 sleep(1.25)
+                """
                 if len(name.split()) >= 2:
                     keyword0 = name.split()[0]
                     keyword1 = name.split()[1]
@@ -143,10 +148,13 @@ def get_info(num):
 
                 else: 
                     json = get_place_url(lat, lon, keyword, 200, key)
+                """
+                json["results"][0] = best_result(json, name)
 
                 if json["status"] == "OVER_QUERY_LIMIT":
                     KEY_INDEX += 1
                     key = developerKeys[KEY_INDEX]
+                    json["results"][0] = best_result(json, name)
                     check[i] = "Changed Key"
 
                 multiple[i] = len(json["results"])
@@ -165,6 +173,10 @@ def get_info(num):
             if json["status"] == "OVER_QUERY_LIMIT":
                 KEY_INDEX += 1
                 key = developerKeys[KEY_INDEX]
+                if len(name.split()) >= 2:
+                    json = get_place_url(lat, lon, keyword, 300, key)
+                else: 
+                    json = get_place_url(lat, lon, keyword, 400, key)
                 check[i] = "Changed Key"
 
             multiple[i] = len(json["results"])
@@ -172,6 +184,7 @@ def get_info(num):
 
             if len(json["results"]) > 1:
                 print ("more than one")
+                json["results"][0] = best_result(json, name)
 
                 multiple[i] = len(json["results"])
                 how[i] = 'name second word, >1 results'
@@ -206,9 +219,8 @@ def get_info(num):
         if jellyfish.levenshtein_distance(add1.lower(), add2.lower()) > 0.5*len(add1):
             check[i] = "Double Check- Address mismatch"
 
-        if multiple[i] > 5:
-            check[i] = "Double Check- Many results"
-
+        #if multiple[i] > 5:
+            #check[i] = "Double Check- Many results"
 
         #will be accurate if one result
         ids[i] = json["results"][0]["place_id"]
@@ -267,8 +279,14 @@ def get_info(num):
     #print(typeset)
     IL.to_csv("snapresultstestChicago1.csv")
 
-def get_details_info(place_id, key):
+def get_details_info(place_id, key, KEY_INDEX, developerKeys):
     json = get_place_details_url(place_id, key)
+    if json["status"] == "OVER_QUERY_LIMIT":
+        print ("over")
+        KEY_INDEX += 1
+        key = developerKeys[KEY_INDEX]
+        json = get_place_details_url(place_id, key)
+            
     form_add = json["result"]["formatted_address"]
     if "formatted_phone_number" in json["result"]:
         phone = json["result"]["formatted_phone_number"]
@@ -321,12 +339,15 @@ def categorize(json):
 
 def best_result(json, name):
     best = 0
+    best_dist = 0
     for i in range(len(json["results"])):
         g_name = json["results"][i]["name"]
         print (g_name)
-        if jellyfish.jaro_distance(json["results"][i]["name"], name) > best:
+        if jellyfish.jaro_distance(json["results"][i]["name"], name) > best_dist:
             best = i
-    json = json["results"][i]
+            best_dist = jellyfish.jaro_distance(json["results"][i]["name"], name)
+            print (best_dist)
+    json = json["results"][best]
 
     return json
 
