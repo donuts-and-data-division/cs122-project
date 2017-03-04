@@ -11,7 +11,6 @@ import backoff
 
 
 #def get_url(lat, lon, keyword, radius, key):
-
     #url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location\
 #={},{}&keyword={}&radius={}&key={}".format(lat, lon, keyword, radius, key)
     #return url
@@ -45,7 +44,11 @@ def get_info(num):
     "AIzaSyDJUsXYFdat1urw-QLkvbZu17gmEj45its", "AIzaSyDef0qoVNWFiIhSf2DIcI6s393w2ikTj2E", \
     "AIzaSyBbj_MRDIQC-GiOLuttSbCyht4cG-CkSjU", "AIzaSyAHH7pVva_7a2Ue4kWVkIvJPoihOvGPdqY", \
     "AIzaSyAHH7pVva_7a2Ue4kWVkIvJPoihOvGPdqY", "AIzaSyC7ukvijmGEqmfRIPZiNlFsXS436eXJs18", \
-    "AIzaSyCls1mcmSzQnNPbTjeYrLA8yyde4AsH0rU"]
+    "AIzaSyCls1mcmSzQnNPbTjeYrLA8yyde4AsH0rU", "AIzaSyCBAgvlKZoVQ9TYzizDA21aNvmk3z5BgLc",\
+    "AIzaSyA99nqCOeT0ouZkmlIl89Ysl-8l5Su67SY",  "AIzaSyBZiNslXrtBSQe75scT7K1Mb0pmyxIGM2M",\
+    "AIzaSyBytEe914saHxkWTfI71kqbVINrg2RWMhE", " AIzaSyC0D12kQSiYdc0oioMEKMXJfR-QPALhzYQ"\
+    "AIzaSyBiTMni2hEjQCIkmq8wVjyqBda2ZGgpTwg"]
+
     key = developerKeys[KEY_INDEX]
 
     ids = [0]*len(IL.index)
@@ -245,7 +248,8 @@ def get_info(num):
         
 
         #USE ID TO GET PLACES INFO
-        add_d, phone_d, hours_d, website_d, url_d, rating_d = get_details_info(json["results"][0]["place_id"], key)
+        add_d, phone_d, hours_d, website_d, url_d, rating_d = get_details_info(json["results"][0]["place_id"],\
+         key, KEY_INDEX, developerKeys)
         form_adds[i] = add_d
         phone[i] = phone_d
         hours[i] = hours_d
@@ -280,9 +284,10 @@ def get_info(num):
     IL.to_csv("snapresultstestChicago1.csv")
 
 def get_details_info(place_id, key, KEY_INDEX, developerKeys):
+    #print (key)
     json = get_place_details_url(place_id, key)
-    if json["status"] == "OVER_QUERY_LIMIT":
-        print ("over")
+    #if json["status"] == "OVER_QUERY_LIMIT":
+    while json["status"] != "OVER_QUERY_LIMIT":
         KEY_INDEX += 1
         key = developerKeys[KEY_INDEX]
         json = get_place_details_url(place_id, key)
