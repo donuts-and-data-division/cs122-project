@@ -168,8 +168,7 @@
         var sw_lat = geo.south;
         var sw_lon = geo.west;
         var ne_lat = geo.north;
-        var ne_lon = geo.east ;  
-        console.log(ne_lon);    
+        var ne_lon = geo.east ;     
         document.getElementById('sw_lat').value = sw_lat;
         document.getElementById('sw_lon').value = sw_lon;
         document.getElementById('ne_lat').value = ne_lat;
@@ -257,21 +256,21 @@
         infoWindow.open(map, marker);
         var place = marker.placeResult.properties;
         buildIWContent(place);
-        
-        $('#submit_groceries').click(function () {
-        var name = place.googlename;
-        
-        var retailer_type = place.googlename;/* need update!*/
-        var price = place.googlename; /* need update!*/
-        document.getElementById('name').value = name;
-        document.getElementById('retailer_type').value = retailer_type;
-        document.getElementById('price').value = price;
-        });
+        console.log(place.googlename);  
       }
 
       function buildIWContent(place) {
         document.getElementById('iw-name').textContent = place.googlename;
-        document.getElementById('iw-address').textContent = place.googleaddress;
+        document.getElementById('iw-address').textContent = place.googleaddress;  
+
+        $('#submit_groceries').hover(function() {
+        var name = place.googlename;
+        var retailer_type = place.googlename;/* need update!*/
+        var price = place.googlename; /* need update!*/
+        document.getElementById('groc_name').value = 'name';
+        document.getElementById('groc_retailer_type').value = 'retailer_type';
+        document.getElementById('groc_price').value = 'price';
+        }); 
       }
 
     </script>

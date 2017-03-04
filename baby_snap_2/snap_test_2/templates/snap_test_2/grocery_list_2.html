@@ -1,0 +1,452 @@
+<head>
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+<style>
+
+body {
+    background-color: rgba(235, 235, 235, 0.56);
+}
+
+
+.header {
+     margin: 0;
+     color: #1d1f20;
+     text-align: center;
+     padding: 1em 0;
+     border-bottom: 1px solid #eee;
+     font-family: 'Slabo 27px', serif;
+ }
+    .header h1 {
+        margin: 0.2em 0;
+        font-size: 3em;
+        font-weight: 300;
+    }
+     .header h2 {
+        font-weight: 300;
+        color: #ccc;
+        padding: 0;
+        margin-top: 0;
+        font-family: 'Source Sans Pro', sans-serif;
+    }
+
+.menu {
+    width: 400px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: url('http://i.imgur.com/FPnuTwT.jpg');
+    background-position: 50% 95%;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 900;
+    font-size: 16px;
+}
+
+.grocery-form {
+    margin-left: 30px;
+    margin-top: 35px;
+
+}
+
+#main {
+    margin-left: 450;
+    margin-top: 85;
+
+}
+
+.menu-header {
+    margin-left: 30px;
+    font-family: 'Pacifico', cursive;
+    color: #636b46;
+    text-decoration: none;
+    font-size: 30px;
+    margin-top: 50px;
+    -o-transition:1s;
+    -ms-transition:1s;
+    -moz-transition:1s;
+    -webkit-transition:1s;
+    letter-spacing: 4px
+
+}
+
+.menu-header:hover {
+    color: #ffffff;
+    letter-spacing: 10px
+}
+
+#removebutton {
+  border-radius: 50px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 900;
+  color: #b3b3b3;
+  font-size: 19px;
+  border:none;
+  background:transparent;
+  text-align: center;
+  transform: scale(1.6, 1.15);
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+}
+
+#removebutton:hover {
+  color: #737373;
+  cursor: pointer;
+}
+
+#id_food {
+   height: 30px;
+   width: 340px;
+   -webkit-border-radius: 5px;
+   -moz-border-radius: 5px;
+   border-radius: 5px;
+   background-color: rgba(255, 255, 255, 0.6);
+   border:none;
+   padding-left: 5px;
+    -o-transition:1s;
+  -ms-transition:1s;
+  -moz-transition:1s;
+  -webkit-transition:1s;
+}
+
+#id_food:hover{
+    background-color: rgba(255, 255, 255, 1);
+    cursor: pointer;
+}
+
+
+.grocery-form select {
+    -webkit-appearance:none;
+    -moz-appearance:none;
+}
+
+.grocery-form:after {
+    content: '>';
+    font: 13px "Consolas", monospace;
+    color: #333;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+    left: 349px;
+    top: 95px;
+    position: absolute;
+
+}
+
+
+.grid table { 
+    border-collapse: collapse; 
+    text-align: left; 
+    font-family: 'Source Sans Pro', sans-serif;
+} 
+
+.grid {
+    font-family: 'Source Sans Pro', sans-serif;
+    width: 700px;
+}
+
+.grid table td, .grid table th { 
+    padding: 3px 10px; 
+}
+
+.grid table thead th {
+    color:#1d1f20; 
+    font-size: 16px; 
+} 
+
+.grid table tbody td { 
+    color: #000000; 
+    font-size: 14px;
+}
+
+.bottom {
+    font-family: 'Pacifico', cursive;
+    font-size:20px;
+    color:#1d1f20;
+    margin-left: 6px;
+    margin-top: 15px;
+}
+
+#total{
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+#increaseButton{
+  border-radius: 50px;
+  width: 25px;
+  height: 25px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 900;
+  color: #698C3C;
+  font-size: 20px;
+  border:none;
+  background:transparent;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+}
+
+#decreaseButton{
+  border-radius: 50px;
+  height: 25px;
+  width: 25px;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 900;
+  color: #ba0f51;
+  font-size: 20px;
+  border:none;
+  background:transparent;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+}
+
+#decreaseButton:hover {
+  color: #843849;
+  cursor: pointer;
+}
+
+#increaseButton:hover {
+  color: #636b46;
+  cursor: pointer;
+}
+
+
+    
+</style>
+
+<link href="https://fonts.googleapis.com/css?family=Pacifico|Slabo+27px|Source+Sans+Pro:400,900" rel="stylesheet"></head>
+
+        <div class="menu">
+            <a class="menu-header" href="#">snapmap</a>
+
+            <form name ='nameform' class="grocery-form" method='POST' onsubmit='return false' value="Select a food">
+
+                {% csrf_token %}
+                {{ form.as_p }}
+
+            </form>
+        </div>
+
+    <div id="main">
+                <div class="grid">
+                    <table>
+                        <col width="330">
+                        <col width="80">
+                        <col width="80">
+                        <col width="160">
+                        <thead>
+                            <tr>
+                                <th>Food</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                
+                <div class="grid">
+                    <table id="food_list_table">
+                        <col width="330">
+                        <col width="80">
+                        <col width="80">
+                        <col width="80">
+                        <col width="110"></table>
+                </div>
+
+                <table class = 'bottom'>
+                    <tr>
+                        <td>Total:</td>
+                        <td id='total'>&nbsp;&nbsp;$0.00</td>
+                    </tr>
+                </table>
+
+                </div>
+            </p>
+  
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<script>
+
+//these resources were helpful in writing the following javascript:
+//https://www.youtube.com/watch?v=o6ueQBrcKrs
+//https://www.w3schools.com/jsref/met_table_insertrow.asp
+
+function addFoodtoTable(data) {    
+
+    //access the table
+    var table = document.getElementById("food_list_table");
+
+    //create empty row at beginning of table:
+    var row = table.insertRow();
+
+    //insert cells into the row
+    var food = row.insertCell(0);
+    var price_per_quantity = row.insertCell(1);
+    var total_price = row.insertCell(2);
+    var quantity = row.insertCell(3);
+    var button = row.insertCell(4);
+
+
+    //create a remove button
+    var removeButton = document.createElement("button");
+    removeButton.innerHTML = "X";
+    removeButton.id = 'removebutton';
+
+    var increaseButton = document.createElement('button');
+    var decreaseButton = document.createElement('button');
+    increaseButton.innerHTML = '&#9650;'
+    decreaseButton.innerHTML = '&#9660;'
+    increaseButton.id = "increaseButton"
+    decreaseButton.id = "decreaseButton"
+
+    //add content to the new cells:
+    var input_quantity = 1
+    food.innerHTML = data.food_name;
+    price_per_quantity.innerHTML = '$' + (data.food_price).toFixed(2) + '/' + data.food_quantity;
+    total_price.innerHTML = '$' + (data.food_price * input_quantity).toFixed(2);
+
+    //FOR THE SUBMIT PRICES VERSION: button.innerHTML = '<input type = "text">'
+    //button.appendChild(removeButton)
+
+    button.appendChild(decreaseButton);
+    button.appendChild(increaseButton);
+    button.appendChild(removeButton)
+    quantity.innerHTML = '<p id = "quantity" >' + input_quantity + '</p>';
+    
+    //recalculate total price
+    var table_rows = document.getElementById('food_list_table').rows;
+    var new_total = 0
+      
+    for (var i = 0; i < table_rows.length; ++i) {
+
+        table_cells = table_rows[i].cells;
+        item_amount = table_cells[2].innerHTML;
+        float_amount = parseFloat(item_amount.slice(1));
+        new_total += float_amount;
+
+    document.getElementById('total').innerHTML = '$' + new_total.toFixed(2);
+    
+    }   
+}
+
+//remove table row and update price on remove button click
+$('#food_list_table').on('click', '#increaseButton', function () {
+
+    var text = $(this).parent().prev('td');
+    var new_quant = parseFloat(text.text()) + 0.25;
+    text.html(new_quant);
+    var per_price = text.prev('td').prev('td').text();
+    var float_price = parseFloat(per_price.slice(1));
+    var total_price = $(this).parent().prev('td').prev('td')
+    var new_amount = float_price * new_quant
+    total_price.html('$' + new_amount.toFixed(2));
+
+    //recalculate total price
+    var table_rows = document.getElementById('food_list_table').rows;
+    var new_total = 0
+
+    if (table_rows.length == 0) {
+    document.getElementById('total').innerHTML = '$' + parseFloat(0.00);
+    }
+      
+    for (var i = 0; i < table_rows.length; ++i) {
+
+        table_cells = table_rows[i].cells;
+        item_amount = table_cells[2].innerHTML;
+        float_amount = parseFloat(item_amount.slice(1));
+        new_total += float_amount;
+    }
+
+    document.getElementById('total').innerHTML = '$' + new_total.toFixed(2);
+
+      
+});
+
+$('#food_list_table').on('click', '#removebutton', function() {
+    $(this).closest('tr').remove();
+
+    //recalculate total price
+    var table_rows = document.getElementById('food_list_table').rows;
+    var new_total = 0
+
+    if (table_rows.length == 0) {
+    document.getElementById('total').innerHTML = '$' + parseFloat(0.00);
+    }
+      
+    for (var i = 0; i < table_rows.length; ++i) {
+
+        table_cells = table_rows[i].cells;
+        item_amount = table_cells[2].innerHTML;
+        float_amount = parseFloat(item_amount.slice(1));
+        new_total += float_amount;
+    }
+
+    document.getElementById('total').innerHTML = '$' + new_total.toFixed(2);
+})
+
+$('#food_list_table').on('click', '#decreaseButton', function () {
+
+    var text = $(this).parent().prev('td');
+    var new_quant = parseFloat(text.text()) - 0.25;
+
+    if (new_quant <= 0) {
+        $(this).closest('tr').remove();
+    }
+    text.html(new_quant);
+    var per_price = text.prev('td').prev('td').text();
+    var float_price = parseFloat(per_price.slice(1));
+    var total_price = $(this).parent().prev('td').prev('td')
+    var new_amount = float_price * new_quant
+    total_price.html('$' + new_amount.toFixed(2));
+
+
+    //recalculate total price
+    var table_rows = document.getElementById('food_list_table').rows;
+    var new_total = 0
+
+    if (table_rows.length == 0) {
+    document.getElementById('total').innerHTML = '$' + parseFloat(0.00);
+    }
+      
+    for (var i = 0; i < table_rows.length; ++i) {
+
+        table_cells = table_rows[i].cells;
+        item_amount = table_cells[2].innerHTML;
+        float_amount = parseFloat(item_amount.slice(1));
+        new_total += float_amount;
+    }
+
+    document.getElementById('total').innerHTML = '$' + new_total.toFixed(2);
+
+      
+});
+
+
+$('#id_food').change(function () {
+
+    var food_id = $('#id_food').val();
+    
+    $.ajax({
+        url: '/ajax/cash_register/',
+        data: {'food_id': food_id},
+        dataType: 'json',
+        success: function(data) {
+            addFoodtoTable(data);
+            }
+        });
+});
+
+
+
+
+</script> 
+
