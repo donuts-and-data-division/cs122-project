@@ -132,9 +132,6 @@
             <td id="iw-website"></td>
           <tr>
             <td>
-            <form id="groceries" action='groceries' method="get">
-              {% csrf_token %}
-              {{ groceries.as_p }}
               <input type="submit" id = "submit_groceries" name = "submit_groceries" value="Build Grocery List" />
             </form>
             </td>
@@ -255,21 +252,17 @@
         var marker = this;
         infoWindow.open(map, marker);
         var place = marker.placeResult.properties;
-        buildIWContent(place);
-        console.log(place.googlename);  
+        buildIWContent(place);  
       }
 
       function buildIWContent(place) {
         document.getElementById('iw-name').textContent = place.googlename;
         document.getElementById('iw-address').textContent = place.googleaddress;  
 
-        $('#submit_groceries').hover(function() {
-        var name = place.googlename;
-        var retailer_type = place.googlename;/* need update!*/
-        var price = place.googlename; /* need update!*/
-        document.getElementById('groc_name').value = 'name';
-        document.getElementById('groc_retailer_type').value = 'retailer_type';
-        document.getElementById('groc_price').value = 'price';
+        $('#submit_groceries').click(function() {
+        var place_id = place.place_id;
+        var url = '/groceries/' + place_id + '/';
+        window.location.href = url;
         }); 
       }
 

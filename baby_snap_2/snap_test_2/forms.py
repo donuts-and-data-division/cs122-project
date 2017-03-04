@@ -41,11 +41,6 @@ class FilterForm(forms.Form):
     rating = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=stars, label='Average Rating', required = False)
 
 
-class GroceriesForm(forms.Form):
-    name = forms.CharField( widget=forms.HiddenInput(attrs={'id':'groc_name'}))
-    retailer_type = forms.CharField( widget=forms.HiddenInput(attrs={'id':'groc_retailer_type'}))
-    price = forms.CharField( widget=forms.HiddenInput(attrs={'id':'groc_price'}))
-
 class PricesForm(forms.Form):
     name = forms.CharField( widget=forms.HiddenInput(attrs={'id':'name'}))
     retailer_type = forms.CharField( widget=forms.HiddenInput(attrs={'id':'retailer_type'}))
@@ -82,4 +77,4 @@ class GroceryForm(forms.ModelForm):
         model = FoodPrices
         exclude = ['food_name', 'food_quantity', 'food_price', 'date_last_updated', 'food_type']
 
-    place_id = forms.CharField( widget=forms.HiddenInput(attrs={'id':'groceries_place_id'}))
+    
