@@ -26,8 +26,10 @@
             <form id="form" onsubmit='return false'>
                 {% csrf_token %}
                 <table class="form">
-                {{ form }}
+                {% for field in form %}
+                <td> {{ field }} </td>
                 </table>
+                {% endfor %}
                 <input type="submit"  value="Filter results" />
             </form>
       </div>
