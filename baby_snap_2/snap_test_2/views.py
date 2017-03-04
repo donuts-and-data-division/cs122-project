@@ -5,7 +5,7 @@ from django.core.serializers import serialize
 from . import placesAPI as pa
 from django.contrib.gis.geos import Polygon
 from django.contrib import messages
-from .forms import SearchForm, GroceriesForm, PricesForm, GroceryForm
+from .forms import SearchForm, PricesForm, GroceryForm
 from .forms import SearchForm, FilterForm
 from django.http import JsonResponse
 
