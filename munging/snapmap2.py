@@ -184,6 +184,7 @@ def get_info(num):
             lngs[i]=None
             adds[i]= None
             costs[i] = None
+            category[i] = "unkown"
             continue
 
         #check if googleaddress closely matches input address
@@ -218,7 +219,8 @@ def get_info(num):
         if IL.loc[i]["Farmers Market?"] == True:
             category[i] = "Farmer's Market"
         else: 
-            category[i] = categorize(json["results"][0]["types"])
+            #category[i] = categorize(json["results"][0]["types"])
+            category[i] = categorize(json)
         types[i] = json["results"][0]["types"]
 
         #if "restaurant" in json["results"][0]["types"]:
@@ -254,6 +256,7 @@ def get_info(num):
     IL['how'] = how
     IL['check'] = check
     IL["type"] = types
+    IL["category"] = category
     IL["address"] = form_adds
     IL["phone number"] = phone
     IL["hours"] = hours
@@ -267,7 +270,10 @@ def get_info(num):
 def get_details_info(place_id, key):
     json = get_place_details_url(place_id, key)
     form_add = json["result"]["formatted_address"]
-    phone = json["result"]["formatted_phone_number"]
+    if "formatted_phone_number" in json["result"]:
+        phone = json["result"]["formatted_phone_number"]
+    else:
+        phone = "None"
     if "opening_hours" in json["result"]:
         hours = json["result"]["opening_hours"]["weekday_text"]
     else: 
@@ -297,7 +303,9 @@ def get_details_info(i, place_id, key, forms_adds, phone, hours, website, url, r
     rating[i] = json["result"]["rating"]
 """
     
-def categorize(types_list):
+def categorize(json):
+    types_list = json["results"][0]["types"]
+
     if "gas_station" in types_list: 
         category = "gas station"
     elif "convenience_store" in types_list or "liquor_store" in types_list:
@@ -305,9 +313,7 @@ def categorize(types_list):
     elif "grocery_or_supermarket" in types_list and "convenience_store" not in types_list:
         category = "grocery"
     elif "bakery" in types_list or "cafe" in types_list:
-        category = "cafe or bakery"
-    elif "types_list" == 0:
-        category = "unknown"
+        category = "other"
     else:
         category = "other"
 
@@ -316,9 +322,11 @@ def categorize(types_list):
 def best_result(json, name):
     best = 0
     for i in range(len(json["results"])):
-        goog_name = json["results"][i]["name"]
-        if jellyfish.jaro_distance(goog_name, name) > best:
-            json = json["results"][i]
+        g_name = json["results"][i]["name"]
+        print (g_name)
+        if jellyfish.jaro_distance(json["results"][i]["name"], name) > best:
+            best = i
+    json = json["results"][i]
 
     return json
 
