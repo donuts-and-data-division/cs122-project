@@ -32,7 +32,13 @@ def get_viewport_poly(places_geometry, key = KEY):
     From inputs forms bounding box polygon for geoquerying.
 
     input: places_geometry (tuple of form (sw_lon, sw_lat, ne_lon, ne_lat) 
-        or google API geometry dictionary of form:
+        or google API geometry dictionary of form of LatLngBoundsLiteral:
+       
+        places_geometry =  { south: 41.6443349, 
+            west: -87.94026689999998, 
+            north: 42.023131, 
+            east: -87.524044 }
+
 
         places_geometry =  {
                             "location" : {
@@ -56,6 +62,12 @@ def get_viewport_poly(places_geometry, key = KEY):
     '''
     if isinstance(places_geometry, tuple) and len(places_geometry)==4:
         geom = places_geometry
+    elif isinstance(places_geometry, dict) and places_geometry.get("east",False):
+        sw_lat = places_geometry['south']
+        sw_lon = places_geometry['west']
+        ne_lat = places_geometry['north']
+        ne_lon = places_geometry['east']
+        geom = (sw_lon, sw_lat, ne_lon, ne_lat)
     elif isinstance(places_geometry, dict):
         sw_lat = places_geometry["viewport"]['southwest']['lat']
         sw_lon = places_geometry["viewport"]['southwest']['lng']

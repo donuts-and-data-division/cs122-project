@@ -5,8 +5,11 @@ from django.core.serializers import serialize
 from . import placesAPI as pa
 from django.contrib.gis.geos import Polygon
 from django.contrib import messages
-from .forms import SearchForm
+from .forms import SearchForm, GroceriesForm, PricesForm
+from .tables import ResultsTable
+from .forms import SearchForm, FilterForm
 from django.http import JsonResponse
+from django_tables2 import RequestConfig
 
 #def index(request):
 #    return render(request, 'snap_test_2/index.html',{})
@@ -16,38 +19,6 @@ def index(request):
     return render(request, "snap_test_2/index.html", 
         {"qs_results":qs_results})
 
-def snapdata(request, key = "AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU"):
-    #query = "Chicago, IL"
-    #geometry = placesAPI.get_geometry(query, key)
-
-    geometry =  {
-                            "location" : {
-                               "lat" : 41.8781136,
-                               "lng" : -87.6297982
-                            },
-                            "viewport" : {
-                               "northeast" : {
-                                  "lat" : 50.023131,
-                                  "lng" : -82.02404399999999
-                               },
-                               "southwest" : {
-                                  "lat" : 39.6443349,
-                                  "lng" : -98.9402669
-                               }
-                            }
-                        }
-
-    sw_lat = geometry["viewport"]['southwest']['lat']
-    sw_lon = geometry["viewport"]['southwest']['lng']
-    ne_lat = geometry["viewport"]['northeast']['lat']
-    ne_lon = geometry["viewport"]['northeast']['lng']
-
-    viewport = Polygon.from_bbox((sw_lon, sw_lat, ne_lon, ne_lat))
-    qs_geojson = serialize('geojson',SnapLocations.objects.filter(geom__contained = viewport))
-
-    return HttpResponse(qs_geojson, content_type='json')
-    #return render(request, "snap_test_2/gmap.html", 
-        #{"qs_geojson":qs_geojson})
 
 def prettygmap(request):
     return render(request, "snap_test_2/prettygmap.html")
@@ -59,15 +30,20 @@ def geojs(request, key = "AIzaSyD2zsB1fPiX_9LUi7t_hyA_TaY3E2aAPQU"):
 def gmap(request):
     qs_results = SnapLocations.objects.all()
     qs_results = serialize('geojson', qs_results)
-    
+
     return render(request, "snap_test_2/gmap.html", 
         {"qs_results":qs_results})
 
 
 def get_places(request):
-    place_name = request.GET.get("name", None)
-    bounds = pa.get_geometry(place_name) #Relies on API
-    viewport = pa.get_viewport_poly(bounds)
+    #place_name = request.GET.get("name", None)
+    #bounds = pa.get_geometry(place_name) #Relies on API
+    sw_lon = request.GET.get('sw_lon',None)
+    sw_lat = request.GET.get('sw_lat',None)
+    ne_lon = request.GET.get('ne_lon',None)
+    ne_lat = request.GET.get('ne_lat',None)
+
+    viewport = pa.get_viewport_poly((sw_lon, sw_lat, ne_lon, ne_lat))
     data = {"data": serialize('geojson',SnapLocations.objects.filter(geom__contained = viewport))}
     return JsonResponse(data)
 
@@ -76,13 +52,13 @@ def gmapdata(request):
     qs_results = serialize('geojson', qs_results)
     return HttpResponse(qs_results, content_type= 'json')
 
-#def auto(request):
- #   return render(request, 'snap_test_2/auto.html', {})
-
+def auto(request):
+    form = FilterForm()
+    return render(request, 'snap_test_2/auto.html', {'form':form})
 
 def auto2(request):
     qs_results = {}
-    qs_results = serialize('geojson', qs_results)
+    qs_results_ser = serialize('geojson', qs_results)
     
     if request.method == 'POST': 
         form = SearchForm(request.POST)        
@@ -100,10 +76,32 @@ def auto2(request):
             #qs_results = SnapLocations.objects.filter(=price).filter(=retailer_type)
             # fill in filters with model fields after jazz updates
             qs_results = SnapLocations.objects.filter(geom__contained = viewport)
-            qs_results = serialize('geojson', qs_results)
+            qs_results_ser = serialize('geojson', qs_results)
     else:
         form = SearchForm()
-        
-    return render(request, 'snap_test_2/auto2.html', {'form': form, 'qs_results': qs_results})
+    
+    table = ResultsTable(qs_results)
+    RequestConfig(request).configure(table)
+    return render(request, 'snap_test_2/auto2.html', {'table': table, 'form': form, 'qs_results': qs_results_ser})
+
+
+def prices(request):
+    if request.method == "POST":
+        prices = PricesForm(request.POST)
+    else:
+        prices = PricesForm()
+    return render(request, "snap_test_2/prices.html", {'prices': prices})
+
+
+def groceries(request):
+    if request.method == "POST":
+        groceries = GroceriesForm(request.POST)
+        if groceries.is_valid():
+            name = groceries.cleaned_data['name']
+            retailer_type = groceries.cleaned_data['retailer_type']
+            price = groceries.cleaned_data['price']
+    else:
+        groceries = GroceriesForm()
+    return render(request, "snap_test_2/groceries.html", {'groceries': groceries})
 
 
