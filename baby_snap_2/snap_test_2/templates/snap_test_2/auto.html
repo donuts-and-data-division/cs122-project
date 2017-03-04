@@ -27,7 +27,7 @@
             </div>   
             <div id="pac-filters">
                 <form id="form" onsubmit='return false'>
-                    {% csrf_token %}
+                    <!--{% csrf_token %}-->
                     <table class="form">
                     <p> Type:<p> {% for field in form.retailer_type %}
                     {{ field }}
@@ -74,13 +74,11 @@
             <td id="iw-website"></td>
           <tr>
             <td>
-            <form id="groceries" action='groceries' method="get">
-              {% csrf_token %}
-              {{ groceries.as_p }}
               <input type="submit" id = "submit_groceries" name = "submit_groceries" value="Build Grocery List" />
             </form>
             </td>
           </tr>
+
         </table>
       </div>
     </div>
@@ -156,7 +154,7 @@
           var ne_lon = bounds.east;  
           
       
-          console.log("You are passing", data)
+         // console.log("You are passing", data)
           
           $.ajax({
             url: '/ajax/get_places/',

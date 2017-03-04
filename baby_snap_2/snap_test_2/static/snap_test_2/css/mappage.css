@@ -29,8 +29,7 @@
       }
 
       .pac-card {
-        display: -webkit-flex;
-        display: flex;
+        
         width: 450px;
         height: 100%;
         position: absolute;

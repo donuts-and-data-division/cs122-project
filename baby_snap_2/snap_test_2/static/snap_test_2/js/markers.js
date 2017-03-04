@@ -109,11 +109,6 @@ function geolocate() {
       });
     }
 
-    function buildIWContent(place) {
-      document.getElementById('iw-name').textContent = place.googlename;
-      document.getElementById('iw-address').textContent = place.googleaddress;
-    } 
-
 
       function addResult(result, i) {
         var results = document.getElementById('results');
@@ -151,4 +146,11 @@ function geolocate() {
       function buildIWContent(place) {
         document.getElementById('iw-name').textContent = place.googlename;
         document.getElementById('iw-address').textContent = place.googleaddress;  
+
+
+        $('#submit_groceries').click(function() {
+        var place_id = place.place_id;
+        var url = '/groceries/' + place_id + '/';
+        window.location.href = url;
+        }); 
       }

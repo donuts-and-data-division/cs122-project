@@ -5,7 +5,7 @@ from django.core.serializers import serialize
 from . import placesAPI as pa
 from django.contrib.gis.geos import Polygon
 from django.contrib import messages
-from .forms import SearchForm, GroceriesForm, PricesForm, GroceryForm
+from .forms import SearchForm, PricesForm, GroceryForm
 from .forms import SearchForm, FilterForm
 from django.http import JsonResponse
 
@@ -86,7 +86,7 @@ def submit_grocery_list(request, place_id):
     #add that dictionary to the render thing
     #somehow edit the dropdown menu on the form based on the list of foods...
 
-    return render(request, 'snap_test_2/grocery_list_2.html', {'form': form})
+    return render(request, 'snap_test_2/grocery_list_2.html', {'form': form, 'this_store':place_id})
 
 
 def cash_register(request):
