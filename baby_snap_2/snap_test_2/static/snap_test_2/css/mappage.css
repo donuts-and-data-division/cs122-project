@@ -2,7 +2,8 @@
        * element that contains the map. */
       #map {
         height: 100%;
-      }
+        left: 450px;
+       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
         height: 100%;
@@ -28,14 +29,16 @@
       }
 
       .pac-card {
-        margin: 10px 10px 0 0;
-        border-radius: 2px 0 0 2px;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        outline: none;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        display: -webkit-flex;
+        display: flex;
+        width: 450px;
+        height: 100%;
+        position: absolute;
+        left: 0px;
+        top: 0px;
         background-color: #fff;
         font-family: Roboto;
+
       }
 
       #pac-container {
@@ -89,4 +92,20 @@
       }
       .iw_table_icon {
         text-align: right;
+      }
+
+      #resultsTable {
+        border-collapse: collapse;
+      }
+      #rating {
+        font-size: 13px;
+        font-family: Arial Unicode MS;
+      }
+
+      #listing {
+        width: 450px;
+        height: 100%;
+        overflow: auto;
+        cursor: pointer;
+        overflow-x: hidden;
       }

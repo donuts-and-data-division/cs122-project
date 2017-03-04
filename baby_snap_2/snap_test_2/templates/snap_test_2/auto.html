@@ -13,28 +13,77 @@
   </head>
 
   <body>
+    <div id="map"></div>
+
     <div class="pac-card" id="pac-card">
-      <div>
         <div id="title">
           Find locations near:
         </div>
         <p></p>
-        <div id="pac-container">
-        <input id="pac-input" type="text"
-            placeholder="Enter a location">
-        </div>   
-            <form id="form" onsubmit='return false'>
-                {% csrf_token %}
-                <table class="form">
-                {% for field in form %}
-                <td> {{ field }} </td>
-                </table>
-                {% endfor %}
-                <input type="submit"  value="Filter results" />
+  
+            <div id="pac-container">
+            <input id="pac-input" type="text"
+                placeholder="Enter a location">
+            </div>   
+            <div id="pac-filters">
+                <form id="form" onsubmit='return false'>
+                    {% csrf_token %}
+                    <table class="form">
+                    <p> Type:<p> {% for field in form.retailer_type %}
+                    {{ field }}
+                    {% endfor %}</p>
+                    <p>Cost:<p> {% for field in form.price %}
+                    {{ field }}
+                    {% endfor %}</p>
+                    <p> Rating:<p> {% for field in form.rating %}
+                    {{ field }}
+                    {% endfor %}</p>
+                    </table>
+                    
+                    <input type="submit"  value="Filter results" />
+                </form>
+              </div>
+          <div id="listing">
+            <table id="resultsTable">
+             <tbody id="results"></tbody>
+            </table>
+         </div>
+    </div>
+
+    <div style="display: none">
+      <div id="info-content">
+        <table>
+          <tr id="iw-name-row" class="iw_table_row">
+            <td class="iw_attribute_name">Name:</td>
+            <td id="iw-name"></td>
+          </tr>
+          <tr id="iw-address-row" class="iw_table_row">
+            <td class="iw_attribute_name">Address:</td>
+            <td id="iw-address"></td>
+          </tr>
+          <tr id="iw-phone-row" class="iw_table_row">
+            <td class="iw_attribute_name">Telephone:</td>
+            <td id="iw-phone"></td>
+          </tr>
+          <tr id="iw-rating-row" class="iw_table_row">
+            <td class="iw_attribute_name">Rating:</td>
+            <td id="iw-rating"></td>
+          </tr>
+          <tr id="iw-website-row" class="iw_table_row">
+            <td class="iw_attribute_name">Website:</td>
+            <td id="iw-website"></td>
+          <tr>
+            <td>
+            <form id="groceries" action='groceries' method="get">
+              {% csrf_token %}
+              {{ groceries.as_p }}
+              <input type="submit" id = "submit_groceries" name = "submit_groceries" value="Build Grocery List" />
             </form>
+            </td>
+          </tr>
+        </table>
       </div>
-      </div>
-    <div id="map"></div>
+    </div>
     
     <!--     SCRIPTS BEGIN  -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -42,7 +91,7 @@
     <script src = {% static "snap_test_2/js/markers.js" %}></script>
     <script>
     var map
-    var placeSearch, autocomplete;
+    var placeSearch, autocomplete, infoWindow;
     
     var markers = [];
     var MARKER_PATH = 'https://developers.google.com/maps/documentation/javascript/images/marker_green';
@@ -63,14 +112,17 @@
         var card = document.getElementById('pac-card');
         var input = document.getElementById('pac-input');
         var types = document.getElementById('type-selector');
-        var strictBounds = document.getElementById('strict-bounds-selector');
         var resultsBox = document.getElementById('listing');
-        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
+        //map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
         
       // Create the autocomplete object
        autocomplete = new google.maps.places.Autocomplete(
         document.getElementById('pac-input'));
         
+        infoWindow = new google.maps.InfoWindow({
+          content: document.getElementById('info-content')
+        });
+
         // When the user selects an address from the dropdown,
        // populate the address fields in the form.
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
@@ -123,62 +175,7 @@
             }
           });
         }
-      
-        /*
-      //Marker placement based on this tutorial:
-      //https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete
-      function placeMarkers(results){
-        clearMarkers();
-        // Create a marker for each hotel found, and
-        // assign a letter of the alphabetic to each marker icon.
-        for (var i = 0; i < results.length; i++) {
-          var markerLetter = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
-          var markerIcon = MARKER_PATH + markerLetter + '.png';
-
-       
-          // Use marker animation to drop the icons incrementally on the map.
-          markers[i] = new google.maps.Marker({
-            position: new google.maps.LatLng(results[i].geometry.coordinates[1], results[i].geometry.coordinates[0]),
-            animation: google.maps.Animation.DROP,
-            icon: markerIcon
-          });
-          // If the user clicks a hotel marker, show the details of that hotel
-          // in an info window.
-          markers[i].placeResult = results[i];
-          //google.maps.event.addListener(markers[i], 'click', showInfoWindow);
-         setTimeout(dropMarker(i),0)
-          //addResult(results[i], i);
-            }
-        }
-  
-      function clearMarkers() {
-        for (var i = 0; i < markers.length; i++) {
-          if (markers[i]) {
-            markers[i].setMap(null);
-          }
-        }
-            markers = [];
-        }
-
-      function dropMarker(i) {
-        return function() {
-          markers[i].setMap(map);
-        };}
-
-      function geolocate() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-              var geolocation = new google.maps.LatLng(
-              position.coords.latitude, position.coords.longitude);
-
-              var latitude = position.coords.latitude;
-              var longitude = position.coords.longitude;
-              document.getElementById("latitude").value = latitude;
-              document.getElementById("longitude").value = longitude;
-              autocomplete.setBounds(new google.maps.LatLngBounds(geolocation, geolocation));
-        });}
-          }
-    */
+    
     initialize();
     </script>
   </body>
