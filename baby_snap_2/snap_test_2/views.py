@@ -92,28 +92,13 @@ def prices(request):
     return render(request, "snap_test_2/prices.html", {'prices': prices})
 
 
-def groceries(request):
-    data = {}
-    if request.method == "POST":
-        groceries = GroceriesForm(request.POST)
-        if groceries.is_valid():
-            name = groceries.cleaned_data['name']
-            retailer_type = groceries.cleaned_data['retailer_type']
-            price = groceries.cleaned_data['price']
-            data = {'name': name, 'retailer_type': retailer_type, 'price': price}
-    else:
-        groceries = GroceriesForm()
-    return render(request, "snap_test_2/grocery_list_2.html", {'groceries': groceries, 'data': data})
 
-
-def submit_grocery_list(request):
-    
+def submit_grocery_list(request, place_id):
     if request.method == "POST":
         form = GroceryForm(request.POST)     
-
     else:
         form = GroceryForm()
-
+    print('place_id:',  place_id)
     #this view will actually be coming from the map part, and will redirect to the grocery list page
     #make a dictionary with dollar sign info and list of foods available at that type of store?
     #add that dictionary to the render thing
