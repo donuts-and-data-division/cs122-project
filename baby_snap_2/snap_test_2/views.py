@@ -74,8 +74,7 @@ def prices(request):
     return render(request, "snap_test_2/prices.html", {'prices': prices})
 
 
-
-def submit_grocery_list(request, place_id):
+def submit_grocery_list(request, place_id=0):
     if request.method == "POST":
         form = GroceryForm(request.POST)     
     else:
@@ -103,12 +102,12 @@ def cash_register(request):
     return JsonResponse(data)
 
 def submit_prices(request):
+
     '''Assumption we have SnapLocation informtion'''
 
+    food_list = request.sesssion.get('food_list', None)
     if request.method == "POST":
         form = GroceryForms(request.POST)
     else:
         form = GroceryForm()
-
-
-    return render(request, 'snap_test_2/submit-prices.html', {'form': form})
+    return render(request, 'snap_test_2/submit-prices.html', {'form': form, 'food_list': food_list})
