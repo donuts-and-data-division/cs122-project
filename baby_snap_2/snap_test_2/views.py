@@ -103,9 +103,12 @@ def cash_register(request):
     return JsonResponse(data)
 
 def submit_prices(request):
+    '''Assumption we have SnapLocation informtion'''
+
     if request.method == "POST":
         form = GroceryForms(request.POST)
     else:
         form = GroceryForm()
+
 
     return render(request, 'snap_test_2/submit-prices.html', {'form': form})

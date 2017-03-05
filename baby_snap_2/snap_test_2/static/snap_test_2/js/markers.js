@@ -59,39 +59,6 @@ function geolocate() {
   });}
     }
 
-/*
-    function addResult(result, i) {
-      var results = document.getElementById('results');
-      var markernumber = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
-      var markerIcon = MARKER_PATH + markernumber + '.png';
-
-      var tr = document.createElement('tr');
-      tr.style.backgroundColor = (i % 2 === 0 ? '#F0F0F0' : '#FFFFFF');
-      tr.onclick = function() {
-        google.maps.event.trigger(markers[i], 'click');
-      };
-      var iconTd = document.createElement('td');
-      var nameTd = document.createElement('td');
-      var icon = document.createElement('img');
-      icon.src = markerIcon;
-      icon.setAttribute('class', 'placeIcon');
-      icon.setAttribute('className', 'placeIcon');
-      var name = document.createTextNode(result.properties.googlename);
-      iconTd.appendChild(icon);
-      nameTd.appendChild(name);
-      tr.appendChild(iconTd);
-      tr.appendChild(nameTd);
-      results.appendChild(tr);
-    } 
-
-    function clearResults() {
-      var results = document.getElementById('results');
-      while (results.childNodes[0]) {
-        results.removeChild(results.childNodes[0]);
-      }
-    }
-
-*/
     function showInfoWindow() {
       var marker = this;
       infoWindow.open(map, marker);
