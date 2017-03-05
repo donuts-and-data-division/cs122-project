@@ -5,7 +5,7 @@ from django.core.serializers import serialize
 from . import placesAPI as pa
 from django.contrib.gis.geos import Polygon
 from django.contrib import messages
-from .forms import SearchForm, GroceriesForm, PricesForm, GroceryForm
+from .forms import SearchForm, PricesForm, GroceryForm
 from .forms import SearchForm, FilterForm
 from django.http import JsonResponse
 
@@ -75,18 +75,20 @@ def prices(request):
 
 
 
-def submit_grocery_list(request, place_id):
+def submit_grocery_list(request, place_id='ChIJS0p5_HHSD4gR3b8D9godIZk'):
     if request.method == "POST":
         form = GroceryForm(request.POST)     
     else:
         form = GroceryForm()
-    print('place_id:',  place_id)
+
+    store_name = SnapLocations.objects.get(place_id=place_id)
+    store_address = SnapLocations.objects.get(place_id=place_id).googleaddress
     #this view will actually be coming from the map part, and will redirect to the grocery list page
     #make a dictionary with dollar sign info and list of foods available at that type of store?
     #add that dictionary to the render thing
     #somehow edit the dropdown menu on the form based on the list of foods...
 
-    return render(request, 'snap_test_2/grocery_list_2.html', {'form': form})
+    return render(request, 'snap_test_2/grocery_list_2.html', {'form': form, 'store_name': store_name, 'address': store_address})
 
 
 def cash_register(request):
@@ -102,10 +104,13 @@ def cash_register(request):
 
     return JsonResponse(data)
 
-def submit_prices(request):
+def submit_prices(request, place_id='ChIJS0p5_HHSD4gR3b8D9godIZk'):
     if request.method == "POST":
         form = GroceryForms(request.POST)
     else:
         form = GroceryForm()
 
-    return render(request, 'snap_test_2/submit-prices.html', {'form': form})
+    store_name = SnapLocations.objects.get(place_id=place_id)
+    store_address = SnapLocations.objects.get(place_id=place_id).googleaddress
+
+    return render(request, 'snap_test_2/submit-prices.html', {'form': form, 'store_name': store_name, 'address': store_address})

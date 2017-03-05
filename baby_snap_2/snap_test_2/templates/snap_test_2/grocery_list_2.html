@@ -38,7 +38,7 @@ body {
 }
 .grocery-form {
     margin-left: 30px;
-    margin-top: 35px;
+    margin-top:15px;
 }
 #main {
     margin-left: 450;
@@ -66,11 +66,10 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 900;
   color: #b3b3b3;
-  font-size: 19px;
+  font-size: 30px;
   border:none;
   background:transparent;
   text-align: center;
-  transform: scale(1.6, 1.15);
   -o-transition:.5s;
   -ms-transition:.5s;
   -moz-transition:.5s;
@@ -111,7 +110,7 @@ body {
     -ms-transform: rotate(90deg);
     transform: rotate(90deg);
     left: 349px;
-    top: 95px;
+    top: 155px;
     position: absolute;
 }
 .grid table { 
@@ -182,13 +181,32 @@ body {
   color: #636b46;
   cursor: pointer;
 }
-    
+
+#store_name {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 18px;
+  margin-left: 30px;
+  margin-top: 35px;
+}
+
+#store_address {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  margin-left: 30px;
+  margin-top: -15px;
+}
+
+
 </style>
 
 <link href="https://fonts.googleapis.com/css?family=Pacifico|Slabo+27px|Source+Sans+Pro:400,900" rel="stylesheet"></head>
 
         <div class="menu">
             <a class="menu-header" href="#">snapmap</a>
+
+            <p id = "store_name"> {{store_name}} </p>
+            <p id = "store_address"> {{address}} </p>
 
             <form name ='nameform' class="grocery-form" method='POST' onsubmit='return false' value="Select a food">
 
@@ -199,6 +217,7 @@ body {
         </div>
 
     <div id="main">
+
                 <div class="grid">
                     <table>
                         <col width="330">
@@ -231,6 +250,8 @@ body {
                         <td id='total'>&nbsp;&nbsp;$0.00</td>
                     </tr>
                 </table>
+                <input type="submit" value="contribute prices" id="contribute-btn">
+
 
                 </div>
             </p>
@@ -245,7 +266,12 @@ body {
 //these resources were helpful in writing the following javascript:
 //https://www.youtube.com/watch?v=o6ueQBrcKrs
 //https://www.w3schools.com/jsref/met_table_insertrow.asp
-function addFoodtoTable(data) {    
+
+    //initialize food ids to list
+    var food_ids = [];
+
+function addFoodtoTable(data, food_id) {   
+  
     //access the table
     var table = document.getElementById("food_list_table");
     //create empty row at beginning of table:
@@ -256,9 +282,11 @@ function addFoodtoTable(data) {
     var total_price = row.insertCell(2);
     var quantity = row.insertCell(3);
     var button = row.insertCell(4);
+    var this_food_id = row.insertCell(5);
+
     //create a remove button
     var removeButton = document.createElement("button");
-    removeButton.innerHTML = "X";
+    removeButton.innerHTML = "x";
     removeButton.id = 'removebutton';
     var increaseButton = document.createElement('button');
     var decreaseButton = document.createElement('button');
@@ -267,6 +295,7 @@ function addFoodtoTable(data) {
     increaseButton.id = "increaseButton"
     decreaseButton.id = "decreaseButton"
     //add content to the new cells:
+    this_food_id.innerHTML = food_id
     var input_quantity = 1
     food.innerHTML = data.food_name;
     price_per_quantity.innerHTML = '$' + (data.food_price).toFixed(2) + '/' + data.food_quantity;
@@ -315,10 +344,24 @@ $('#food_list_table').on('click', '#increaseButton', function () {
         new_total += float_amount;
     }
     document.getElementById('total').innerHTML = '$' + new_total.toFixed(2);
-      
+
+ 
 });
+
+function removeFoodID(id) {
+    var i = food_ids.indexOf(id)
+    if (i!= -1) {
+      food_ids.splice(i, 1);
+    }
+}   
+
 $('#food_list_table').on('click', '#removebutton', function() {
     $(this).closest('tr').remove();
+
+    //remove food id from list
+    var id = $(this).parent().next('td').text();
+    removeFoodID(id)
+
     //recalculate total price
     var table_rows = document.getElementById('food_list_table').rows;
     var new_total = 0
@@ -332,14 +375,17 @@ $('#food_list_table').on('click', '#removebutton', function() {
         float_amount = parseFloat(item_amount.slice(1));
         new_total += float_amount;
     }
-    document.getElementById('total').innerHTML = '$' + new_total.toFixed(2);
 })
+
 $('#food_list_table').on('click', '#decreaseButton', function () {
     var text = $(this).parent().prev('td');
     var new_quant = parseFloat(text.text()) - 0.25;
     if (new_quant <= 0) {
         $(this).closest('tr').remove();
+        var id = $(this).parent().next('td').text();
+        removeFoodID(id)
     }
+
     text.html(new_quant);
     var per_price = text.prev('td').prev('td').text();
     var float_price = parseFloat(per_price.slice(1));
@@ -350,7 +396,7 @@ $('#food_list_table').on('click', '#decreaseButton', function () {
     var table_rows = document.getElementById('food_list_table').rows;
     var new_total = 0
     if (table_rows.length == 0) {
-    document.getElementById('total').innerHTML = '$' + parseFloat(0.00);
+      document.getElementById('total').innerHTML = '$' + parseFloat(0.00);
     }
       
     for (var i = 0; i < table_rows.length; ++i) {
@@ -370,8 +416,16 @@ $('#id_food').change(function () {
         data: {'food_id': food_id},
         dataType: 'json',
         success: function(data) {
-            addFoodtoTable(data);
+            addFoodtoTable(data, food_id);
+            food_ids.push(food_id);
             }
         });
 });
+
+
+$('#contribute-btn').click(function () {
+  var food_string = food_ids.join('+')
+  
+})
+
 </script> 

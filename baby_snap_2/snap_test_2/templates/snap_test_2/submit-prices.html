@@ -43,7 +43,7 @@ body {
 
 .grocery-form {
     margin-left: 30px;
-    margin-top: 35px;
+    margin-top: 15px;
 
 }
 
@@ -129,7 +129,7 @@ body {
     -ms-transform: rotate(90deg);
     transform: rotate(90deg);
     left: 349px;
-    top: 95px;
+    top: 155px;
     position: absolute;
 
 }
@@ -193,6 +193,21 @@ body {
   cursor: pointer;
 }
 
+#store_name {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 18px;
+  margin-left: 30px;
+  margin-top: 35px;
+}
+
+#store_address {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  margin-left: 30px;
+  margin-top: -15px;
+}
+
 
     
 </style>
@@ -201,6 +216,9 @@ body {
 
         <div class="menu">
             <a class="menu-header" href="#">snapmap</a>
+
+            <p id = "store_name"> {{store_name}} </p>
+            <p id = "store_address"> {{address}} </p>
 
             <form name ='nameform' class="grocery-form" method='POST' onsubmit='return false' value="Select a food">
 

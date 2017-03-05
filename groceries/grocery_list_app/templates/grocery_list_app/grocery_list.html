@@ -1,116 +1,319 @@
-{% load staticfiles %}
-<html>
-    <head>
-        <title>Create your list</title>
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-        <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+<head>
+<style>
 
-        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
-        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-      
+body {
+    background-color: rgba(235, 235, 235, 0.56);
+}
 
 
-        <script>
-            $('#grocery-form').on('submit', function(event){
-            event.preventDefault();
-            console.log("form submitted!")  // sanity check
-            addListItem()
-        });
+.header {
+     margin: 0;
+     color: #1d1f20;
+     text-align: center;
+     padding: 1em 0;
+     border-bottom: 1px solid #eee;
+     font-family: 'Slabo 27px', serif;
+ }
+    .header h1 {
+        margin: 0.2em 0;
+        font-size: 3em;
+        font-weight: 300;
+    }
+     .header h2 {
+        font-weight: 300;
+        color: #ccc;
+        padding: 0;
+        margin-top: 0;
+        font-family: 'Source Sans Pro', sans-serif;
+    }
 
-            function addListItem() {
-                 var write = $('#newItem').val();
-                 var list = $('#itemList');
-                 var item = $('<span class="list">' + write + '</span><button class="delete">X</button></li>');
-                 var newItem = $("#newItem");
-                
-                list.append(item);
-                $(newItem).val('');
-            }
+.menu {
+    width: 400px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: url('http://i.imgur.com/FPnuTwT.jpg');
+    background-position: 50% 95%;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 900;
+    font-size: 16px;
+}
+
+.grocery-form {
+    margin-left: 30px;
+    margin-top: 30px;
+    color: #373f27;
+
+}
+
+#main {
+    margin-left: 450;
+    margin-top: 85;
+
+}
+
+.menu-header {
+    margin-left: 30px;
+    font-family: 'Pacifico', cursive;
+    color: #636b46;
+    text-decoration: none;
+    font-size: 30px;
+    margin-top: 50px;
+    -o-transition:1s;
+    -ms-transition:1s;
+    -moz-transition:1s;
+    -webkit-transition:1s;
+
+}
+
+.menu-header:hover {
+    color: #ffffff;
+}
 
 
-            function deleteItem() {
-                $(this).parent().remove();
-            }
+#id_food {
+    width: 290px;
+}
+
+.addbutton {
+  border-radius: 60px;
+  font-family: 'Source Sans Pro', sans-serif;
+  color: #ffffff;
+  font-size: 22px;
+  background: #843849;
+  padding: 10px 16px 10px 16px;
+  border:none;
+  font-weight: 900;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+}
+
+.addbutton:hover {
+  background: #ba0f51;
+  cursor: pointer;
+}
+
+#removebutton {
+  border-radius: 60px;
+  font-family: 'Source Sans Pro', sans-serif;
+  color: #ffffff;
+  font-size: 14px;
+  background: #636b46;
+  border:none;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+}
+
+#removebutton:hover{
+    background-color: #000000;
+    cursor:pointer;
+}
+
+#id_food, #id_quantity {
+    color: #1d1f20;
+}
+
+.datagrid table { 
+    border-collapse: collapse; 
+    text-align: left; 
+    font-family: 'Source Sans Pro', sans-serif;
+} 
+
+.datagrid {
+    font-family: 'Source Sans Pro', sans-serif;
+    width: 700px;
+}
+
+.datagrid table td, .datagrid table th { 
+    padding: 3px 10px; 
+}
+
+.datagrid table thead th {
+    color:#1d1f20; 
+    font-size: 15px; 
+} 
+
+.datagrid table tbody td { 
+    color: #000000; 
+    font-size: 16px;
+}
+
+.bottom {
+    font-family: 'Pacifico', cursive;
+    font-size:20px;
+    color:#1d1f20;
+    margin-left: 6px;
+    margin-top: 15px;
+}
+
+#total{
+    font-family: 'Source Sans Pro', sans-serif;
 
 
-            $(function() {
-                var add = $('#addItem');
-                var newItem = $('#newItem');
-                var list = $('#itemList');
-                
-                add.on('click', addListItem);
-                list.on('click', '.delete', deleteItem);
-                newItem.on('keypress', function (e) {
-                    if (e.which == 13) {
-                        addListItem();
-                    }
-                });
-            });
+}
+    
+</style>
 
-        </script>
+<link href="https://fonts.googleapis.com/css?family=Pacifico|Slabo+27px|Source+Sans+Pro:400,900" rel="stylesheet"></head>
 
+        <div class="menu">
+            <a class="menu-header" href="#">snapmap</a>
 
-    </head>
+            <form name ='nameform' class="grocery-form" method='POST' onsubmit='return false'>
 
+                {% csrf_token %}
+                {{ form.as_p }}
 
-    <body>
-        <div class="page-header">
-            <h1>Create your list</h1>
+                <input type="submit" id="addbutton" class="addbutton" value="+">
+
+            </form>
         </div>
-        <div class="content container">
-            <div class="row">
-                <div class="col-md-8">
-                    {% block content %}
-                        <h1>New post</h1>
-                        <form method="POST" class="grocery-form">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            <button type="submit" class="save btn btn-default">
-                                Save
-                            </button>
 
-                <div class="col-md-6">
-                    <div id="form">
-
-                        <form method="GET" class="grocery-form" id="newItem">
-
-                            {% csrf_token %}
-                            {{ form.as_p }}
-
-                            <button type="submit" class="save btn btn-default" id="addItem">+</button>
-
-                        </form>
-                    </div>
+    <div id="main">
+                <div class="datagrid">
+                    <table>
+                        <col width="450">
+                        <col width="80">
+                        <col width="80">
+                        <col width="90">
+                        <thead>
+                            <tr>
+                                <th>Food</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
-            </div>
+                
+                <div class="datagrid">
+                    <table id="food_list_table">
+                        <col width="450">
+                        <col width="80">
+                        <col width="80">
+                        <col width="90"></table>
+                </div>
 
-            <div id="bottom">
-            <div class="items">
-                <ul id="itemList">
-                </ul>
-            </div>
-            </div>    
-        
+                <table class = 'bottom'>
+                    <tr>
+                        <td>Total:</td>
+                        <td id='total'>&nbsp;&nbsp;$0.00</td>
+                    </tr>
+                </table>
+
+                </div>
+            </p>
+  
         </div>
-        
-        
+    </div>
+</div>
 
-    </body>
-   <script>
-            $("#id_food").change(function () {
-              //var food_name = $(this).val();
-              console.log( $(this).val() );
-              /*$.ajax({
-                url: '/ajax/cash_registersssssssssssssss',
-                data: {
-                  'food_name': food_name
-                },
-                dataType: 'json',
-                success: function (data) {
-                    alert("A user with this username already exists.");*/
-            });
-          </script> 
-</html>
-</div>
-</div>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<script>
+
+//these resources were helpful in writing the following javascript:
+//https://www.youtube.com/watch?v=o6ueQBrcKrs
+//https://www.w3schools.com/jsref/met_table_insertrow.asp
+
+function addFoodtoTable(data) {    
+
+    //access the table
+    var table = document.getElementById("food_list_table");
+
+    //create empty row at beginning of table:
+    var row = table.insertRow();
+
+    //insert cells into the row
+    var food = row.insertCell(0);
+    var price_per_quantity = row.insertCell(1);
+    var total_price = row.insertCell(2);
+    var button = row.insertCell(3);
+
+    //create a remove button
+    var removeButton = document.createElement("button");
+    removeButton.innerHTML = "Remove";
+    removeButton.id = 'removebutton';
+
+    //add content to the new cells:
+    var input_quantity = document.getElementById('id_quantity').value
+
+    //assume dollar sign information is passed in a dictionary called store_type:
+    //var multiplier = store_type['dollar_sign']
+    //var price = (data.food_price * multiplier).toFixed(2)
+    //price_per_quantity.innerHTML = '$' + price + '/' + data.food_quantity;
+    //total_price = (price_per_quantity * input_quantity).toFixed(2)
+
+    food.innerHTML = data.food_name;
+    price_per_quantity.innerHTML = '$' + (data.food_price).toFixed(2) + '/' + data.food_quantity;
+    total_price.innerHTML = '$' + (data.food_price * input_quantity).toFixed(2);
+    button.appendChild('<input type=text>');
+    
+    //recalculate total price
+    var table_rows = document.getElementById('food_list_table').rows;
+    var new_total = 0
+      
+    for (var i = 0; i < table_rows.length; ++i) {
+
+        table_cells = table_rows[i].cells;
+        item_amount = table_cells[2].innerHTML;
+        float_amount = parseFloat(item_amount.slice(1));
+        new_total += float_amount;
+
+    document.getElementById('total').innerHTML = '$' + new_total.toFixed(2);
+    
+    }   
+}
+
+//remove table row and update price on remove button click
+$('#food_list_table').on('click', 'button', function () {
+    
+    //remove row
+    $(this).closest('tr').remove();
+
+    //recalculate total price
+    var table_rows = document.getElementById('food_list_table').rows;
+    var new_total = 0
+
+    if (table_rows.length == 0) {
+    document.getElementById('total').innerHTML = '$' + parseFloat(0.00);
+    }
+      
+    for (var i = 0; i < table_rows.length; ++i) {
+
+        table_cells = table_rows[i].cells;
+        item_amount = table_cells[2].innerHTML;
+        float_amount = parseFloat(item_amount.slice(1));
+        new_total += float_amount;
+    }
+
+    document.getElementById('total').innerHTML = '$' + new_total.toFixed(2);
+
+      
+});
+
+
+$('#addbutton').click(function () {
+
+    var food_id = $('#id_food').val();
+    
+    $.ajax({
+        url: '/ajax/cash_register/',
+        data: {'food_id': food_id},
+        dataType: 'json',
+        success: function(data) {
+            addFoodtoTable(data);
+            }
+        });
+});
+
+
+
+
+</script> 
