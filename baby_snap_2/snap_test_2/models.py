@@ -11,7 +11,10 @@ class SnapLocations(models.Model):
     geom = gismodels.PointField()
     googleaddress = models.CharField(max_length = 200)
     place_id = models.CharField(max_length = 100)
-
+    '''
+    store_type =  models.CharField(max_length = 100)
+    price_leve = models.IntegerField()
+    '''
     # Returns the string representation of the model.
     def __str__(self):              
         return self.googlename
