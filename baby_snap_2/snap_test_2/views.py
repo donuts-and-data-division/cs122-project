@@ -85,7 +85,7 @@ def submit_grocery_list(request, place_id=0):
     #add that dictionary to the render thing
     #somehow edit the dropdown menu on the form based on the list of foods...
 
-    return render(request, 'snap_test_2/grocery_list_2.html', {'form': form})
+    return render(request, 'snap_test_2/grocery_list_2.html', {'form': form, 'this_store':place_id})
 
 
 def cash_register(request):
