@@ -7,7 +7,7 @@ var MARKER_PATH = 'https://developers.google.com/maps/documentation/javascript/i
 
 function placeMarkers(results){
   clearMarkers();
-  //clearResults();
+  clearResults();
   // Create a marker for each hotel found, and
   // assign a letter of the alphabetic to each marker icon.
   for (var i = 0; i < results.length; i++) {
@@ -27,7 +27,7 @@ function placeMarkers(results){
     markers[i].placeResult = results[i];
     google.maps.event.addListener(markers[i], 'click', showInfoWindow);
     setTimeout(dropMarker(i), 0);
-    //addResult(results[i], i);
+    addResult(results[i], i);
       }
   }
 
@@ -59,39 +59,6 @@ function geolocate() {
   });}
     }
 
-/*
-    function addResult(result, i) {
-      var results = document.getElementById('results');
-      var markernumber = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
-      var markerIcon = MARKER_PATH + markernumber + '.png';
-
-      var tr = document.createElement('tr');
-      tr.style.backgroundColor = (i % 2 === 0 ? '#F0F0F0' : '#FFFFFF');
-      tr.onclick = function() {
-        google.maps.event.trigger(markers[i], 'click');
-      };
-      var iconTd = document.createElement('td');
-      var nameTd = document.createElement('td');
-      var icon = document.createElement('img');
-      icon.src = markerIcon;
-      icon.setAttribute('class', 'placeIcon');
-      icon.setAttribute('className', 'placeIcon');
-      var name = document.createTextNode(result.properties.googlename);
-      iconTd.appendChild(icon);
-      nameTd.appendChild(name);
-      tr.appendChild(iconTd);
-      tr.appendChild(nameTd);
-      results.appendChild(tr);
-    } 
-
-    function clearResults() {
-      var results = document.getElementById('results');
-      while (results.childNodes[0]) {
-        results.removeChild(results.childNodes[0]);
-      }
-    }*/
-
-
     function showInfoWindow() {
       var marker = this;
       infoWindow.open(map, marker);
@@ -101,15 +68,56 @@ function geolocate() {
       $('#submit_groceries').click(function () {
       var name = place.googlename;
       
-      var retailer_type = place.googlename;/* need update!*/
-      var price = place.googlename; /* need update!*/
+      var retailer_type = place.googlename;
+      var price = place.googlename; 
       document.getElementById('name').value = name;
       document.getElementById('retailer_type').value = retailer_type;
       document.getElementById('price').value = price;
       });
     }
 
-    function buildIWContent(place) {
-      document.getElementById('iw-name').textContent = place.googlename;
-      document.getElementById('iw-address').textContent = place.googleaddress;
-    }
+
+      function addResult(result, i) {
+        var results = document.getElementById('results');
+        var markernumber = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
+        var markerIcon = MARKER_PATH + markernumber + '.png';
+
+        var tr = document.createElement('tr');
+        tr.style.backgroundColor = (i % 2 === 0 ? '#F0F0F0' : '#FFFFFF');
+        tr.onclick = function() {
+          google.maps.event.trigger(markers[i], 'click');
+        };
+
+        var iconTd = document.createElement('td');
+        var nameTd = document.createElement('td');
+        var icon = document.createElement('img');
+        icon.src = markerIcon;
+        icon.setAttribute('class', 'placeIcon');
+        icon.setAttribute('className', 'placeIcon');
+        var name = document.createTextNode(result.properties.googlename);
+        iconTd.appendChild(icon);
+        nameTd.appendChild(name);
+        tr.appendChild(iconTd);
+        tr.appendChild(nameTd);
+        results.appendChild(tr);
+      } 
+
+      function clearResults() {
+        var results = document.getElementById('results');
+        while (results.childNodes[0]) {
+          results.removeChild(results.childNodes[0]);
+        }
+      }
+
+    
+      function buildIWContent(place) {
+        document.getElementById('iw-name').textContent = place.googlename;
+        document.getElementById('iw-address').textContent = place.googleaddress;  
+
+
+        $('#submit_groceries').click(function() {
+        var place_id = place.place_id;
+        var url = '/groceries/' + place_id + '/';
+        window.location.href = url;
+        }); 
+      }
