@@ -246,7 +246,6 @@ body {
                     </table>
                 </div>
                 <div>
-                  {{ food_list }}
                 <div class="grid">
                     <table id="food_list_table">
                         <col width="300">
@@ -323,6 +322,25 @@ $('#id_food').change(function () {
             addFoodtoTable(data);
             }
         });
+});
+
+$(window).on('load', function () {
+  var foods = {{food_list|safe}};
+  var foods_length = foods.length
+
+  for (var i = 0; i < foods_length; i++) {
+
+    $.ajax({
+      url: '/ajax/cash_register/',
+      data: {'food_id': foods[i]},
+      dataType: 'json',
+      success: function(data) {
+        addFoodtoTable(data);
+      }
+    
+  })
+  }
+
 });
 
 </script> 

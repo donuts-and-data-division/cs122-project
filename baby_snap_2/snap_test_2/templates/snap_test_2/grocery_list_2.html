@@ -83,7 +83,6 @@ body {
    height: 30px;
    width: 340px;
    -webkit-border-radius: 5px;
-   -moz-border-radius: 5px;
    border-radius: 5px;
    background-color: rgba(255, 255, 255, 0.6);
    border:none;
@@ -409,6 +408,7 @@ $('#food_list_table').on('click', '#decreaseButton', function () {
     document.getElementById('total').innerHTML = '$' + new_total.toFixed(2);
       
 });
+
 $('#id_food').change(function () {
     var food_id = $('#id_food').val();
     
@@ -423,11 +423,12 @@ $('#id_food').change(function () {
         });
 });
 
-
-$('#contribute-btn').click(function () {
-  var food_string = food_ids.join('+')
-  
-})
+//send list to submit prices page
+  $('#contribute-btn').click(function () {
+  var food_string = food_ids.join('&');
+  var url = '/submit-prices/' + '{{place_id}}' + '/' + food_string + '/';
+  window.location.href = url; 
+});
 
 
 </script> 
