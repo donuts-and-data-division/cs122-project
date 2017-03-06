@@ -1,0 +1,45 @@
+#Donuts-and-Data-Division
+#generate data for calculate food category/price weights
+
+import random
+from sklearn import linear_model 
+
+
+#prices for each category type taken by field research
+Grocery_1_apple = [0.8]
+Grocery_2_apple = [1.50]
+Grocery_3_apple = [2.49]
+Grocery_1_banana = [0.59]
+Grocery_2_banana = [0.75]
+Grocery_3_banana = [0.57]
+Grocery_1_pb = [4.99]
+Grocery_2_pb = [3.99]
+Grocery_3_pb = [5.00]
+Grocery_1_chips = [6.804]
+Grocery_2_chips = [3.47]
+Grocery_3_chips = [5.104]
+
+Gas_unknown_apple = [2.97]
+Gas_unknown_banana = [2.97]
+Gas_unknown_pb = [2.79]
+Gas_unknown_chips = [3.58]
+
+CS_2_apple = [3.27]
+CS_2_banana = [2.25]
+CS_2_pb = [3.49]
+CS_2_chips = [5.59]
+
+all_items = [Grocery_1_apple, Grocery_2_apple, Grocery_3_apple, Grocery_1_banana, Grocery_2_banana, Grocery_3_banana, Grocery_1_pb, Grocery_2_pb, Grocery_3_pb, Grocery_1_chips, Grocery_2_chips, Grocery_3_chips, Gas_unknown_apple, Gas_unknown_banana, Gas_unknown_pb, Gas_unknown_chips, CS_2_apple, CS_2_banana, CS_2_pb, CS_2_chips]
+
+def random_set(food_categories = all_items):
+    """
+    Food categories is list of list where each list represents one item at one location type
+    """
+    
+    for list in food_categories: 
+        price = list[0]
+        for i in range(10):
+            add_price = price + random.uniform(-1,1)*0.2*price
+            list.append(add_price)
+        print (list)
+    
