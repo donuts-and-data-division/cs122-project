@@ -123,3 +123,20 @@ def submit_prices(request, place_id='ChIJS0p5_HHSD4gR3b8D9godIZk', food_string=0
     return render(request, 'snap_test_2/submit-prices.html', {'form': form, \
         'store_name': store_name, 'address': store_address, 'food_list': food_id_list})
 
+
+def submit_prices_blank(request, place_id='ChIJS0p5_HHSD4gR3b8D9godIZk'):
+
+    '''Assumption we have SnapLocation informtion'''
+
+    if request.method == "POST":
+        form = GroceryForms(request.POST)
+    else:
+        form = GroceryForm()
+
+    store_name = SnapLocations.objects.get(place_id=place_id)
+    store_address = SnapLocations.objects.get(place_id=place_id).googleaddress
+    food_list = []
+
+    return render(request, 'snap_test_2/submit-prices.html', {'form': form, \
+        'store_name': store_name, 'address': store_address, 'food_list': food_list})
+

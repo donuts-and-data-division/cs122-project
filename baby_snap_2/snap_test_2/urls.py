@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^ajax/cash_register/$', views.cash_register, name='cash_register'),
     url(r'^submit-prices$', views.submit_prices, name='submit_prices'),
     url(r'^submit-prices/(?P<place_id>\w+)/(?P<food_string>[\d+&?]+)/$', views.submit_prices, name='price_page'),
+    url(r'^submit-prices/(?P<place_id>\w+)/$', views.submit_prices_blank, name='blank_price_page'),
     
 ]
 

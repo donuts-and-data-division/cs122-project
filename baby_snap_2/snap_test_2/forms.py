@@ -49,10 +49,6 @@ class PricesForm(forms.Form):
 
 
 class GroceryForm(forms.ModelForm):
-
-
-    #food = forms.ModelChoiceField(queryset=FoodPrices.objects.all(), \
-        #empty_label = "Build your list", label="")
     
     fruits_and_veggies = forms.ModelChoiceField(queryset=FoodPrices.objects.filter(food_type="Fruits & Vegetables").order_by('food_name'), \
         empty_label = "Fruits & Vegetables", label="", required=False)
