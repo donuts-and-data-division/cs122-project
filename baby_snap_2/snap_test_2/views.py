@@ -84,12 +84,9 @@ def submit_grocery_list(request, place_id='ChIJS0p5_HHSD4gR3b8D9godIZk'):
 
     store_name = SnapLocations.objects.get(place_id=place_id)
     store_address = SnapLocations.objects.get(place_id=place_id).googleaddress
-    #this view will actually be coming from the map part, and will redirect to the grocery list page
-    #make a dictionary with dollar sign info and list of foods available at that type of store?
-    #add that dictionary to the render thing
-    #somehow edit the dropdown menu on the form based on the list of foods...
 
-    return render(request, 'snap_test_2/grocery_list_2.html', {'form': form, 'store_name': store_name, 'address': store_address})
+    return render(request, 'snap_test_2/grocery_list_2.html', {'form': form, \
+        'store_name': store_name, 'address': store_address, 'place_id': place_id})
 
 
 
@@ -101,26 +98,28 @@ def cash_register(request):
             'food_name': FoodPrices.objects.get(id=food_id).food_name
             }
 
-    #probably add dollar signs to this dictionary
-    #e.g. 'dollar_sign': 1
-
     return JsonResponse(data)
 
 
-def submit_prices(request, place_id='ChIJS0p5_HHSD4gR3b8D9godIZk'):
+def submit_prices(request, place_id='ChIJS0p5_HHSD4gR3b8D9godIZk', food_string=0):
 
     '''Assumption we have SnapLocation informtion'''
-
-    food_list = request.sesssion.get('food_list', None)
 
     if request.method == "POST":
         form = GroceryForms(request.POST)
     else:
         form = GroceryForm()
 
-
     store_name = SnapLocations.objects.get(place_id=place_id)
     store_address = SnapLocations.objects.get(place_id=place_id).googleaddress
+    food_id_list = food_string.split('&')
+    food_list = []
 
-    return render(request, 'snap_test_2/submit-prices.html', {'form': form, 'store_name': store_name, 'address': store_address})
+    for food_id in food_id_list:
+        food = FoodPrices.objects.get(id=food_id).food_name
+        food_list.append(food)
+
+
+    return render(request, 'snap_test_2/submit-prices.html', {'form': form, \
+        'store_name': store_name, 'address': store_address, 'food_list': food_id_list})
 

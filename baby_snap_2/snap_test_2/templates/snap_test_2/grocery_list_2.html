@@ -31,7 +31,7 @@ body {
     left: 0;
     bottom: 0;
     background: url('http://i.imgur.com/FPnuTwT.jpg');
-    background-position: 50% 95%;
+    background-position: 50% 88%;
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 900;
     font-size: 16px;
@@ -40,6 +40,7 @@ body {
     margin-left: 30px;
     margin-top:15px;
 }
+
 #main {
     margin-left: 450;
     margin-top: 85;
@@ -62,56 +63,57 @@ body {
     letter-spacing: 10px
 }
 #removebutton {
+  width: 25px;
+  height: 25px;
   border-radius: 50px;
   font-family: 'Source Sans Pro', sans-serif;
-  font-weight: 900;
   color: #b3b3b3;
   font-size: 30px;
+  font-weight: 900;
   border:none;
-  background:transparent;
+  background:url('http://i.imgur.com/AqWX9gH.png');
+    background-size: 25px 25px;
+  display: table-cell;
+  vertical-align: middle;
   text-align: center;
+  line-height: 25px;
+  margin-left:-2px;
   -o-transition:.5s;
   -ms-transition:.5s;
   -moz-transition:.5s;
   -webkit-transition:.5s;
 }
+
 #removebutton:hover {
-  color: #737373;
+  opacity: 0.4;
   cursor: pointer;
 }
-#id_food {
-   height: 30px;
-   width: 340px;
-   -webkit-border-radius: 5px;
-   -moz-border-radius: 5px;
-   border-radius: 5px;
-   background-color: rgba(255, 255, 255, 0.6);
-   border:none;
-   padding-left: 5px;
-    -o-transition:1s;
-  -ms-transition:1s;
-  -moz-transition:1s;
-  -webkit-transition:1s;
+#id_food, #id_fruits_and_veggies, #id_meat_and_fish, #id_dairy,
+#id_grains, #id_other {
+  height: 25px;
+  width: 340px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.75);
+  border:none;
+  padding-left: 5px;
+  margin-top: -7px;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
 }
-#id_food:hover{
+
+#id_food:hover, #id_fruits_and_veggies:hover, #id_meat_and_fish:hover, 
+#id_dairy:hover, #id_grains:hover, #id_other:hover{
     background-color: rgba(255, 255, 255, 1);
     cursor: pointer;
 }
+
 .grocery-form select {
     -webkit-appearance:none;
     -moz-appearance:none;
-}
-.grocery-form:after {
-    content: '>';
-    font: 13px "Consolas", monospace;
-    color: #333;
-    -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    transform: rotate(90deg);
-    left: 349px;
-    top: 155px;
-    position: absolute;
+
 }
 .grid table { 
     border-collapse: collapse; 
@@ -120,10 +122,11 @@ body {
 } 
 .grid {
     font-family: 'Source Sans Pro', sans-serif;
-    width: 700px;
+    width: 650px;
 }
 .grid table td, .grid table th { 
     padding: 3px 10px; 
+
 }
 .grid table thead th {
     color:#1d1f20; 
@@ -149,36 +152,49 @@ body {
   height: 25px;
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 900;
-  color: #698C3C;
-  font-size: 20px;
+  color: rgba(105,140,60, 0.75);
+  font-size: 30px;
   border:none;
-  background:transparent;
+  background:url('http://i.imgur.com/2sdpvcM.png');
+    background-size: 25px 25px;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  line-height: 25px;
   -o-transition:.5s;
   -ms-transition:.5s;
   -moz-transition:.5s;
   -webkit-transition:.5s;
 }
+
 #decreaseButton{
   border-radius: 50px;
   height: 25px;
   width: 25px;
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 900;
-  color: #ba0f51;
-  font-size: 20px;
+  color: rgba(186,15,81, 0.75);
+  font-size: 30px;
   border:none;
-  background:transparent;
+  background:url('http://i.imgur.com/xq5HnHY.png');
+  background-size: 25px 25px;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  line-height: 25px;
   -o-transition:.5s;
   -ms-transition:.5s;
   -moz-transition:.5s;
   -webkit-transition:.5s;
 }
+
 #decreaseButton:hover {
-  color: #843849;
+  opacity: 0.4;
   cursor: pointer;
 }
+
 #increaseButton:hover {
-  color: #636b46;
+  opacity: 0.4;
   cursor: pointer;
 }
 
@@ -186,7 +202,7 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 18px;
   margin-left: 30px;
-  margin-top: 35px;
+  margin-top: 15px;
 }
 
 #store_address {
@@ -195,6 +211,37 @@ body {
   font-size: 14px;
   margin-left: 30px;
   margin-top: -15px;
+}
+
+#invisible {
+  color: transparent;
+}
+
+#contribute-btn {
+  border-radius: 50px;
+  font-family: 'Source Sans Pro', sans-serif;
+  color: white;
+  font-size: 12px;
+  font-weight:900;
+  border:none;
+  background:rgba(186,15,81,0.65);
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  line-height: 25px;
+  position: fixed;
+  bottom: 10;
+  right: 10;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+}
+
+#contribute-btn:hover {
+  background-color: rgba(186,15,81,1);
+  cursor: pointer;
+
 }
 
 
@@ -220,16 +267,19 @@ body {
 
                 <div class="grid">
                     <table>
-                        <col width="330">
+                        <col width="269">
                         <col width="80">
-                        <col width="80">
-                        <col width="160">
+                        <col width="78">
+                        <col width="85">
+                        <col width="106">
+                        <col width="32">
                         <thead>
                             <tr>
                                 <th>Food</th>
                                 <th>Price</th>
                                 <th>Total</th>
                                 <th>Quantity</th>
+                                <th></th><th></th>
                             </tr>
                         </thead>
                     </table>
@@ -237,11 +287,12 @@ body {
                 
                 <div class="grid">
                     <table id="food_list_table">
-                        <col width="330">
+                        <col width="269">
                         <col width="80">
-                        <col width="80">
-                        <col width="80">
-                        <col width="110"></table>
+                        <col width="78">
+                        <col width="85">
+                        <col width="106">
+                        <col width="32"></table>
                 </div>
 
                 <table class = 'bottom'>
@@ -268,15 +319,15 @@ body {
 //https://www.youtube.com/watch?v=o6ueQBrcKrs
 //https://www.w3schools.com/jsref/met_table_insertrow.asp
 
-    //initialize food ids to list
-    var food_ids = [];
+//initialize food ids to list
+  var food_ids = [];
 
 function addFoodtoTable(data, food_id) {   
   
-    //access the table
+    //access the table & create empty row at beginning
     var table = document.getElementById("food_list_table");
-    //create empty row at beginning of table:
     var row = table.insertRow();
+    
     //insert cells into the row
     var food = row.insertCell(0);
     var price_per_quantity = row.insertCell(1);
@@ -284,27 +335,24 @@ function addFoodtoTable(data, food_id) {
     var quantity = row.insertCell(3);
     var button = row.insertCell(4);
     var this_food_id = row.insertCell(5);
+    this_food_id.id = 'invisible'
 
     //create a remove button
     var removeButton = document.createElement("button");
-    removeButton.innerHTML = "x";
     removeButton.id = 'removebutton';
     var increaseButton = document.createElement('button');
     var decreaseButton = document.createElement('button');
-    increaseButton.innerHTML = '&#9650;'
-    decreaseButton.innerHTML = '&#9660;'
     increaseButton.id = "increaseButton"
     decreaseButton.id = "decreaseButton"
+    
     //add content to the new cells:
     this_food_id.innerHTML = food_id
     var input_quantity = 1
     food.innerHTML = data.food_name;
     price_per_quantity.innerHTML = '$' + (data.food_price).toFixed(2) + '/' + data.food_quantity;
     total_price.innerHTML = '$' + (data.food_price * input_quantity).toFixed(2);
-    //FOR THE SUBMIT PRICES VERSION: button.innerHTML = '<input type = "text">'
-    //button.appendChild(removeButton)
-    button.appendChild(decreaseButton);
     button.appendChild(increaseButton);
+    button.appendChild(decreaseButton);
     button.appendChild(removeButton)
     quantity.innerHTML = '<p id = "quantity" >' + input_quantity + '</p>';
     
@@ -331,6 +379,7 @@ $('#food_list_table').on('click', '#increaseButton', function () {
     var total_price = $(this).parent().prev('td').prev('td')
     var new_amount = float_price * new_quant
     total_price.html('$' + new_amount.toFixed(2));
+    
     //recalculate total price
     var table_rows = document.getElementById('food_list_table').rows;
     var new_total = 0
@@ -409,8 +458,9 @@ $('#food_list_table').on('click', '#decreaseButton', function () {
     document.getElementById('total').innerHTML = '$' + new_total.toFixed(2);
       
 });
-$('#id_food').change(function () {
-    var food_id = $('#id_food').val();
+
+$('#id_food, #id_other, #id_grains, #id_dairy, #id_meat_and_fish, #id_fruits_and_veggies').change(function () {
+    var food_id = $(this).val();
     
     $.ajax({
         url: '/ajax/cash_register/',
@@ -423,11 +473,22 @@ $('#id_food').change(function () {
         });
 });
 
+//send list to submit prices page
+  $('#contribute-btn').click(function () {
+  var food_string = food_ids.join('&');
+  if (food_string.length == 0) {
+    alert('please make a list!')
+  }
 
-$('#contribute-btn').click(function () {
-  var food_string = food_ids.join('+')
-  
-})
+  else {
+  var url = '/submit-prices/' + '{{place_id}}' + '/' + food_string + '/';
+  window.location.href = url; 
+}
+});
+
+$('#id_other, #id_grains, #id_dairy, #id_meat_and_fish, #id_fruits_and_veggies').click(function(){
+    $('#id_other, #id_grains, #id_dairy, #id_meat_and_fish, #id_fruits_and_veggies').val(''); //value of your default option
+});
 
 
 </script> 

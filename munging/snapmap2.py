@@ -8,6 +8,7 @@ from time import sleep
 import recordlinkage as rl
 import jellyfish
 import backoff
+import string
 
 
 #def get_url(lat, lon, keyword, radius, key):
@@ -30,6 +31,31 @@ placeid={}&key={}".format(placeid, key)
     r = requests.get(url)
     return r.json()
 
+def get_yelp_keys():
+    app_id = "uc-LC0hKhl1jNEwzmyafRQ"
+    app_secret = "cCisYBB8tDDnVD2qn7MNdUx3mv5McEggAkvWcIHoG7WiJbVtDgl4qnqYLNM3P7Sg"
+
+    data = {'grant_type': 'client_credentials', "client_id": app_id, "client_secret": app_secret}
+
+    token = requests.post('https://api.yelp.com/oauth2/token', data=data)
+    access_token = token.json()['access_token']
+    headers = {'Authorization': 'bearer %s' % access_token}
+    return headers
+
+def get_yelp_price(phone, headers, url = 'https://api.yelp.com/v3/businesses/search/phone'):
+    for character in string.punctuation + " ":
+        phone = phone.replace(character, "")
+    format_phone = "+1" + phone
+    param = {'phone': format_phone}
+    resp = requests.get(url=url, params=param, headers=headers)
+
+    if resp.json()['businesses'] == []:
+        return None
+    elif "price" not in resp.json()["businesses"][0]:
+        print ("hey")
+        return None
+    return resp.json()['businesses'][0]['price']
+
 def get_info(num):
     IL_filename = "Snap_With_Markets.csv"
     #IL = pd.read_csv(IL_filename)
@@ -37,7 +63,9 @@ def get_info(num):
     IL = df[df["City"] == "Chicago"]
     IL.reset_index(drop = True, inplace = True)
 
-    KEY_INDEX = 0
+    headers = get_yelp_keys()
+
+    KEY_INDEX = 1
     developerKeys = ["AIzaSyCGt79JrG0sym4cyrs6YabCyy76zpnB828",\
     "AIzaSyBUDrUeEyJyUNwQl1oVJCydSFPb5fCMQvw", "AIzaSyC9dbLTJ-aU2VL0r1Zhpzlxx99TrW-tpMM",\
     "AIzaSyBkWTxpnmygafi2mFETLRumyw0OlY_ftwM", "AIzaSyC-_IRZoDqHowcopoCBFvQFGG7wU9CNOPw", \
@@ -68,6 +96,8 @@ def get_info(num):
     website = [0]*len(IL.index)
     url = [0]*len(IL.index)
     rating = [0]*len(IL.index)
+    price_level = [0]*len(IL.index)
+    yelp_prices = [0]*len(IL.index)
     
     #typeset = set()
     completed = 0
@@ -200,7 +230,7 @@ def get_info(num):
             lngs[i]=None
             adds[i]= None
             costs[i] = None
-            category[i] = "unkown"
+            category[i] = "unknown"
             continue
 
         #check if googleaddress closely matches input address
@@ -238,17 +268,17 @@ def get_info(num):
             category[i] = categorize(json)
         types[i] = json["results"][0]["types"]
 
-        #if "restaurant" in json["results"][0]["types"]:
-            #check[i] = "Double Check- invalid type"
-
         if "price_level" in json["results"][0]:
             costs[i] = json["results"][0]["price_level"]
         else:
             costs[i] = None
+
+        #if "restaurant" in json["results"][0]["types"]:
+            #check[i] = "Double Check- invalid type"
         
 
         #USE ID TO GET PLACES INFO
-        add_d, phone_d, hours_d, website_d, url_d, rating_d = get_details_info(json["results"][0]["place_id"],\
+        add_d, phone_d, hours_d, website_d, url_d, rating_d, price_d = get_details_info(json["results"][0]["place_id"],\
          key, KEY_INDEX, developerKeys)
         form_adds[i] = add_d
         phone[i] = phone_d
@@ -256,6 +286,13 @@ def get_info(num):
         website[i] = website_d
         url[i] = url_d
         rating[i] = rating_d
+        price_level[i] = price_d
+
+        #USE PHONE NUMBER TO GET YELP PRICE
+        if phone_d != None:
+            yelp_price = get_yelp_price(phone_d, headers, url = 'https://api.yelp.com/v3/businesses/search/phone')
+            yelp_prices[i] = yelp_price
+        
 
         #typeset.add(tuple(json["results"][0]["types"]))
         completed += 1
@@ -267,18 +304,20 @@ def get_info(num):
     IL["googlelat"] = lats
     IL["googlelon"] = lngs
     IL["googleaddress"] = adds
-    IL["cost"] = costs
-    IL['multiple'] = multiple
-    IL['how'] = how
     IL['check'] = check
-    IL["type"] = types
-    IL["category"] = category
-    IL["address"] = form_adds
+    IL["official_address"] = form_adds
     IL["phone number"] = phone
     IL["hours"] = hours
     IL["website"] = website
     IL["url"] = url
     IL["rating"] = rating
+    IL["nearby_price"] = costs
+    IL["details_price"] = price_level
+    IL["Yelp_price"] = yelp_prices
+    IL["category"] = category
+    IL["type"] = types
+    IL['multiple'] = multiple
+    IL['how'] = how
     
     #print(typeset)
     IL.to_csv("snapresultstestChicago1.csv")
@@ -287,30 +326,34 @@ def get_details_info(place_id, key, KEY_INDEX, developerKeys):
     #print (key)
     json = get_place_details_url(place_id, key)
     #if json["status"] == "OVER_QUERY_LIMIT":
-    while json["status"] != "OVER_QUERY_LIMIT":
+    while json["status"] == "OVER_QUERY_LIMIT":
         KEY_INDEX += 1
         key = developerKeys[KEY_INDEX]
         json = get_place_details_url(place_id, key)
             
     form_add = json["result"]["formatted_address"]
+    url = json["result"]["url"]
     if "formatted_phone_number" in json["result"]:
         phone = json["result"]["formatted_phone_number"]
     else:
-        phone = "None"
+        phone = None
     if "opening_hours" in json["result"]:
         hours = json["result"]["opening_hours"]["weekday_text"]
     else: 
-        hours = "None"
+        hours = None
     if "website" in json["result"]:
         website = json["result"]["website"]
     else:
-        website = "None"
-    url = json["result"]["url"]
+        website = None
     if "rating" in json["result"]:
         rating = json["result"]["rating"]
     else:
-        rating = "None"
-    return form_add, phone, hours, website, url, rating
+        rating = None
+    if "price_level" in json["result"]:
+        price = json["result"]["price_level"]
+    else:
+        price = None
+    return form_add, phone, hours, website, url, rating, price
 
 """
 def get_details_info(i, place_id, key, forms_adds, phone, hours, website, url, rating):

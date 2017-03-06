@@ -48,31 +48,27 @@ class PricesForm(forms.Form):
     place_id = forms.CharField( widget=forms.HiddenInput(attrs={'id':'place_id'}))
 
 
-QUANTITY_CHOICES = (
-    (0.25, 0.25),
-    (0.5, 0.5),
-    (0.75, 0.75),
-    (1, 1),
-    (2, 2),
-    (3, 3),
-    (4, 4),
-    (5, 5),
-    (6, 6),
-    (7, 7),
-    (8, 8),
-    (9, 9),
-    (10, 10),
-)
-
 class GroceryForm(forms.ModelForm):
 
-    #instead of .all we need to filter by store type to adjust the dropdown menu
-    #store type will come from the view maybe ?
 
-    food = forms.ModelChoiceField(queryset=FoodPrices.objects.all(), empty_label = "Build your list", label="")
-    #quantity = forms.CharField(max_length=3, 
-        #widget=forms.Select(choices=QUANTITY_CHOICES))
+    #food = forms.ModelChoiceField(queryset=FoodPrices.objects.all(), \
+        #empty_label = "Build your list", label="")
+    
+    fruits_and_veggies = forms.ModelChoiceField(queryset=FoodPrices.objects.filter(food_type="Fruits & Vegetables").order_by('food_name'), \
+        empty_label = "Fruits & Vegetables", label="", required=False)
 
+    meat_and_fish = forms.ModelChoiceField(queryset=FoodPrices.objects.filter(food_type="Meat & Fish").order_by('food_name'), \
+        empty_label = "Meat & Fish", label="", required=False)
+    
+    dairy = forms.ModelChoiceField(queryset=FoodPrices.objects.filter(food_type="Dairy").order_by('food_name'), \
+        empty_label = "Dairy", label="", required=False)
+
+    grains = forms.ModelChoiceField(queryset=FoodPrices.objects.filter(food_type="Grains").order_by('food_name'), \
+        empty_label = "Grains", label="", required=False)
+
+    other = forms.ModelChoiceField(queryset=FoodPrices.objects.filter(food_type="Other").order_by('food_name'), \
+        empty_label = "Other", label="", required=False)
+    
     class Meta:
         model = FoodPrices
         exclude = ['food_name', 'food_quantity', 'food_price', 'date_last_updated', 'food_type']
