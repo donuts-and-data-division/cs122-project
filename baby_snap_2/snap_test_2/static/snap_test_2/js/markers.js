@@ -65,15 +65,6 @@ function geolocate() {
       var place = marker.placeResult.properties;
       buildIWContent(place);
       
-      $('#submit_groceries').click(function () {
-      var name = place.googlename;
-      
-      var retailer_type = place.googlename;
-      var price = place.googlename; 
-      document.getElementById('name').value = name;
-      document.getElementById('retailer_type').value = retailer_type;
-      document.getElementById('price').value = price;
-      });
     }
 
 

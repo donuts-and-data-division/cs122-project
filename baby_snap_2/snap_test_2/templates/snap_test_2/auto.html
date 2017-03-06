@@ -97,10 +97,11 @@
     $("#autocomplete").on('focus', function () {
           geolocate();
         });
-    
+  
     //Map initialization modified from:
     //https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete
     function initialize() {
+      
        console.log("I JUST RESET THE MAP")
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 12,

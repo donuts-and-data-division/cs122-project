@@ -29,3 +29,9 @@ class FoodPrices(models.Model):
     # Returns the string representation of the model.
     def __str__(self):              
         return self.food_name
+
+
+class FakeModel(models.Model):
+    store_id = models.IntegerField()
+    food_id = models.IntegerField()
+    
