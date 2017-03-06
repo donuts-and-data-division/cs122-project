@@ -7,9 +7,10 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class SnapLocations(models.Model):
+    store_id = models.IntegerField()
     double_value = models.BooleanField()
     farmers_mkt = models.BooleanField()
-    name = models.CharField(max_length = 5000)
+    store_name = models.CharField(max_length = 5000)
     address = models.CharField(max_length = 5000)
     place_id = models.CharField(max_length = 5000)
     geom = gismodels.PointField()
@@ -22,7 +23,7 @@ class SnapLocations(models.Model):
 
     # Returns the string representation of the model.
     def __str__(self):              
-        return self.googlename
+        return self.store_name
 
 
 class FoodPrices(models.Model):

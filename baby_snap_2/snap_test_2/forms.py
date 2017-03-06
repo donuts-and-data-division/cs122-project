@@ -12,15 +12,14 @@ class SearchForm(forms.Form):
     types = [('Grocery', 'Grocery'), 
         ('Convenience Store', "Convenience Store"),
         ('Farmers Market', "Farmer's Market"), 
-        ('Gas Station', "Gas Station")]
+        ('Gas Station', "Gas Station"),
+        ('Other', "Other")]
     retailer_type = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=types, label='Retailer Type', required = False)
     
-    dollar_signs = [('$', '$'), ('$$','$$'), ('$$$','$$$')]
+    dollar_signs = [(1, '$'), (2, '$$'), (3,'$$$'), (4,'$$$$'), (5, '$$$$$')]
     price = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=dollar_signs, label='Price', required = False)
     
-    distances = [('1 mile', '1 mile'), ('5 miles', '5 miles'), ('10 miles', '10 miles')]
-    radius = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=distances, label='Radius', required = False)
-    
+    # could we make these actual stars?
     stars = [('1 star', '1 star'),('2 stars', '2 stars'),('3 stars', '3 stars'), ('4 stars', '4 stars'), ('5 stars', '5 stars')]
     rating = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=stars, label='Average Rating', required = False)
     
@@ -34,10 +33,10 @@ class FilterForm(forms.Form):
     types = types_list(['Grocery', "Farmer's Market", 'Convenience Store', 'Gas Station'])
     retailer_type = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=types, label='Retailer Type', required = False)
     
-    dollar_signs = types_list(["$","$$","$$$"])
+    dollar_signs = types_list(["$","$$","$$$", "$$$$", "$$$$$"])
     price = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=dollar_signs, label='Price', required = False)
      
-    stars = [('1 star', '1 star'),('2 stars', '2 stars'),('3 stars', '3 stars'), ('4 stars', '4 stars'), ('5 stars', '5 stars')]
+    stars = types_list(["1 star","2 stars","3 stars", "4 stars", "5 stars"])
     rating = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=stars, label='Average Rating', required = False)
 
 
@@ -49,10 +48,6 @@ class PricesForm(forms.Form):
 
 
 class GroceryForm(forms.ModelForm):
-
-
-    #food = forms.ModelChoiceField(queryset=FoodPrices.objects.all(), \
-        #empty_label = "Build your list", label="")
     
     fruits_and_veggies = forms.ModelChoiceField(queryset=FoodPrices.objects.filter(food_type="Fruits & Vegetables").order_by('food_name'), \
         empty_label = "Fruits & Vegetables", label="", required=False)

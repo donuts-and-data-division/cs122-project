@@ -75,17 +75,18 @@ def prices(request):
 
 
 
-def submit_grocery_list(request, place_id='ChIJS0p5_HHSD4gR3b8D9godIZk'):
+def submit_grocery_list(request, store_id):
+
     if request.method == "POST":
         form = GroceryForm(request.POST)     
     else:
         form = GroceryForm()
 
-    store_name = SnapLocations.objects.get(place_id=place_id)
-    store_address = SnapLocations.objects.get(place_id=place_id).googleaddress
+    store_name = SnapLocations.objects.get(store_id=store_id)
+    store_address = SnapLocations.objects.get(store_id=store_id).address
 
     return render(request, 'snap_test_2/grocery_list_2.html', {'form': form, \
-        'store_name': store_name, 'address': store_address, 'place_id': place_id})
+        'store_name': store_name, 'address': store_address, 'store_id': store_id})
 
 
 
@@ -100,7 +101,7 @@ def cash_register(request):
     return JsonResponse(data)
 
 
-def submit_prices(request, place_id='ChIJS0p5_HHSD4gR3b8D9godIZk', food_string=0):
+def submit_prices(request, store_id, food_string=0):
 
     '''Assumption we have SnapLocation informtion'''
 
@@ -109,8 +110,8 @@ def submit_prices(request, place_id='ChIJS0p5_HHSD4gR3b8D9godIZk', food_string=0
     else:
         form = GroceryForm()
 
-    store_name = SnapLocations.objects.get(place_id=place_id)
-    store_address = SnapLocations.objects.get(place_id=place_id).googleaddress
+    store_name = SnapLocations.objects.get(store_id=store_id)
+    store_address = SnapLocations.objects.get(store_id=store_id).address
     food_id_list = food_string.split('&')
     food_list = []
 
@@ -121,4 +122,21 @@ def submit_prices(request, place_id='ChIJS0p5_HHSD4gR3b8D9godIZk', food_string=0
 
     return render(request, 'snap_test_2/submit-prices.html', {'form': form, \
         'store_name': store_name, 'address': store_address, 'food_list': food_id_list})
+
+
+def submit_prices_blank(request, store_id=000):
+
+    '''Assumption we have SnapLocation informtion'''
+
+    if request.method == "POST":
+        form = GroceryForms(request.POST)
+    else:
+        form = GroceryForm()
+
+    store_name = SnapLocations.objects.get(store_id=store_id)
+    store_address = SnapLocations.objects.get(store_id=store_id).address
+    food_list = []
+
+    return render(request, 'snap_test_2/submit-prices.html', {'form': form, \
+        'store_name': store_name, 'address': store_address, 'food_list': food_list})
 
