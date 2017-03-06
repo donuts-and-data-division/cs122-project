@@ -18,14 +18,14 @@ def index(request):
         {"qs_results":qs_results})
 
 def get_places(request):
-    #place_name = request.GET.get("name", None)
-    #bounds = pa.get_geometry(place_name) #Relies on API
+    print("Roger. Getting places.")
     sw_lon = request.GET.get('sw_lon',None)
     sw_lat = request.GET.get('sw_lat',None)
     ne_lon = request.GET.get('ne_lon',None)
     ne_lat = request.GET.get('ne_lat',None)
 
     viewport = pa.get_viewport_poly((sw_lon, sw_lat, ne_lon, ne_lat))
+    print("Bound here",viewport)
     data = {"data": serialize('geojson',SnapLocations.objects.filter(geom__contained = viewport))}
     return JsonResponse(data)
 
@@ -76,7 +76,6 @@ def prices(request):
 
 
 def submit_grocery_list(request, place_id='ChIJS0p5_HHSD4gR3b8D9godIZk'):
-
     if request.method == "POST":
         form = GroceryForm(request.POST)     
     else:

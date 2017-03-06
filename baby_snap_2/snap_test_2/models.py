@@ -32,12 +32,26 @@ class FoodPrices(models.Model):
     date_last_updated = models.DateTimeField(default=timezone.now)
     food_type = models.CharField(max_length=50, default=0)
 
+
+    
     # Returns the string representation of the model.
     def __str__(self):              
         return self.food_name
 
 
-class FakeModel(models.Model):
+class UserPriceDataModel(models.Model):
     store_id = models.IntegerField()
     food_id = models.IntegerField()
+    user_input = models.FloatField()
+    # Store Regression Estimates:
+    for store_type in range(6):
+        for price_level in range(6):
+            exec("s{}_p{} = models.IntegerField()".format(store_type, price_level))
+          
+class StorePriceModel(models.Model):
+    store_id = models.IntegerField()
+    food_id = models.IntegerField()
+
+
+
     
