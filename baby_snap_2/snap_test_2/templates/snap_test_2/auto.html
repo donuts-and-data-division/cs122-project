@@ -39,7 +39,6 @@
                     {{ field }}
                     {% endfor %}</p>
                     </table>
-                    
                     <input type="submit"  value="Filter results" />
                 </form>
               </div>
@@ -80,6 +79,10 @@
           <tr id="iw-website-row" class="iw_table_row">
             <td class="iw_attribute_name">Hours:</td>
             <td id="iw-hours"></td>
+          </tr>
+          <tr id="iw-website-row" class="iw_table_row">
+            <td class="iw_attribute_name">Farmer's Market Double Value:</td>
+            <td id="iw-double"></td>
           </tr>
             <td>
               <input type="submit" id = "submit_groceries" name = "submit_groceries" value="Build Grocery List" />
@@ -290,6 +293,7 @@
       document.getElementById('iw-website').textContent = place.website;
       document.getElementById('iw-hours').textContent = place.hours;
       document.getElementById('iw-category').textContent = place.store_category;
+      document.getElementById('iw-double').textContent = place.double_value;
       
 
       $('#submit_groceries').click(function() {
