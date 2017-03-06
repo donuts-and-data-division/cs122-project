@@ -7,17 +7,23 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class SnapLocations(models.Model):
-    googlename = models.CharField(max_length=100)
+    store_id = models.IntegerField()
+    double_value = models.BooleanField()
+    farmers_mkt = models.BooleanField()
+    store_name = models.CharField(max_length = 5000)
+    address = models.CharField(max_length = 5000)
+    place_id = models.CharField(max_length = 5000)
     geom = gismodels.PointField()
-    googleaddress = models.CharField(max_length = 200)
-    place_id = models.CharField(max_length = 100)
-    '''
-    store_type =  models.CharField(max_length = 100)
-    price_leve = models.IntegerField()
-    '''
+    phone = models.CharField(max_length = 5000)
+    hours = models.CharField(max_length = 5000)
+    website = models.CharField(max_length = 5000)
+    rating = models.FloatField() # NOTE: rating = 0 means not available from Google
+    store_category = models.CharField(max_length = 5000)
+    price_level = models.IntegerField()
+
     # Returns the string representation of the model.
     def __str__(self):              
-        return self.googlename
+        return self.store_name
 
 
 class FoodPrices(models.Model):
@@ -30,3 +36,9 @@ class FoodPrices(models.Model):
     # Returns the string representation of the model.
     def __str__(self):              
         return self.food_name
+
+
+class FakeModel(models.Model):
+    store_id = models.IntegerField()
+    food_id = models.IntegerField()
+    
