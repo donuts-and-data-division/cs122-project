@@ -10,12 +10,10 @@ urlpatterns = [
     url(r'^auto2$', views.auto2),
     url(r'^ajax/get_places/$', views.get_places),
     url(r'^ajax/go_to_prices$', views.prices),
-    url(r'^groceries/(?P<place_id>[\w\-]+)/$', views.submit_grocery_list, name='grocery_list'),
+    url(r'^groceries/(?P<place_id>\w+)/$', views.submit_grocery_list, name='grocery_list'),
     url(r'^prices$', views.prices),
     url(r'^groceries$', views.submit_grocery_list, name='grocery_list'),
     url(r'^ajax/cash_register/$', views.cash_register, name='cash_register'),
     url(r'^submit-prices$', views.submit_prices, name='submit_prices'),
-    url(r'^submit-prices/(?P<place_id>\w+)/(?P<food_string>[\d+&?]+)/$', views.submit_prices, name='price_page'),
-    
 ]
 
