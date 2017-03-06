@@ -35,7 +35,7 @@ body {
     left: 0;
     bottom: 0;
     background: url('http://i.imgur.com/FPnuTwT.jpg');
-    background-position: 50% 95%;
+    background-position: 50% 88%;
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 900;
     font-size: 16px;
@@ -82,7 +82,8 @@ body {
   color: #698C3C;
   font-size: 20px;
   border:none;
-  background:transparent;
+  background:url('http://i.imgur.com/AqWX9gH.png');
+  background-size: 25px 25px;
   -o-transition:.5s;
   -ms-transition:.5s;
   -moz-transition:.5s;
@@ -90,26 +91,28 @@ body {
 }
 
 #removebutton:hover {
-  color: #737373;
+  opacity: 0.4;
   cursor: pointer;
 }
 
-#id_food {
-   height: 30px;
-   width: 340px;
-   -webkit-border-radius: 5px;
-   -moz-border-radius: 5px;
-   border-radius: 5px;
-   background-color: rgba(255, 255, 255, 0.6);
-   border:none;
-   padding-left: 5px;
-    -o-transition:1s;
-  -ms-transition:1s;
-  -moz-transition:1s;
-  -webkit-transition:1s;
+#id_food, #id_fruits_and_veggies, #id_meat_and_fish, #id_dairy,
+#id_grains, #id_other {
+  height: 25px;
+  width: 340px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.75);
+  border:none;
+  padding-left: 5px;
+  margin-top: -7px;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
 }
 
-#id_food:hover{
+#id_food:hover, #id_fruits_and_veggies:hover, #id_meat_and_fish:hover, 
+#id_dairy:hover, #id_grains:hover, #id_other:hover{
     background-color: rgba(255, 255, 255, 1);
     cursor: pointer;
 }
@@ -118,20 +121,6 @@ body {
 .grocery-form select {
     -webkit-appearance:none;
     -moz-appearance:none;
-}
-
-.grocery-form:after {
-    content: '>';
-    font: 13px "Consolas", monospace;
-    color: #333;
-    -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    transform: rotate(90deg);
-    left: 349px;
-    top: 155px;
-    position: absolute;
-
 }
 
 
@@ -181,7 +170,8 @@ body {
   color: #698C3C;
   font-size: 20px;
   border:none;
-  background:transparent;
+  background:url('http://i.imgur.com/4KzYHuo.png');
+  background-size: 25px 25px;
   -o-transition:.5s;
   -ms-transition:.5s;
   -moz-transition:.5s;
@@ -189,7 +179,7 @@ body {
 }
 
 #checkmark:hover {
-  color: #636b46;
+  opacity: 0.4;
   cursor: pointer;
 }
 
@@ -197,7 +187,7 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 18px;
   margin-left: 30px;
-  margin-top: 35px;
+  margin-top: 15px;
 }
 
 #store_address {
@@ -287,11 +277,11 @@ function addFoodtoTable(data) {
 
     //create a remove button
     var removeButton = document.createElement("button");
-    removeButton.innerHTML = "&times;";
+    removeButton.innerHTML = "";
     removeButton.id = 'removebutton';
 
     var checkmark = document.createElement('button');
-    checkmark.innerHTML = '&#10003;'
+    checkmark.innerHTML = ''
     checkmark.id = "checkmark"
 
     //add content to the new cells:
@@ -310,9 +300,9 @@ $('#food_list_table').on('click', '#removebutton', function() {
 })
 
 
-$('#id_food').change(function () {
+$('#id_food, #id_other, #id_grains, #id_dairy, #id_meat_and_fish, #id_fruits_and_veggies').change(function () {
 
-    var food_id = $('#id_food').val();
+    var food_id = $(this).val();
     
     $.ajax({
         url: '/ajax/cash_register/',
@@ -341,6 +331,11 @@ $(window).on('load', function () {
   })
   }
 
+});
+
+//reset dropdowns after selection
+$('#id_other, #id_grains, #id_dairy, #id_meat_and_fish, #id_fruits_and_veggies').click(function(){
+    $('#id_other, #id_grains, #id_dairy, #id_meat_and_fish, #id_fruits_and_veggies').val(''); //value of your default option
 });
 
 </script> 
