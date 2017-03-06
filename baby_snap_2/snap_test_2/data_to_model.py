@@ -16,12 +16,13 @@ with open(csv_file) as f:
     ls = list(csv.reader(f))
     headers = ls[0]
     for ind, line in enumerate(ls[1:]):
+        store_id = line[0]
         double_value = line[headers.index('Double Value')]
         farmers_mkt = line[headers.index('Farmers Market?')]
         if line[headers.index('place_id')]:
             # found record linkage to google; use google places information
             # 94% of Chicago retailers fall into this category
-            name = line[headers.index('googlename')]
+            store_name = line[headers.index('googlename')]
             address = line[headers.index('official_address')]
             place_id = line[headers.index('place_id')]
             geom = Point(float(line[headers.index('googlelon')]), float(line[headers.index('googlelat')]))
@@ -53,7 +54,7 @@ with open(csv_file) as f:
         else:
             # no reliable record linkage to google; use original information
             # 6% of Chicago retailers fall into this category
-            name = line[headers.index('Store_Name')]
+            store_name = line[headers.index('Store_Name')]
             street = line[headers.index('Address')]
             street2 = line[headers.index('Address Line #2')]
             city = line[headers.index('City')]
@@ -71,9 +72,10 @@ with open(csv_file) as f:
         
         try:
             SnapLocations(  
+                store_id = store_id,
                 double_value = double_value,
                 farmers_mkt = farmers_mkt,
-                name = name,
+                store_name = store_name,
                 address = address,
                 geom = geom,
                 place_id = place_id,

@@ -59,14 +59,6 @@ function geolocate() {
   });}
     }
 
-    function showInfoWindow() {
-      var marker = this;
-      infoWindow.open(map, marker);
-      var place = marker.placeResult.properties;
-      buildIWContent(place);
-      
-    }
-
 
       function addResult(result, i) {
         var results = document.getElementById('results');
@@ -85,14 +77,23 @@ function geolocate() {
         icon.src = markerIcon;
         icon.setAttribute('class', 'placeIcon');
         icon.setAttribute('className', 'placeIcon');
-        var name = document.createTextNode(result.properties.googlename);
+        var name = document.createTextNode(result.properties.store_name);
+        console.log(name)
         iconTd.appendChild(icon);
         nameTd.appendChild(name);
         tr.appendChild(iconTd);
         tr.appendChild(nameTd);
         results.appendChild(tr);
-      } 
+      }
 
+      function showInfoWindow() {
+      var marker = this;
+      infoWindow.open(map, marker);
+      var place = marker.placeResult.properties;
+      console.log(place)
+      buildIWContent(place);
+      }
+ 
       function clearResults() {
         var results = document.getElementById('results');
         while (results.childNodes[0]) {
@@ -102,8 +103,8 @@ function geolocate() {
 
     
       function buildIWContent(place) {
-        document.getElementById('iw-name').textContent = place.googlename;
-        document.getElementById('iw-address').textContent = place.googleaddress;  
+        document.getElementById('iw-name').textContent = place.store_name;
+        document.getElementById('iw-address').textContent = place.address;  
 
 
         $('#submit_groceries').click(function() {
