@@ -1,13 +1,16 @@
 {% load staticfiles %}
 
 <head>
+
   <link rel="stylesheet" type="text/css" href="{% static "snap_test_2/css/groceries.css" %}"/>
   <link href="https://fonts.googleapis.com/css?family=Pacifico|Slabo+27px|Source+Sans+Pro:400,900" rel="stylesheet">
+  <title>Build your grocery list</title>
+
 </head>
 
         <div class="menu">
+            
             <a class="menu-header" href="#">snapmap</a>
-
             <p id = "store_name"> {{store_name}} </p>
             <p id = "store_address"> {{address}} </p>
 
@@ -17,61 +20,58 @@
                 {{ form.as_p }}
 
             </form>
+
         </div>
 
     <div id="main">
 
-                <div class="grid">
-                    <table>
-                        <col width="269">
-                        <col width="80">
-                        <col width="78">
-                        <col width="85">
-                        <col width="106">
-                        <col width="32">
-                        <thead>
-                            <tr>
-                                <th>Food</th>
-                                <th>Price</th>
-                                <th>Total</th>
-                                <th>Quantity</th>
-                                <th></th><th></th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
+        <div class="grid">
+            <table>
+                <col width="269">
+                <col width="80">
+                <col width="78">
+                <col width="85">
+                <col width="106">
+                <col width="32">
                 
-                <div class="grid">
-                    <table id="food_list_table">
-                        <col width="269">
-                        <col width="80">
-                        <col width="78">
-                        <col width="85">
-                        <col width="106">
-                        <col width="32"></table>
-                </div>
-
-                <table class = 'bottom'>
+                <thead>
                     <tr>
-                        <td>Total:</td>
-                        <td id='total'>&nbsp;&nbsp;$0.00</td>
+                        <th>Food</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Quantity</th>
+                        <th></th><th></th>
                     </tr>
-                    
-                </table>
-
-                <input type="submit" value="contribute prices" id="contribute-btn">
-
-                </div>
-            </p>
-  
+                </thead>
+            </table>
         </div>
+                
+        <div class="grid">
+            <table id="food_list_table">
+                <col width="269">
+                <col width="80">
+                <col width="78">
+                <col width="85">
+                <col width="106">
+                <col width="32">
+            </table>
+        </div>
+
+        <table class = 'bottom'>
+            <tr>
+                <td>Total:</td>
+                <td id='total'>&nbsp;&nbsp;$0.00</td>
+            </tr>
+                    
+        </table>
+
+        <input type="submit" value="contribute prices" id="contribute-btn">
+
     </div>
-</div>
+
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src = {% static "snap_test_2/js/grocerypage.js" %}></script>
-
-
 
 <script>
 
@@ -79,11 +79,11 @@
   $('#contribute-btn').click(function () {
   var food_string = food_ids.join('&');
   if (food_string.length == 0) {
-    var url = '/submit-prices/' + '{{place_id}}' + '/'
+    var url = '/submit-prices/' + '{{store_id}}' + '/'
   }
 
   else {
-  var url = '/submit-prices/' + '{{place_id}}' + '/' + food_string + '/'};
+  var url = '/submit-prices/' + '{{store_id}}' + '/' + food_string + '/'};
   window.location.href = url; 
 });
 

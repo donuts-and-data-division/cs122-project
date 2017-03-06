@@ -1,61 +1,61 @@
 {% load staticfiles %}
 
 <head>
+  
   <link rel="stylesheet" type="text/css" href="{% static "snap_test_2/css/groceries.css" %}"/>
   <link href="https://fonts.googleapis.com/css?family=Pacifico|Slabo+27px|Source+Sans+Pro:400,900" rel="stylesheet">
+  <title>Submit your prices</title>
+
 </head>
 
-        <div class="menu">
-            <a class="menu-header" href="#">snapmap</a>
+  <div class="menu">
 
-            <p id = "store_name"> {{store_name}} </p>
-            <p id = "store_address"> {{address}} </p>
+    <a class="menu-header" href="#">snapmap</a>
+    <p id = "store_name"> {{store_name}} </p>
+    <p id = "store_address"> {{address}} </p>
+    
+    <form name ='nameform' class="grocery-form" method='POST' onsubmit='return false' value="Select a food">
 
-            <form name ='nameform' class="grocery-form" method='POST' onsubmit='return false' value="Select a food">
+        {% csrf_token %}
+        {{ form.as_p }}
 
-                {% csrf_token %}
-                {{ form.as_p }}
+    </form>
 
-            </form>
-        </div>
+  </div>
 
-    <div id="main">
-                <div class="grid">
-                    <table>
-                        <col width="300">
-                        <col width="145">
-                        <col width="115">
-                        <col width="110">
-                        <thead>
-                            <tr>
-                                <th>Food</th>
-                                <th>Current Price</th>
-                                <th>Your Price</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-                <div>
-                <div class="grid">
-                    <table id="food_list_table">
-                        <col width="300">
-                        <col width="145">
-                        <col width="115">
-                        <col width="110">
-                        </table>
-                </div>
+  <div id="main">
 
-                </div>
-            </p>
-  
-        </div>
+    <div class="grid">
+      <table>
+        <col width="300">
+        <col width="145">
+        <col width="115">
+        <col width="110">
+        
+        <thead>
+          <tr>
+            <th>Food</th>
+            <th>Current Price</th>
+            <th>Your Price</th>
+            <th></th>
+          </tr>
+        </thead>
+      </table>
     </div>
-</div>
+    
+    <div class="grid">
+      <table id="food_list_table">
+        <col width="300">
+        <col width="145">
+        <col width="115">
+        <col width="110">
+      </table>
+    </div>
+
+  </div>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src = {% static "snap_test_2/js/submitpricespage.js" %}></script>
-
 
 <script>
 
@@ -73,7 +73,7 @@ $(window).on('load', function () {
       success: function(data) {
         addFoodtoTable(data);
       }
-  })
+    })
   }
 });
 
