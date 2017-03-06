@@ -24,7 +24,8 @@ def get_places(request):
     sw_lat = request.GET.get('sw_lat',None)
     ne_lon = request.GET.get('ne_lon',None)
     ne_lat = request.GET.get('ne_lat',None)
-
+    form_data = request.GET.get('data', None)
+    print(form_data)
     viewport = pa.get_viewport_poly((sw_lon, sw_lat, ne_lon, ne_lat))
     data = {"data": serialize('geojson',SnapLocations.objects.filter(geom__contained = viewport))}
     return JsonResponse(data)
@@ -74,7 +75,6 @@ def prices(request):
     return render(request, "snap_test_2/prices.html", {'prices': prices})
 
 
-
 def submit_grocery_list(request, store_id):
 
     if request.method == "POST":
@@ -100,6 +100,7 @@ def cash_register(request):
             }
 
     return JsonResponse(data)
+
 
 
 def submit_prices(request, store_id, food_string=0):
