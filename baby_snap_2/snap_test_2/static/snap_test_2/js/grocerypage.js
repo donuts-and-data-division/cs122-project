@@ -8,6 +8,8 @@ var food_ids = [];
 //get data based on selected food
 $('#id_food, #id_other, #id_grains, #id_dairy, #id_meat_and_fish, #id_fruits_and_veggies').change(function () {
     var food_id = $(this).val();
+    var store_id = {{ store_id }};
+    alert(store_id)
     
     $.ajax({
         url: '/ajax/cash_register/',

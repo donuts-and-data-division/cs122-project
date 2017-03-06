@@ -45,9 +45,9 @@ function addFoodtoTable(data) {
     var checkmark = document.createElement('button');
     checkmark.innerHTML = ''
     checkmark.id = "checkmark"
+    checkmark.form = "price_form"
 
     //add content to the new cells:
-    var input_quantity = 1
     food.innerHTML = data.food_name;
     price_per_quantity.innerHTML = '$' + (data.food_price).toFixed(2) + '/' + data.food_quantity;
     input_price.innerHTML = '<input type = "text" size=4 id="price_input">'
@@ -59,4 +59,11 @@ function addFoodtoTable(data) {
 //remove food from table on remove button click
 $('#food_list_table').on('click', '#removebutton', function() {
     $(this).closest('tr').remove();
+});
+
+
+$('#food_list_table').on('click', '#checkmark', function () {
+    var text = $(this).parent().prev('td');
+    alert(text.text());
+   //some function that updates the model with the price
 });

@@ -92,6 +92,7 @@ def submit_grocery_list(request, store_id):
 
 def cash_register(request):
     food_id = request.GET.get('food_id', None)
+    store_id = request.GET.get('store_id', None)
     data = {
             'food_price': FoodPrices.objects.get(id=food_id).food_price,
             'food_quantity': FoodPrices.objects.get(id=food_id).food_quantity,
@@ -125,7 +126,7 @@ def submit_prices(request, store_id, food_string=0):
         'store_name': store_name, 'address': store_address, 'food_list': food_id_list})
 
 
-def submit_prices_blank(request, store_id=000):
+def submit_prices_blank(request, store_id):
 
     '''Assumption we have SnapLocation informtion'''
 
