@@ -5,20 +5,7 @@
 //initialize food ids to list
 var food_ids = [];
 
-//get data based on selected food
-$('#id_food, #id_other, #id_grains, #id_dairy, #id_meat_and_fish, #id_fruits_and_veggies').change(function () {
-    var food_id = $(this).val();
-    
-    $.ajax({
-        url: '/ajax/cash_register/',
-        data: {'food_id': food_id},
-        dataType: 'json',
-        success: function(data) {
-            addFoodtoTable(data, food_id);
-            food_ids.push(food_id);
-            }
-        });
-});
+
 
 
 //reset dropdowns after selection
