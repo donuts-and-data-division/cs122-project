@@ -17,7 +17,7 @@ class SnapLocations(models.Model):
     phone = models.CharField(max_length = 5000)
     hours = models.CharField(max_length = 5000)
     website = models.URLField(max_length = 5000)
-    rating = models.CharField(max_length = 5000)
+    rating = models.FloatField()
     store_category = models.CharField(max_length = 5000)
     price_level = models.CharField(max_length = 5000)
 
@@ -36,19 +36,17 @@ class FoodPrices(models.Model):
     def __str__(self):              
         return self.food_name
 
-
-
 class Multipliers(models.Model):
     # Store Regression Estimates:
-    var_name = models.CharField(max_length = 50)
-    coefficient = models.FloatField()
+    store_category = models.CharField(max_length = 50)
+    price_level = models.CharField(max_length = 50)
+    multiplier = models.FloatField()
 
 class StorePriceModel(models.Model):
     store_id = models.IntegerField()
     food_id = models.IntegerField()
     n = models.IntegerField()
     users_mean = models.FloatField()
-
 
 class UserData(models.Model):
     store_id = models.IntegerField()

@@ -29,13 +29,13 @@
                 <form id="form" onsubmit='return false'>
                     <!--{% csrf_token %}-->
                     <table class="form">
-                    <p> Type:<p> {% for field in form.retailer_type %}
+                    <p> Retailer Type:<p> {% for field in form.retailer_type %}
                     {{ field }}
                     {% endfor %}</p>
-                    <p>Cost:<p> {% for field in form.price %}
+                    <p>Cost level:<p> {% for field in form.price %}
                     {{ field }}
                     {% endfor %}</p>
-                    <p> Rating:<p> {% for field in form.rating %}
+                    <p> Minimum Rating:<p> {% for field in form.rating %}
                     {{ field }}
                     {% endfor %}</p>
                     </table>
@@ -64,7 +64,7 @@
             <td class="iw_attribute_name">Telephone:</td>
             <td id="iw-phone"></td>
           </tr>
-          <tr id="iw-rating-row" class="iw_table_row">
+          <tr id="iw-category-row" class="iw_table_row">
             <td class="iw_attribute_name">Category:</td>
             <td id="iw-category"></td>
           </tr>
@@ -76,11 +76,11 @@
             <td class="iw_attribute_name">Website:</td>
             <td id="iw-website"></td>
           </tr>
-          <tr id="iw-website-row" class="iw_table_row">
+          <tr id="iw-hours-row" class="iw_table_row">
             <td class="iw_attribute_name">Hours:</td>
             <td id="iw-hours"></td>
           </tr>
-          <tr id="iw-website-row" class="iw_table_row">
+          <tr id="iw-double-row" class="iw_table_row">
             <td class="iw_attribute_name">Farmer's Market Double Value:</td>
             <td id="iw-double"></td>
           </tr>
@@ -164,8 +164,8 @@
           var sw_lon = bounds.west;
           var ne_lat = bounds.north;
           var ne_lon = bounds.east;  
+
           
-      
          // console.log("You are passing", data)
           
           $.ajax({
@@ -178,6 +178,7 @@
                   },
             dataType: 'json',
             success: function(data) {
+              
             var results = JSON.parse(data.data).features;
             console.log(results);
             placeMarkers(results);
@@ -293,10 +294,14 @@
 
   
     function buildIWContent(place) {
+      var rating = place.rating;
+      if (rating == 0) {
+            rating = 'Not available';
+          }; 
       document.getElementById('iw-name').textContent = place.store_name;
       document.getElementById('iw-address').textContent = place.address;  
       document.getElementById('iw-phone').textContent = place.phone;
-      document.getElementById('iw-rating').textContent = place.rating;
+      document.getElementById('iw-rating').textContent = rating;
       document.getElementById('iw-website').textContent = place.website;
       document.getElementById('iw-hours').textContent = place.hours;
       document.getElementById('iw-category').textContent = place.store_category;

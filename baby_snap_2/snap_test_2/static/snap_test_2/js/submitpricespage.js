@@ -30,6 +30,13 @@ function addFoodtoTable(data) {
 
     //create empty row at beginning of table:
     var row = table.insertRow();
+    
+    //set table ids
+    var table_rows = document.getElementById('food_list_table').rows;
+    var rowcount = 0
+    for (var i = 0; i < table_rows.length; ++i) {
+        table_rows[i].id = rowcount
+        rowcount += 1 }
 
     //insert cells into the row
     var food = row.insertCell(0);
@@ -45,12 +52,12 @@ function addFoodtoTable(data) {
     var checkmark = document.createElement('button');
     checkmark.innerHTML = ''
     checkmark.id = "checkmark"
-    checkmark.form = "price_form"
 
     //add content to the new cells:
     food.innerHTML = data.food_name;
     price_per_quantity.innerHTML = '$' + (data.food_price).toFixed(2) + '/' + data.food_quantity;
-    input_price.innerHTML = '<input type = "text" size=4 id="price_input">'
+    input_price.innerHTML = '$<input type = "text" size=3 id="price_input">'
+
     button.appendChild(checkmark);
     button.appendChild(removeButton);
 }
@@ -59,11 +66,28 @@ function addFoodtoTable(data) {
 //remove food from table on remove button click
 $('#food_list_table').on('click', '#removebutton', function() {
     $(this).closest('tr').remove();
+
+    //reset table ids
+    var table_rows = document.getElementById('food_list_table').rows;
+    var rowcount = 0
+    for (var i = 0; i < table_rows.length; ++i) {
+        table_rows[i].id = rowcount
+        rowcount += 1
+    }
 });
 
 
 $('#food_list_table').on('click', '#checkmark', function () {
-    var text = $(this).parent().prev('td');
-    alert(text.text());
+    //get row id for the selected row
+    var rc = $(this).parent().parent().attr('id');
+
+    //get the user input value from that row 
+    var price = document.querySelectorAll('#price_input')[rc].value;
+
+    //ensure that the input is integer or float
+    if ($.isNumeric(price) == false) {
+        alert('please enter a number :-)\ne.g. 4 or 4.00')
+    }
+
    //some function that updates the model with the price
 });
