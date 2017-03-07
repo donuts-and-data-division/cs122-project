@@ -10,7 +10,7 @@ import csv
 
 
 csv_file = 'snapresultstestChicago1.csv'
-#DOLLAR_SIGNS = {'0': 0, '$': 1, '$$': 2, '$$$': 3, '$$$$': 4, '$$$$$': 5}
+DOLLAR_SIGNS = {'': 'Not available', '1.0': '$', '2.0': '$$', '3.0': '$$$', '4.0': '$$$$', '5.0': '$$$$$'}
 
 with open(csv_file) as f:
     ls = list(csv.reader(f))
@@ -35,13 +35,13 @@ with open(csv_file) as f:
             
             rating = line[headers.index('rating')]
             if rating == '':
-                rating = 'Not available'
+                rating = 0
 
             hours_list = line[headers.index('hours')]
             if hours_list != '':
                 hours = hours_list.replace(',', '\n')
-                hours = hours_list.replace(']', '')
-                hours = hours_list.replace('[', '')
+                hours = hours_list.replace(']', '') # this isn't working...
+                hours = hours_list.replace('[', '') 
             else:
                 hours = 'Not available'
 
@@ -49,8 +49,9 @@ with open(csv_file) as f:
             if yelp_price == '0' or yelp_price == '':
                 # no yelp price levels; use Google's instead
                 price_level = line[headers.index('details_price')]
+                price_level = DOLLAR_SIGNS[price_level]
             else:
-                # convert yelp dollar signs to numbers
+                # use yelp price
                 price_level = yelp_price
             if price_level == '':
                 price_level = 'Not available'
@@ -69,7 +70,7 @@ with open(csv_file) as f:
             place_id = 'Not available'
             phone = 'Not available'
             website = 'Not available'
-            rating = 'Not available'
+            rating = 0
             store_category = 'Not available'
             hours = 'Not available'
             price_level = 'Not available'

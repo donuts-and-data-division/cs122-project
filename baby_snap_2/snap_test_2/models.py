@@ -17,7 +17,7 @@ class SnapLocations(models.Model):
     phone = models.CharField(max_length = 5000)
     hours = models.CharField(max_length = 5000)
     website = models.URLField(max_length = 5000)
-    rating = models.CharField(max_length = 5000)
+    rating = models.FloatField()
     store_category = models.CharField(max_length = 5000)
     price_level = models.CharField(max_length = 5000)
 
