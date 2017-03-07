@@ -5,6 +5,8 @@ import random
 from sklearn import linear_model 
 import numpy as np
 import math
+import statsmodel.api as sm
+
 
 
 #prices for each category type taken by field research
@@ -33,22 +35,34 @@ for row in array3:
 print(Y)
 X = []
 for row in array3:
-    X.append(row[6:11])
-        
-#add interaction terms
+    X.append(row[7:10])
+     
+X = sm.add_constant(X)
+results = sm.OLS(Y,X).fit()
+print(results.summary())
+
+
+#reg = linear_model.LinearRegression(fit_intercept=True)
+#reg.fit(X, Y)
+#returns array of coefficients
+#print (reg.__dict__["intercept_"], reg.coef_)   
+
+"""
+add interaction terms
 for c in [0,1]:
     for c2 in range(2,5):
         np.hstack(X, (X[c]*X[c2]).reshape
-        #interactions.append(X[c]*X[c2])    
-#create list of list (1 list of 5 interaction variables per obs)
-#np.insert(X, 14 or X.shape[1], list, axis = 1)    
+interactions.append(X[c]*X[c2])    
+create list of list (1 list of 5 interaction variables per obs)
+np.insert(X, 14 or X.shape[1], list, axis = 1)    
 
-#print(X)
-#run regression
-#Y is list of normalized prices
-#X is list of dummy values for categories and prices 
+print(X)
+run regression
+Y is list of normalized prices
+X is list of dummy values for categories and prices 
+"""
 
-reg = linear_model.LinearRegression(fit_intercept=False)
+reg = linear_model.LinearRegression(fit_intercept=True)
 reg.fit(X, Y)
 #returns array of coefficients
 print (reg.coef_)
