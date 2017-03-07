@@ -32,28 +32,25 @@ class FoodPrices(models.Model):
     food_price = models.FloatField()
     date_last_updated = models.DateTimeField(default=timezone.now)
     food_type = models.CharField(max_length=50, default=0)
-
-
-    
     # Returns the string representation of the model.
     def __str__(self):              
         return self.food_name
 
 
 
-class UserPriceDataModel(models.Model):
-    store_id = models.IntegerField()
-    food_id = models.IntegerField()
-    user_input = models.FloatField()
+class Multipliers(models.Model):
     # Store Regression Estimates:
-    for store_type in range(6):
-        for price_level in range(6):
-            exec("s{}_p{} = models.IntegerField()".format(store_type, price_level))
-          
+    var_name = models.CharField(max_length = 50)
+    coefficient = models.FloatField()
+
 class StorePriceModel(models.Model):
     store_id = models.IntegerField()
     food_id = models.IntegerField()
+    n = models.IntegerField()
+    users_mean = models.FloatField()
 
 
-
-    
+class UserData(models.Model):
+    store_id = models.IntegerField()
+    food_id = models.IntegerField()
+    user_price = models.FloatField()

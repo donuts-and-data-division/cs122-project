@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import SnapLocations, FoodPrices
 from django.core.serializers import serialize
 from . import placesAPI as pa
+from . import pricesAPI as pricesAPI
 from django.contrib.gis.geos import Polygon
 from django.contrib import messages
 from .forms import SearchForm, PricesForm, GroceryForm
@@ -93,7 +94,10 @@ def submit_grocery_list(request, store_id):
 def cash_register(request):
     food_id = request.GET.get('food_id', None)
     store_id = request.GET.get('store_id', None)
+    price_estimate = pricesAPI.get_price_estimate(food_id,store_id)
+
     data = {
+            #'food_price': price_estimate,
             'food_price': FoodPrices.objects.get(id=food_id).food_price,
             'food_quantity': FoodPrices.objects.get(id=food_id).food_quantity,
             'food_name': FoodPrices.objects.get(id=food_id).food_name
@@ -101,6 +105,16 @@ def cash_register(request):
 
     return JsonResponse(data)
 
+def update_price(request):
+    food_id = request.GET.get('food_id', None)
+    store_id = request.GET.get('store_id', None)
+    user_price = request.GET.get('user_price',None)
+
+    pricesAPI.update_price_estimate(food_id,store_id,user_price)
+    
+    data = {"thanks": "thanks"}
+
+    return JsonResponse(data)
 
 
 def submit_prices(request, store_id, food_string=0):
