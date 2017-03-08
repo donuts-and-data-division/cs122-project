@@ -8,6 +8,8 @@ Combine $$$, $$$$ and $$$$$? In the data I have there are 4 $$$$ and none with $
 
 There are currently duplicate places (i.e. 2 Hyde Park Produce results) (maybe updating database will fix this)
 
+Hours formatting in infor window
+
 Clear search bar on back button (otherwise if the user presses filter the map won't recenter.)
 
 Nice to have:
@@ -26,11 +28,15 @@ Add some instruction? (Perhaps instead of the cute snapmap, we can write "Make g
 Nice to have:
 adjust serving size (lb vs loaf)
 
+## Operational things
+update repo / clean up code
+VM on flash drive
 
 ## Nice additions
 write script that automates price updating
 write script that checks for changes in SNAP list.
 create updatable form => way for user to save grocery list.
+adjust serving sizes (lb vs loaf)
 
 ### Small things
 Organize repository
