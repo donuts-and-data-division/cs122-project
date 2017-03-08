@@ -72,15 +72,17 @@ def get_price_estimate(store_id, food_id):
     Assumes big model with a current price estimate ('price_estimate') 
     and list of user-inputted prices ('user_input)
     '''
+    print("I'm in")
     try:
         data = get_StorePrice(store_id=store_id, food_id=food_id)
-
+        print("I got", data)
     except:
         return "Exception Raised store_id or food id not valid"
     
+
     current_estimate = data.users_mean #a float
     n = data.n
-    
+    print('N =',n)
 
     if n >= THRESHOLD:
         return round(current_estimate,2)
