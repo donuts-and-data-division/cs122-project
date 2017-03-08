@@ -50,13 +50,12 @@
       <div id="info-content">
         <p id = "iw-name"></p>
         <table id='left_table'>
-          <col width="100">
+          <col width="85">
           <col width="250">
 
           <tr id="iw-address-row" class="iw_table_row">
             <td class="iw_attribute_name">Address:</td>
             <td id="iw-address"></td>
-            <td id='iw-hours'></td>
            
           </tr>
           <tr id="iw-phone-row" class="iw_table_row">
@@ -85,8 +84,8 @@
         </table>
 
         <table id='right_table'>
-          <col width="100">
-          <col width="250">
+          <col width="50">
+          <col width="190">
           <tr id="iw-hours-row" class="iw_table_row">
             <td class="iw_attribute_name">Hours:</td>
             <td id="iw-hours"></td>
@@ -285,7 +284,8 @@
 
       var tr = document.createElement('tr');
       tr.style.width = '100%' ;
-      tr.style.backgroundColor = (i % 2 === 0 ? '#F0F0F0' : '#FFFFFF');
+      //tr.style.backgroundColor = (i % 2 === 0 ? '#F0F0F0' : '#FFFFFF');
+      tr.id = (i % 2 === 0 ? 'gray-row' : 'white-row');
       tr.onclick = function() {
         google.maps.event.trigger(markers[i], 'click');
       };
