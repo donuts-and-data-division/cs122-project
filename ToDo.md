@@ -12,6 +12,8 @@ Hours formatting in infor window
 
 Clear search bar on back button (otherwise if the user presses filter the map won't recenter.)
 
+ARI: zoom not researching anymore!
+
 Nice to have:
 Hidable filters?
 
