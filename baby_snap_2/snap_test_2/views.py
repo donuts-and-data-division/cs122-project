@@ -6,8 +6,8 @@ from . import placesAPI as pa
 from . import pricesAPI as pricesAPI
 from django.contrib.gis.geos import Polygon
 from django.contrib import messages
-from .forms import SearchForm, PricesForm, GroceryForm
-from .forms import SearchForm, FilterForm
+from .forms import PricesForm, GroceryForm
+from .forms import FilterForm
 from django.http import JsonResponse
 #import simplejson as json
 
@@ -61,7 +61,7 @@ def gmapdata(request):
 def auto(request):
     form = FilterForm()
     return render(request, 'snap_test_2/auto.html', {'form':form})
-
+'''
 def auto2(request):
     qs_results = {}
     qs_results_ser = serialize('geojson', qs_results)
@@ -88,7 +88,7 @@ def auto2(request):
     # put this in different view?!!
 
     return render(request, 'snap_test_2/auto2.html', {'form': form, 'qs_results': qs_results_ser})
-
+'''
 
 def prices(request):
     if request.method == "POST":

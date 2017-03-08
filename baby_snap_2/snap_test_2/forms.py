@@ -5,7 +5,7 @@ def types_list(lst):
     return [(x,x) for x in lst]
     
 
-
+'''
 class SearchForm(forms.Form):
     location = forms.CharField(widget = forms.TextInput(), label='Near', max_length=100)
     
@@ -28,7 +28,7 @@ class SearchForm(forms.Form):
     ne_lat = forms.FloatField( widget=forms.HiddenInput(attrs={'id':'ne_lat'}))
     ne_lon = forms.FloatField( widget=forms.HiddenInput(attrs={'id':'ne_lon'}))
    # Need to remove bullet points from check boxes with CSS
-
+'''
 class FilterForm(forms.Form):
     types = types_list(['Grocery',"Farmer's Market", 'Convenience Store', 'Gas Station', 'Other'])
     retailer_type = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=types, label='Retailer Type', required = False)

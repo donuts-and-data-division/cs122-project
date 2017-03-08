@@ -193,52 +193,20 @@
       // Create a marker for each hotel found, and
       // assign a letter of the alphabetic to each marker icon.
       for (var i = 0; i < results.length; i++) {
-       //var markerLetter = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
 
         var type = results[i].properties.store_category;
         console.log(type)
-        /*
-
-        //if (type == "grocery") {
-          //var icon = {
-             // url: 'http://i.imgur.com/8VkZpUB.png',
-              // This marker is 20 pixels wide by 32 pixels high.
-              //size: new google.maps.Size(20, 32),
-
-           // };
-
-        var markerIcon = 'http://i.imgur.com/8VkZpUB.png';
-        var icon = document.createElement('img');
-        icon.src = img;
-        icon.setAttribute('class', 'icon');
-        }
-
-        //else {
-          //var markerLetter = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
-          //var icon = MARKER_PATH + markerLetter + '.png';
-        //}
-        //var type = results[i].properties.store_category;
-
-        if (type=='other'){
-          var markerIcon = {url: 'https://raw.githubusercontent.com/Ranks/emojione/master/assets/svg/1f604.svg',
-            scaledSize: new google.maps.Size(50,50),
-            scaledSize: new google.maps.Size(50,50)
-            
-          };
-        }  
-*/        
+          
         var markerIcon = ''
         markerIcon = selectIcon(type);
-        //};
+
         // Use marker animation to drop the icons incrementally on the map.
         markers[i] = new google.maps.Marker({
-          position: new google.maps.LatLng(results[i].geometry.coordinates[1], results[i].geometry.coordinates[0]),
-          animation: google.maps.Animation.DROP,
-          icon: markerIcon
-          //animation: google.maps.Animation.DROP,
+        position: new google.maps.LatLng(results[i].geometry.coordinates[1], results[i].geometry.coordinates[0]),
+        animation: google.maps.Animation.DROP,
+        icon: markerIcon
+        //animation: google.maps.Animation.DROP,
         });
-        // If the user clicks a hotel marker, show the details of that hotel
-        // in an info window.
         
         markers[i].placeResult = results[i];
         google.maps.event.addListener(markers[i], 'click', showInfoWindow);
@@ -249,17 +217,34 @@
 
     function selectIcon(type){
       if (type == "Grocery") {
-          var markerIcon = 'http://i.imgur.com/WFOBHyy.png'
+          var markerIcon = 'http://i.imgur.com/gyu9sDb.png'
         } else if (type == "Farmer's Market") {
-          var markerIcon = 'http://i.imgur.com/8E4xSWe.png'
+          var markerIcon = 'http://i.imgur.com/wOJFQEz.png'
         } else if (type == "Convenience Store") {
-          var markerIcon = 'http://i.imgur.com/QdrsR1G.png'
-        } else {
-          //var markernumber = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
-          var markerIcon = MARKER_PATH + "A"+ '.png';
-        };
+          var markerIcon = 'http://i.imgur.com/xBkWn0a.png'
+        } else if (type == "Gas Station") {
+          var markerIcon = 'http://i.imgur.com/OvKr766.png'
+        } else if (type == "Other" || type == "Not available") {
+          var markerIcon = 'http://i.imgur.com/UyipNwG.png'
+        }
         return markerIcon;
     }
+
+    function selectIconForList(type){
+      if (type == "Grocery") {
+          var markerIcon = 'http://i.imgur.com/2U1kUPJ.png'
+        } else if (type == "Farmer's Market") {
+          var markerIcon = 'http://i.imgur.com/wOJFQEz.png'
+        } else if (type == "Convenience Store") {
+          var markerIcon = 'http://i.imgur.com/ey3Gjry.png'
+        } else if (type == "Gas Station") {
+          var markerIcon = 'http://i.imgur.com/jO4tKLq.png'
+        } else if (type == "Other" || type == "Not available") {
+          var markerIcon = 'http://i.imgur.com/LZNaYUi.png'
+        }
+        return markerIcon;
+    }
+
 
     function clearMarkers() {
       for (var i = 0; i < markers.length; i++) {
@@ -293,7 +278,7 @@
     function addResult(result, i) {
       var results = document.getElementById('results');
       var type = result.properties.store_category;
-      var markerIcon = selectIcon(type);
+      var markerIcon = selectIconForList(type);
 
       var tr = document.createElement('tr');
       tr.style.width = '100%' ;
