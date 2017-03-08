@@ -9,6 +9,7 @@ import recordlinkage as rl
 import jellyfish
 import backoff
 import string
+import re
 
 
 #def get_url(lat, lon, keyword, radius, key):
@@ -52,7 +53,6 @@ def get_yelp_price(phone, headers, url = 'https://api.yelp.com/v3/businesses/sea
     if resp.json()['businesses'] == []:
         return None
     elif "price" not in resp.json()["businesses"][0]:
-        print ("hey")
         return None
     return resp.json()['businesses'][0]['price']
 
@@ -65,18 +65,27 @@ def get_info(num):
 
     headers = get_yelp_keys()
 
-    KEY_INDEX = 1
-    developerKeys = ["AIzaSyCGt79JrG0sym4cyrs6YabCyy76zpnB828",\
-    "AIzaSyBUDrUeEyJyUNwQl1oVJCydSFPb5fCMQvw", "AIzaSyC9dbLTJ-aU2VL0r1Zhpzlxx99TrW-tpMM",\
-    "AIzaSyBkWTxpnmygafi2mFETLRumyw0OlY_ftwM", "AIzaSyC-_IRZoDqHowcopoCBFvQFGG7wU9CNOPw", \
-    "AIzaSyDJUsXYFdat1urw-QLkvbZu17gmEj45its", "AIzaSyDef0qoVNWFiIhSf2DIcI6s393w2ikTj2E", \
-    "AIzaSyBbj_MRDIQC-GiOLuttSbCyht4cG-CkSjU", "AIzaSyAHH7pVva_7a2Ue4kWVkIvJPoihOvGPdqY", \
-    "AIzaSyAHH7pVva_7a2Ue4kWVkIvJPoihOvGPdqY", "AIzaSyC7ukvijmGEqmfRIPZiNlFsXS436eXJs18", \
-    "AIzaSyCls1mcmSzQnNPbTjeYrLA8yyde4AsH0rU", "AIzaSyCBAgvlKZoVQ9TYzizDA21aNvmk3z5BgLc",\
-    "AIzaSyA99nqCOeT0ouZkmlIl89Ysl-8l5Su67SY",  "AIzaSyBZiNslXrtBSQe75scT7K1Mb0pmyxIGM2M",\
-    "AIzaSyBytEe914saHxkWTfI71kqbVINrg2RWMhE", " AIzaSyC0D12kQSiYdc0oioMEKMXJfR-QPALhzYQ"\
-    "AIzaSyBiTMni2hEjQCIkmq8wVjyqBda2ZGgpTwg"]
+    KEY_INDEX = 0
+    #developerKeys = ["AIzaSyCGt79JrG0sym4cyrs6YabCyy76zpnB828",\
+    #"AIzaSyBUDrUeEyJyUNwQl1oVJCydSFPb5fCMQvw", "AIzaSyC9dbLTJ-aU2VL0r1Zhpzlxx99TrW-tpMM",\
+    #"AIzaSyBkWTxpnmygafi2mFETLRumyw0OlY_ftwM", "AIzaSyC-_IRZoDqHowcopoCBFvQFGG7wU9CNOPw", \
+    #"AIzaSyDJUsXYFdat1urw-QLkvbZu17gmEj45its", "AIzaSyDef0qoVNWFiIhSf2DIcI6s393w2ikTj2E", \
+    #"AIzaSyBbj_MRDIQC-GiOLuttSbCyht4cG-CkSjU", "AIzaSyAHH7pVva_7a2Ue4kWVkIvJPoihOvGPdqY", \
+    #,"AIzaSyC7ukvijmGEqmfRIPZiNlFsXS436eXJs18", \
+    #"AIzaSyCls1mcmSzQnNPbTjeYrLA8yyde4AsH0rU", "AIzaSyCBAgvlKZoVQ9TYzizDA21aNvmk3z5BgLc",\
+    #"AIzaSyA99nqCOeT0ouZkmlIl89Ysl-8l5Su67SY",  "AIzaSyBZiNslXrtBSQe75scT7K1Mb0pmyxIGM2M",\
+    #"AIzaSyBytEe914saHxkWTfI71kqbVINrg2RWMhE", " AIzaSyC0D12kQSiYdc0oioMEKMXJfR-QPALhzYQ"\
+    #"AIzaSyBiTMni2hEjQCIkmq8wVjyqBda2ZGgpTwg"]
 
+
+    developerKeys = ["AIzaSyBiTMni2hEjQCIkmq8wVjyqBda2ZGgpTwg", "AIzaSyC0D12kQSiYdc0oioMEKMXJfR-QPALhzYQ"\
+    "AIzaSyBytEe914saHxkWTfI71kqbVINrg2RWMhE", "AIzaSyBZiNslXrtBSQe75scT7K1Mb0pmyxIGM2M", \
+    "AIzaSyA99nqCOeT0ouZkmlIl89Ysl-8l5Su67SY", "AIzaSyCBAgvlKZoVQ9TYzizDA21aNvmk3z5BgLc", \
+     "AIzaSyDb7c1qkijqhCmmyciGEGeKEMRrZHRHYQQ", "AIzaSyBQdC9NUR0qPj1T0PY4OfgVm49GpaZsVCU", \
+     "AIzaSyCls1mcmSzQnNPbTjeYrLA8yyde4AsH0rU", "AIzaSyC7ukvijmGEqmfRIPZiNlFsXS436eXJs18", \
+     "AIzaSyAGADuJIZhQkgy8kZJ8KRNTclFVHvTB5CM", "AIzaSyAHH7pVva_7a2Ue4kWVkIvJPoihOvGPdqY", \
+     "AIzaSyBbj_MRDIQC-GiOLuttSbCyht4cG-CkSjU", "AIzaSyDef0qoVNWFiIhSf2DIcI6s393w2ikTj2E", \
+     "AIzaSyDJUsXYFdat1urw-QLkvbZu17gmEj45its"]
     key = developerKeys[KEY_INDEX]
 
     ids = [0]*len(IL.index)
@@ -98,10 +107,11 @@ def get_info(num):
     rating = [0]*len(IL.index)
     price_level = [0]*len(IL.index)
     yelp_prices = [0]*len(IL.index)
+    jaro = [0]*len(IL.index)
     
     #typeset = set()
     completed = 0
-
+    #for i in range(1255,1265):
     for i in range(len(IL[:num])):
         sleep(1)
 
@@ -229,18 +239,60 @@ def get_info(num):
             lats[i]=None
             lngs[i]=None
             adds[i]= None
+            form_adds[i] = None
+            phone[i] = None
+            hours[i] = None
+            website[i] = None
+            url[i] = None
+            rating[i] = None
             costs[i] = None
-            category[i] = "unknown"
-            continue
+            price_level[i] = None
+            yelp_prices[i] = None
+            if IL.loc[i]["Farmers Market?"] == True:
+                category[i] = "Farmer's Market"
+            else: 
+                category[i] = "Unknown"
+            types[i] = None
 
+            continue
+    
         #check if googleaddress closely matches input address
         #firstthree = address.split()[0] + "" + address.split()[1] + "" + address.split()[2]
         #googfirstthree = json["results"][0]["vicinity"].split()[0] + "" + json["results"][0]["vicinity"].split()[1] \
         #+ "" + json["results"][0]["vicinity"].split()[2]
-
         add1 = address.split()[0]
         add2 = json["results"][0]["vicinity"].split()[0]
 
+        name = name.lower()
+        name = re.sub("\s\d*\w?$", "", name)
+        jaro[i] = jellyfish.jaro_distance(name, json["results"][0]["name"].lower())
+
+
+        if add1.lower() != add2.lower():
+            check[i] = "Address mismatch"
+            if jaro[i] < 0.6:
+                check[i] = "Bad Match"
+                ids[i]=None
+                names[i]=None
+                lats[i]=None
+                lngs[i]=None
+                adds[i]= None
+                form_adds[i] = None
+                phone[i] = None
+                hours[i] = None
+                website[i] = None
+                url[i] = None
+                rating[i] = None
+                costs[i] = None
+                price_level[i] = None
+                yelp_prices[i] = None
+                if IL.loc[i]["Farmers Market?"] == True:
+                    category[i] = "Farmer's Market"
+                else: 
+                    category[i] = "Unknown"
+                types[i] = None
+
+                continue
         #if len(address.split()) < 3 or len(json["results"][0]["vicinity"].split()) < 3:
             #add1 = address.split()[0] + address.split()[1] 
             #add2 = json["results"][0]["vicinity"].split()[0] + json["results"][0]["vicinity"].split()[1] 
@@ -249,8 +301,8 @@ def get_info(num):
             #add1 = address.split()[0] + address.split()[1] + address.split()[2]
             #add2 = json["results"][0]["vicinity"].split()[0] + json["results"][0]["vicinity"].split()[1] + json["results"][0]["vicinity"].split()[2]
         
-        if jellyfish.levenshtein_distance(add1.lower(), add2.lower()) > 0.5*len(add1):
-            check[i] = "Double Check- Address mismatch"
+        #if jellyfish.levenshtein_distance(add1.lower(), add2.lower()) > 0.5*len(add1):
+
 
         #if multiple[i] > 5:
             #check[i] = "Double Check- Many results"
@@ -264,7 +316,6 @@ def get_info(num):
         if IL.loc[i]["Farmers Market?"] == True:
             category[i] = "Farmer's Market"
         else: 
-            #category[i] = categorize(json["results"][0]["types"])
             category[i] = categorize(json)
         types[i] = json["results"][0]["types"]
 
@@ -292,6 +343,8 @@ def get_info(num):
         if phone_d != None:
             yelp_price = get_yelp_price(phone_d, headers, url = 'https://api.yelp.com/v3/businesses/search/phone')
             yelp_prices[i] = yelp_price
+        else:
+            yelp_prices[i] = None
         
 
         #typeset.add(tuple(json["results"][0]["types"]))
@@ -318,9 +371,10 @@ def get_info(num):
     IL["type"] = types
     IL['multiple'] = multiple
     IL['how'] = how
+    IL["jaro"] = jaro
     
     #print(typeset)
-    IL.to_csv("snapresultstestChicago1.csv")
+    IL.to_csv("snapresultstestChicago2.csv")
 
 def get_details_info(place_id, key, KEY_INDEX, developerKeys):
     #print (key)
@@ -373,27 +427,32 @@ def categorize(json):
     types_list = json["results"][0]["types"]
 
     if "gas_station" in types_list: 
-        category = "gas station"
+        category = "Gas Station"
     elif "convenience_store" in types_list or "liquor_store" in types_list:
-        category = "convenience store"
+        category = "Convenience Store"
     elif "grocery_or_supermarket" in types_list and "convenience_store" not in types_list:
-        category = "grocery"
+        category = "Grocery"
     elif "bakery" in types_list or "cafe" in types_list:
-        category = "other"
+        category = "Other"
     else:
-        category = "other"
+        category = "Other"
 
     return category
 
 def best_result(json, name):
     best = 0
     best_dist = 0
+    #print (name)
     for i in range(len(json["results"])):
-        g_name = json["results"][i]["name"]
-        print (g_name)
-        if jellyfish.jaro_distance(json["results"][i]["name"], name) > best_dist:
+        result = json["results"][i]["name"]
+        g_name = name.lower()
+        #g_name = re.findall(r'(.*)\s[0-9]', g_name)
+        g_name = re.sub("\s\d*\w?$", "", g_name)
+        #print (g_name)
+        print (result)
+        if jellyfish.jaro_distance(result.lower(), g_name) > best_dist:
             best = i
-            best_dist = jellyfish.jaro_distance(json["results"][i]["name"], name)
+            best_dist = jellyfish.jaro_distance(result.lower(), g_name)
             print (best_dist)
     json = json["results"][best]
 
