@@ -1,7 +1,6 @@
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
-        
         position:absolute;
         height: 100%;        
         bottom:0;
@@ -14,9 +13,10 @@
         height: 100%;
         margin: 0;
         padding: 0;
+        font-family: 'Source Sans Pro', sans-serif;
       }
+
       #description {
-        font-family: Roboto;
         font-size: 15px;
         font-weight: 300;
       }
@@ -33,27 +33,13 @@
         display: inline;
       }
 
-      
-
       #pac-container {
         padding-bottom: 12px;
         margin-right: 12px;
       }
 
-      .pac-controls {
-        display: inline-block;
-        padding: 5px 11px;
-      }
-
-      .pac-controls label {
-        font-family: Roboto;
-        font-size: 13px;
-        font-weight: 300;
-      }
-
       #pac-input {
         background-color: #fff;
-        font-family: Roboto;
         font-size: 15px;
         font-weight: 300;
         margin-left: 20px;
@@ -62,7 +48,7 @@
         width: 275px;
         border: 2px solid #d9d9d9;
         height: 30px;
-        margin-top: -8px;
+        
       }
 
       #pac-input:focus {
@@ -70,7 +56,6 @@
       }
 
       #title {
-        font-family: 'Source Sans Pro', sans-serif;
         font-weight: 900;
         margin-left: 10px;
         color: #636b46;
@@ -94,43 +79,38 @@
       }
 
       #resultsTable {
-        border-collapse: collapse;
+       border-collapse: collapse;
+       width: 100%;
       }
-      #rating {
-        font-size: 13px;
-        font-family: Arial Unicode MS;
+
+      #results {
       }
 
       #listing {
-        width: 300px;
         height: 100%;
         overflow: auto;
         cursor: pointer;
-}
+      }
 
 
 #sidebar {
   width: 350px;
   background-color: white;
-  top: 0px;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
-#pac-card {
-  margin-top: 0px;
-}
 
 
 #form {
   margin-left: 20px;
   margin-right: 20px;
-  font-family: 'Source Sans Pro', sans-serif;
   font-size: 13px;
   margin-top: -10px;
 }
 
 .field {
-  font-family: 'Source Sans Pro', sans-serif;
   font-weight: 900;
   font-size: 14px;
   margin-bottom: -10px;
@@ -138,7 +118,6 @@
 
 #filter-btn {
   border-radius: 50px;
-  font-family: 'Source Sans Pro', sans-serif;
   color: white;
   font-size: 12px;
   font-weight:900;
@@ -148,7 +127,8 @@
   vertical-align: middle;
   text-align: center;
   line-height: 25px;
-  margin-top: 8px;
+  margin-top: 2px;
+  margin-bottom: 12px;
   -o-transition:.5s;
   -ms-transition:.5s;
   -moz-transition:.5s;
@@ -158,8 +138,4 @@
 #filter-btn:hover {
   background-color: rgba(186,15,81,1);
   cursor: pointer;
-}
-
-#pac-filters {
-  width: 340px;
 }
