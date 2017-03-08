@@ -6,7 +6,7 @@ from sklearn import linear_model
 import numpy as np
 import math
 import statsmodels.api as sm
-
+from snap_test_2.models import SnapLocations
 
 
 #prices for each category type taken by field research
@@ -56,9 +56,7 @@ print (coefficients)
 #results = sm.OLS(Y,X).fit()
 #print(results.summary())
 
-
 """
-
 add interaction terms
 for c in [0,1]:
     for c2 in range(2,5):
@@ -71,7 +69,34 @@ print(X)
 run regression
 Y is list of normalized prices
 X is list of dummy values for categories and prices 
-
 """
 
- 
+
+qs_cats = SnapLocations.objects.values_list('store_category').distinct() 
+qs_price_levels = SnapLocations.objects.values_list('price_level').distinct() 
+categories = []
+price_levels = [] 
+for i in qs_cats:
+    categories.append(i[0])
+for i in qs_price_levels:
+    price_levels.append(i[0])
+
+COEFF = reg.coef_
+INTERCEPT = reg.intercept_
+INTERCEPT_6 = 3 # made up number for $$$$/$$$$$ based on patterns from other dollar signs
+print(cats)
+print(price_levels)
+
+multipliers = {}
+for cat in categories:
+    for price in price_levels:
+        d[cat][price] = get_multiplier(cat, price)
+
+def get_multiplier(cat, price):
+    # helper function to calculate multiplier based on estimated regression coefficients
+    
+    d = {c: 0 for c in categories}
+    d1 = {p: 0 for p in price_levels}
+    d.update(d1)
+
+    

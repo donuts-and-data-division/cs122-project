@@ -1,4 +1,4 @@
-from snap_test_2.models import SnapLocations, FoodPrices, StorePriceModel, UserData 
+from snap_test_2.models import SnapLocations, FoodPrices, StorePriceModel
 
 qs = SnapLocations.objects.all()
 store_ids = [q.store_id for q in qs] ## will need to unpack query set
@@ -14,4 +14,5 @@ food_ids = [f.id for f in fs] ## will need to unpack query set
 for store_id in store_ids:
     for food_id in food_ids:
         StorePriceModel(store_id= store_id, food_id=food_id, n=0, users_mean=0).save()
+
 

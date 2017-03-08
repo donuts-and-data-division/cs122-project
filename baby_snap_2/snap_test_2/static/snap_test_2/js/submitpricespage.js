@@ -6,7 +6,8 @@
 $('#id_food, #id_other, #id_grains, #id_dairy, #id_meat_and_fish, #id_fruits_and_veggies').change(function () {
 
     var food_id = $(this).val();
-    
+    console.log("I have the id of", food_id)
+
     $.ajax({
         url: '/ajax/cash_register/',
         data: {'food_id': food_id},
@@ -24,7 +25,7 @@ $('#id_other, #id_grains, #id_dairy, #id_meat_and_fish, #id_fruits_and_veggies')
 
 
 function addFoodtoTable(data) {    
-
+    console.log("We are running addFoodtoTable")
     //access the table
     var table = document.getElementById("food_list_table");
 
@@ -88,6 +89,15 @@ $('#food_list_table').on('click', '#checkmark', function () {
     if ($.isNumeric(price) == false) {
         alert('please enter a number :-)\ne.g. 4 or 4.00')
     }
+
+    //replace the submit field with a smiley after submission
+    var table_rows = document.getElementById('food_list_table').rows;
+    var table_cells = table_rows[rc].cells;
+    var cell = table_cells[2]
+    cell.innerHTML = '<img src= "http://i.imgur.com/2MzKVnC.png" id="smiley">'
+
+
+
 
     //$.ajax({
         //url: '/ajax/update_prices/',
