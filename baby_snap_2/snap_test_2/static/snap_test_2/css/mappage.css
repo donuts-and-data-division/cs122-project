@@ -1,8 +1,13 @@
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
-        height: 100%;
-        left: 450px;
+        
+        position:absolute;
+        height: 100%;        
+        bottom:0;
+        left:350px;
+        right:0;
+        overflow:hidden;
        }
       /* Optional: Makes the sample page fill the window. */
       html, body {
@@ -28,17 +33,7 @@
         display: inline;
       }
 
-      .pac-card {
-        
-        width: 450px;
-        height: 100%;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        background-color: #fff;
-        font-family: Roboto;
-
-      }
+      
 
       #pac-container {
         padding-bottom: 12px;
@@ -64,10 +59,10 @@
         margin-left: 20px;
         padding: 0 11px 0 13px;
         text-overflow: ellipsis;
-        width: 375px;
+        width: 275px;
         border: 2px solid #d9d9d9;
         height: 30px;
-        margin-top: 20px;
+        margin-top: -8px;
       }
 
       #pac-input:focus {
@@ -77,8 +72,7 @@
       #title {
         font-family: 'Source Sans Pro', sans-serif;
         font-weight: 900;
-        margin-left: 20px;
-        margin-top: 20px;
+        margin-left: 10px;
         color: #636b46;
         font-size: 25px;
         padding: 6px 12px;
@@ -108,24 +102,37 @@
       }
 
       #listing {
-        width: 450px;
+        width: 300px;
         height: 100%;
         overflow: auto;
         cursor: pointer;
-        overflow-x: hidden;
-      }
+}
+
+
+#sidebar {
+  width: 350px;
+  background-color: white;
+  top: 0px;
+  height: 100%;
+}
+
+#pac-card {
+  margin-top: 0px;
+}
+
 
 #form {
   margin-left: 20px;
   margin-right: 20px;
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 13px;
+  margin-top: -10px;
 }
 
-#field {
+.field {
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 900;
-  font-size: 16px;
+  font-size: 14px;
   margin-bottom: -10px;
 }
 
@@ -141,7 +148,7 @@
   vertical-align: middle;
   text-align: center;
   line-height: 25px;
-  margin-top: 15px;
+  margin-top: 8px;
   -o-transition:.5s;
   -ms-transition:.5s;
   -moz-transition:.5s;
@@ -151,4 +158,8 @@
 #filter-btn:hover {
   background-color: rgba(186,15,81,1);
   cursor: pointer;
+}
+
+#pac-filters {
+  width: 340px;
 }
