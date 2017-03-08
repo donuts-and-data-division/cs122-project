@@ -5,7 +5,7 @@ import random
 from sklearn import linear_model 
 import numpy as np
 import math
-import statsmodel.api as sm
+import statsmodels.api as sm
 
 
 
@@ -22,32 +22,43 @@ def generate_set(array):
             new_price = [new_price]
             new_price.extend(rest)
             array2.append(new_price)
-    #return array2
     array3 = np.concatenate((array, array2), axis=0)
     return array3
 
+def get_coefficients(array):
+    array3 = generate_set(array)
+    Y = []
+    
+    #Y values as distance from CPI price
+    for row in array3:
+        val = math.log(row[0]/row[1])
+        Y.append(val)
+    
+    #dummy variables for each categegory and price minus 1
+    X = []
+    for row in array3:
+        X.append(row[5:10])
 
-array3 = generate_set(array)
-Y = []
-for row in array3:
-    val = math.log(row[0]/row[1])
-    Y.append(val)
-print(Y)
-X = []
-for row in array3:
-    X.append(row[7:10])
-     
-X = sm.add_constant(X)
-results = sm.OLS(Y,X).fit()
-print(results.summary())
+    reg = linear_model.LinearRegression(fit_intercept=True)
+    reg.fit(X, Y)
+    #returns dictionary that includes constant and coefficients
+    return reg.__dict__
+
+result = get_coefficients(array)
+
+constant = result["intercept_"]
+coefficients = result["coef_"]
+print (constant)
+print (coefficients)
 
 
-#reg = linear_model.LinearRegression(fit_intercept=True)
-#reg.fit(X, Y)
-#returns array of coefficients
-#print (reg.__dict__["intercept_"], reg.coef_)   
+#X = sm.add_constant(X)
+#results = sm.OLS(Y,X).fit()
+#print(results.summary())
+
 
 """
+
 add interaction terms
 for c in [0,1]:
     for c2 in range(2,5):
@@ -60,29 +71,7 @@ print(X)
 run regression
 Y is list of normalized prices
 X is list of dummy values for categories and prices 
-"""
-
-reg = linear_model.LinearRegression(fit_intercept=True)
-reg.fit(X, Y)
-#returns array of coefficients
-print (reg.coef_)
-
 
 """
-all_items = [Grocery_1_apple, Grocery_2_apple, Grocery_3_apple, Grocery_1_banana, Grocery_2_banana, Grocery_3_banana, Grocery_1_pb, Grocery_2_pb, Grocery_3_pb, Grocery_1_chips, Grocery_2_chips, Grocery_3_chips, Gas_unknown_apple, Gas_unknown_banana, Gas_unknown_pb, Gas_unknown_chips, CS_2_apple, CS_2_banana, CS_2_pb, CS_2_chips]
 
-def random_Y_set(food_categories = all_items):
-    
-    #Food categories is list of list where each list represents one item at one #location type
-    
-    all_Y = []
-   
-    for list in food_categories: 
-        price = list[0]
-        for i in range(10):
-            add_price = price + random.uniform(-1,1)*0.2*price
-            list.append(add_price)
-        print (list)
-        all_Y += list
-    print (all_Y)
-"""   
+ 
