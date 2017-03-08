@@ -30,13 +30,13 @@ class SearchForm(forms.Form):
    # Need to remove bullet points from check boxes with CSS
 
 class FilterForm(forms.Form):
-    types = types_list(['Grocery', "Farmer's Market", 'Convenience Store', 'Gas Station'])
+    types = [('grocery', 'Grocery'), ("Farmer's Market", "Farmer's Market"), ('convenience store', 'Convenience Store'),('gas station', 'Gas Station'), ('other', 'Other')]
     retailer_type = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=types, label='Retailer Type', required = False)
     
     dollar_signs = types_list(["$","$$","$$$", "$$$$", "$$$$$"])
     price = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=dollar_signs, label='Price', required = False)
      
-    stars = types_list(["1 star","2 stars","3 stars", "4 stars", "5 stars"])
+    stars = [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)]
     rating = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=stars, label='Average Rating', required = False)
 
 

@@ -29,13 +29,14 @@
                 <form id="form" onsubmit='return false'>
                     <!--{% csrf_token %}-->
                     <table class="form">
-                    <p id='field'> Type:<p> {% for field in form.retailer_type %}
+                    
+                    <p id='field'> Retailer Type:<p> {% for field in form.retailer_type %}
                     {{ field }}
                     {% endfor %}</p>
-                    <p id='field'>Cost:<p> {% for field in form.price %}
+                    <p id='field'>Cost level:<p> {% for field in form.price %}
                     {{ field }}
                     {% endfor %}</p>
-                    <p id='field'> Rating:<p> {% for field in form.rating %}
+                    <p id='field'> Minimum Rating:<p> {% for field in form.rating %}
                     {{ field }}
                     {% endfor %}</p>
                     </table>
@@ -64,7 +65,7 @@
             <td class="iw_attribute_name">Telephone:</td>
             <td id="iw-phone"></td>
           </tr>
-          <tr id="iw-rating-row" class="iw_table_row">
+          <tr id="iw-category-row" class="iw_table_row">
             <td class="iw_attribute_name">Category:</td>
             <td id="iw-category"></td>
           </tr>
@@ -76,11 +77,11 @@
             <td class="iw_attribute_name">Website:</td>
             <td id="iw-website"></td>
           </tr>
-          <tr id="iw-website-row" class="iw_table_row">
+          <tr id="iw-hours-row" class="iw_table_row">
             <td class="iw_attribute_name">Hours:</td>
             <td id="iw-hours"></td>
           </tr>
-          <tr id="iw-website-row" class="iw_table_row">
+          <tr id="iw-double-row" class="iw_table_row">
             <td class="iw_attribute_name">Farmer's Market Double Value:</td>
             <td id="iw-double"></td>
           </tr>
@@ -164,8 +165,8 @@
           var sw_lon = bounds.west;
           var ne_lat = bounds.north;
           var ne_lon = bounds.east;  
+
           
-      
          // console.log("You are passing", data)
           
           $.ajax({
@@ -178,8 +179,7 @@
                   },
             dataType: 'json',
             success: function(data) {
-            console.log(data);
-
+              
             var results = JSON.parse(data.data).features;
             console.log(results);
             placeMarkers(results);
@@ -196,6 +196,7 @@
       // Create a marker for each hotel found, and
       // assign a letter of the alphabetic to each marker icon.
       for (var i = 0; i < results.length; i++) {
+<<<<<<< HEAD
         //var markerLetter = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
 
         var type = results[i].properties.store_category;
@@ -219,13 +220,24 @@
           var markerLetter = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
           var icon = MARKER_PATH + markerLetter + '.png';
         }
+        var type = results[i].properties.store_category;
 
-     
+        if (type=='other'){
+          var markerIcon = {url: 'https://raw.githubusercontent.com/Ranks/emojione/master/assets/svg/1f604.svg',
+            scaledSize: new google.maps.Size(50,50),
+            scaledSize: new google.maps.Size(50,50)
+            
+          };
+        }  else {
+          var markerLetter = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
+          var markerIcon = MARKER_PATH + markerLetter + '.png';
+        };
         // Use marker animation to drop the icons incrementally on the map.
         markers[i] = new google.maps.Marker({
           position: new google.maps.LatLng(results[i].geometry.coordinates[1], results[i].geometry.coordinates[0]),
           animation: google.maps.Animation.DROP,
           icon: icon
+          //animation: google.maps.Animation.DROP,
         });
         // If the user clicks a hotel marker, show the details of that hotel
         // in an info window.
@@ -308,10 +320,14 @@
 
   
     function buildIWContent(place) {
+      var rating = place.rating;
+      if (rating == 0) {
+            rating = 'Not available';
+          }; 
       document.getElementById('iw-name').textContent = place.store_name;
       document.getElementById('iw-address').textContent = place.address;  
       document.getElementById('iw-phone').textContent = place.phone;
-      document.getElementById('iw-rating').textContent = place.rating;
+      document.getElementById('iw-rating').textContent = rating;
       document.getElementById('iw-website').textContent = place.website;
       document.getElementById('iw-hours').textContent = place.hours;
       document.getElementById('iw-category').textContent = place.store_category;
