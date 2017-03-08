@@ -2,24 +2,28 @@
 
 # Big things
 ## Main map
-Ari: Make "Search" Work + Research AJAX -- write code to call google place API with place_id when querying (i.e. get hours information).
+Min Ratings -> radio buttons 
 
-Joan: Make autocomplete and html work
+Combine $$$, $$$$ and $$$$$? In the data I have there are 4 $$$$ and none with $$$$$.
 
-Jazz: Continue wrangling with script to map retailers to google place_id, longitude and latitude, price level, type
-	take care of multiple place IDs
-	
-desgin filters, write query logic for filtering
+There are currently duplicate places (i.e. 2 Hyde Park Produce results) (maybe updating database will fix this)
 
+Clear search bar on back button (otherwise if the user presses filter the map won't recenter.)
+
+Nice to have:
+Hidable filters?
 
 ## Grocery list
-Emma: Research AJAX, conceptualize the grocery list 
-
-Jazz: categorize retailers when multiple types are returned
-
 determine foods available for each types
+
 design multipier algorithm (e.g. location/region, store type, google $$ etc)
 
+test database updating algorithms on map.
+
+Add some instruction? (Perhaps instead of the cute snapmap, we can write "Make grocery list" 
+(On my machine (ari) this isn't working ...)
+
+Nice to have:
 adjust serving size (lb vs loaf)
 
 
@@ -33,17 +37,11 @@ Organize repository
 ~~Emma stops being Anne~~
 
 ## Notes from check-in 2/8/17
-Farmer's market: Can turn street addresses to lat and long using google maps api
-Record linkage: How close name and addresses are, make an overall score
-
 Grocery list: 
 Field research about multipliers for store types
 Try it at one store and then do it at another store with our calculator
 
 Add crowdsourcing. 
-	If something is too far from our average, do sanity checks for outlier, or until two different users input the same price
-	If we see that there are systematic errors for a store (ex: 20% off), maybe need to recalibrate everything
 	Fuelbuddy for inspiration
 
-Geolocating - maybe just use haversine formula
 

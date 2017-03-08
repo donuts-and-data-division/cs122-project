@@ -25,7 +25,6 @@ class SnapLocations(models.Model):
     def __str__(self):              
         return self.store_name
 
-
 class FoodPrices(models.Model):
     food_name = models.CharField(max_length=100)
     food_quantity = models.CharField(max_length=20)
