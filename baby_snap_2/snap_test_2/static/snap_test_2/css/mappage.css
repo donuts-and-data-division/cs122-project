@@ -21,6 +21,12 @@
         font-weight: 300;
       }
 
+      #info-content {
+        width: auto;
+        height: auto;
+        background-color: rgba(255, 255, 255, 95%);
+      }
+
       #infowindow-content .title {
         font-weight: bold;
       }
@@ -73,6 +79,7 @@
       .iw_attribute_name {
         font-weight: bold;
         text-align: right;
+
       }
       .iw_table_icon {
         text-align: right;
@@ -139,3 +146,34 @@
   background-color: rgba(186,15,81,1);
   cursor: pointer;
 }
+
+#submit_groceries, #submit_prices {
+  border-radius: 50px;
+  color: white;
+  font-size: 12px;
+  font-weight:900;
+  border:none;
+  background:rgba(153, 153, 153, 1);
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  line-height: 25px;
+  margin-left: 10px;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+}
+
+#submit_groceries:hover, #submit_prices:hover {
+  background-color: rgba(186,15,81,1);
+  cursor: pointer;
+}
+
+#iw-name {
+  font-size: 16px;
+  font-weight: 900;
+  text-align: center;
+  margin-top: 5px;
+}
+
