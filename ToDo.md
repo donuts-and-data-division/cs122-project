@@ -2,9 +2,12 @@
 
 # Big things
 ## Main map
-Min Ratings -> radio buttons
+Min Ratings -> radio buttons 
+
 Combine $$$, $$$$ and $$$$$? In the data I have there are 4 $$$$ and none with $$$$$.
+
 There are currently duplicate places (i.e. 2 Hyde Park Produce results) (maybe updating database will fix this)
+
 Clear search bar on back button (otherwise if the user presses filter the map won't recenter.)
 
 Nice to have:
@@ -12,7 +15,9 @@ Hidable filters?
 
 ## Grocery list
 determine foods available for each types
+
 design multipier algorithm (e.g. location/region, store type, google $$ etc)
+
 test database updating algorithms on map.
 
 Add some instruction? (Perhaps instead of the cute snapmap, we can write "Make grocery list" 
