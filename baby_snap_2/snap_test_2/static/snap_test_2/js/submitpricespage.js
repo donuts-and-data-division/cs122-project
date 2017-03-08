@@ -89,5 +89,16 @@ $('#food_list_table').on('click', '#checkmark', function () {
         alert('please enter a number :-)\ne.g. 4 or 4.00')
     }
 
+    //$.ajax({
+        //url: '/ajax/update_prices/',
+        //data: {'food_id': food_id, 'store_id': store_id, 'user_price': price},
+        //dataType: 'json',
+        //success: function(data) {
+            //addFoodtoTable(data);
+           // }
+       // });
+//});
+    //ajax: food_id, store_id, user_price
+
    //some function that updates the model with the price
 });
