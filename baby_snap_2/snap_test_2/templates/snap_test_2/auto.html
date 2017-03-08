@@ -226,17 +226,9 @@
             
           };
         }  
-*/      if (type == "grocery") {
-            var markerIcon = 'http://i.imgur.com/WFOBHyy.png'
-        } else if (type == "Farmer's Market") {
-          var markerIcon = 'http://i.imgur.com/8E4xSWe.png'
-        } else if (type == "convenience store") {
-          var markerIcon = 'http://i.imgur.com/QdrsR1G.png'
-        } else {
-          var markerLetter = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
-          var markerIcon = MARKER_PATH + markerLetter + '.png';
-        }
-
+*/        
+        var markerIcon = ''
+        markerIcon = selectIcon(type);
         //};
         // Use marker animation to drop the icons incrementally on the map.
         markers[i] = new google.maps.Marker({
@@ -254,6 +246,20 @@
         addResult(results[i], i);
           }
       }
+
+    function selectIcon(type){
+      if (type == "grocery") {
+          var markerIcon = 'http://i.imgur.com/WFOBHyy.png'
+        } else if (type == "Farmer's Market") {
+          var markerIcon = 'http://i.imgur.com/8E4xSWe.png'
+        } else if (type == "convenience store") {
+          var markerIcon = 'http://i.imgur.com/QdrsR1G.png'
+        } else {
+          //var markernumber = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
+          var markerIcon = MARKER_PATH + "A"+ '.png';
+        };
+        return markerIcon;
+    }
 
     function clearMarkers() {
       for (var i = 0; i < markers.length; i++) {
@@ -286,8 +292,8 @@
 
     function addResult(result, i) {
       var results = document.getElementById('results');
-      var markernumber = String.fromCharCode('A'.charCodeAt(0) + (i % 26));
-      var markerIcon = MARKER_PATH + markernumber + '.png';
+      var type = result.properties.store_category;
+      var markerIcon = selectIcon(type);
 
       var tr = document.createElement('tr');
       tr.style.width = '100%' ;
