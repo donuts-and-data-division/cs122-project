@@ -114,13 +114,14 @@ def submit_grocery_list(request, store_id):
 
 
 def cash_register(request):
+    print("hello cash_register")
     food_id = request.GET.get('food_id', None)
     store_id = request.GET.get('store_id', None)
-    price_estimate = pricesAPI.get_price_estimate(food_id,store_id)
-
+    price_estimate = pricesAPI.get_price_estimate(store_id,food_id)
+    print(price_estimate)
     data = {
-            #'food_price': price_estimate,
-            'food_price': FoodPrices.objects.get(id=food_id).food_price,
+            'food_price': price_estimate,
+            #'food_price': FoodPrices.objects.get(id=food_id).food_price,
             'food_quantity': FoodPrices.objects.get(id=food_id).food_quantity,
             'food_name': FoodPrices.objects.get(id=food_id).food_name
             }
@@ -132,7 +133,7 @@ def update_price(request):
     store_id = request.GET.get('store_id', None)
     user_price = request.GET.get('user_price',None)
 
-    pricesAPI.update_price_estimate(food_id,store_id,user_price)
+    pricesAPI.update_price_estimate(store_id,food_id,user_price)
     
     data = {"thanks": "thanks"}
 
