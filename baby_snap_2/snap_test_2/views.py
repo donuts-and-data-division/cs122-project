@@ -43,10 +43,10 @@ def get_places(request):
                     min_rating = rating
     #default lists for filters: include all
     if price_levels == []:
-        price_levels = ['$', '$$', '$$$', '$$$$', '$$$$$']
+        price_levels = SnapLocations.objects.values_list('price_level').distinct() 
     if categories == []:
-        categories = ["Farmer's Market", 'convenience store', 'grocery', 'gas station', 'other', 'unknown']
-    
+        categories = SnapLocations.objects.values_list('store_category').distinct() 
+        
     print('price_levels: ', price_levels, 'categories: ', categories, 'min_rating: ', min_rating)
     viewport = pa.get_viewport_poly((sw_lon, sw_lat, ne_lon, ne_lat))
     data = {"data": serialize('geojson',SnapLocations.objects.filter(geom__contained = viewport).filter(price_level__in = price_levels).filter(store_category__in = categories).filter(rating__gte = min_rating))}

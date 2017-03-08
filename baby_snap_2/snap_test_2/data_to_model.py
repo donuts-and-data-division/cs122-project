@@ -8,8 +8,8 @@ from snap_test_2.models import SnapLocations
 from django.contrib.gis.geos import Point
 import csv
 
-
-csv_file = 'snapresultstestChicago1.csv'
+SnapLocations.objects.all().delete()
+csv_file = 'snapresultstestChicago2.csv'
 DOLLAR_SIGNS = {'': 'Not available', '1.0': '$', '2.0': '$$', '3.0': '$$$', '4.0': '$$$$', '5.0': '$$$$$'}
 
 with open(csv_file) as f:
