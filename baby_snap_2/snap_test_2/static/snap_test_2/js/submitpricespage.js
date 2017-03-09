@@ -2,21 +2,7 @@
 //https://www.youtube.com/watch?v=o6ueQBrcKrs
 //https://www.w3schools.com/jsref/met_table_insertrow.asp
 
-//get data based on selected food
-$('#id_food, #id_other, #id_grains, #id_dairy, #id_meat_and_fish, #id_fruits_and_veggies').change(function () {
 
-    var food_id = $(this).val();
-    console.log("I have the id of", food_id)
-
-    $.ajax({
-        url: '/ajax/cash_register/',
-        data: {'food_id': food_id},
-        dataType: 'json',
-        success: function(data) {
-            addFoodtoTable(data);
-            }
-        });
-});
 
 //reset dropdowns after selection
 $('#id_other, #id_grains, #id_dairy, #id_meat_and_fish, #id_fruits_and_veggies').click(function(){
@@ -24,7 +10,7 @@ $('#id_other, #id_grains, #id_dairy, #id_meat_and_fish, #id_fruits_and_veggies')
 });
 
 
-function addFoodtoTable(data) {    
+function addFoodtoTable(data, food_id) {    
     console.log("We are running addFoodtoTable")
     //access the table
     var table = document.getElementById("food_list_table");
@@ -55,7 +41,9 @@ function addFoodtoTable(data) {
     checkmark.id = "checkmark"
 
     //add content to the new cells:
+    console.log('data: ', data)
     food.innerHTML = data.food_name;
+    console.log('price', data.food_price)
     price_per_quantity.innerHTML = '$' + (data.food_price).toFixed(2) + '/' + data.food_quantity;
     input_price.innerHTML = '$<input type = "text" size=3 id="price_input">'
 
