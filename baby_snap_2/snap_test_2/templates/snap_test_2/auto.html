@@ -48,18 +48,20 @@
 
     <div style="display: none">
       <div id="info-content">
-        <table>
-          <tr id="iw-name-row" class="iw_table_row">
-            <td class="iw_attribute_name">Name:</td>
-            <td id="iw-name"></td>
-          </tr>
+        <p id = "iw-name"></p>
+        <table id='left_table'>
+          <col width="85">
+          <col width="250">
+
           <tr id="iw-address-row" class="iw_table_row">
             <td class="iw_attribute_name">Address:</td>
             <td id="iw-address"></td>
+           
           </tr>
           <tr id="iw-phone-row" class="iw_table_row">
             <td class="iw_attribute_name">Telephone:</td>
             <td id="iw-phone"></td>
+            
           </tr>
           <tr id="iw-category-row" class="iw_table_row">
             <td class="iw_attribute_name">Category:</td>
@@ -73,21 +75,21 @@
             <td class="iw_attribute_name">Website:</td>
             <td id="iw-website"></td>
           </tr>
+          
+          <tr id="iw-double-row" class="iw_table_row">
+            <td class="iw_attribute_name">Double Value:</td>
+            <td id="iw-double"></td>
+          </tr>
+        
+        </table>
+
+        <table id='right_table'>
+          <col width="50">
+          <col width="190">
           <tr id="iw-hours-row" class="iw_table_row">
             <td class="iw_attribute_name">Hours:</td>
             <td id="iw-hours"></td>
           </tr>
-          <tr id="iw-double-row" class="iw_table_row">
-            <td class="iw_attribute_name">Farmer's Market Double Value:</td>
-            <td id="iw-double"></td>
-          </tr>
-            <td>
-              <input type="submit" id = "submit_groceries" name = "submit_groceries" value="Build Grocery List" />
-              <input type="submit" id = "submit_prices" name = "submit_prices" value="Contribute Prices" />
-            </form>
-            </td>
-          </tr>
-
         </table>
       </div>
     </div>
@@ -234,7 +236,7 @@
       if (type == "Grocery") {
           var markerIcon = 'http://i.imgur.com/2U1kUPJ.png'
         } else if (type == "Farmer's Market") {
-          var markerIcon = 'http://i.imgur.com/wOJFQEz.png'
+          var markerIcon = 'http://i.imgur.com/dtjndbn.png'
         } else if (type == "Convenience Store") {
           var markerIcon = 'http://i.imgur.com/ey3Gjry.png'
         } else if (type == "Gas Station") {
@@ -282,7 +284,8 @@
 
       var tr = document.createElement('tr');
       tr.style.width = '100%' ;
-      tr.style.backgroundColor = (i % 2 === 0 ? '#F0F0F0' : '#FFFFFF');
+      //tr.style.backgroundColor = (i % 2 === 0 ? '#F0F0F0' : '#FFFFFF');
+      tr.id = (i % 2 === 0 ? 'gray-row' : 'white-row');
       tr.onclick = function() {
         google.maps.event.trigger(markers[i], 'click');
       };
@@ -322,7 +325,7 @@
       if (rating == 0) {
             rating = 'Not available';
           }; 
-      document.getElementById('iw-name').textContent = place.store_name;
+      document.getElementById('iw-name').innerHTML = place.store_name + '<input type="submit" id = "submit_groceries" name = "submit_groceries" value="Build Grocery List" />' + '<input type="submit" id = "submit_prices" name = "submit_prices" value="Contribute Prices" />';
       document.getElementById('iw-address').textContent = place.address;  
       document.getElementById('iw-phone').textContent = place.phone;
       document.getElementById('iw-rating').textContent = rating;
