@@ -36,8 +36,8 @@ class FilterForm(forms.Form):
     dollar_signs = types_list(["$","$$","$$$", "$$$$"])
     price = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=dollar_signs, label='Price', required = False)
      
-    stars = [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)]
-    rating = forms.MultipleChoiceField(widget=forms.RadioSelect, choices=stars, label='Average Rating', required = False)
+    stars = [("",""), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5)]
+    rating = forms.ChoiceField(choices=stars, label='Average Rating', required = False)
 
 
 class PricesForm(forms.Form):
