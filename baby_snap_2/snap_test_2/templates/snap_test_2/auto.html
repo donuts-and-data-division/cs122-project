@@ -144,8 +144,9 @@
             map.setCenter(place.geometry.location);
             map.setZoom(17);  
           }
-               
-           get_places();
+           var data = $('#form').serializeArray();
+           console.log(data);
+           get_places(data);
         });
 
       
