@@ -30,6 +30,8 @@ function addFoodtoTable(data, food_id) {
     var price_per_quantity = row.insertCell(1);
     var input_price = row.insertCell(2);
     var button = row.insertCell(3);
+    var this_food_id = row.insertCell(4);
+    this_food_id.id = 'invisible'
 
     //create buttons
     var removeButton = document.createElement("button");
@@ -45,7 +47,8 @@ function addFoodtoTable(data, food_id) {
     food.innerHTML = data.food_name;
     console.log('price', data.food_price)
     price_per_quantity.innerHTML = '$' + (data.food_price).toFixed(2) + '/' + data.food_quantity;
-    input_price.innerHTML = '$<input type = "text" size=3 id="price_input">'
+    input_price.innerHTML = '$<input type = "text" size=3 class="price_input">'
+    this_food_id.innerHTML = food_id
 
     button.appendChild(checkmark);
     button.appendChild(removeButton);
@@ -66,37 +69,3 @@ $('#food_list_table').on('click', '#removebutton', function() {
 });
 
 
-$('#food_list_table').on('click', '#checkmark', function () {
-    //get row id for the selected row
-    var rc = $(this).parent().parent().attr('id');
-
-    //get the user input value from that row 
-    var price = document.querySelectorAll('#price_input')[rc].value;
-
-    //ensure that the input is integer or float
-    if ($.isNumeric(price) == false) {
-        alert('please enter a number :-)\ne.g. 4 or 4.00')
-    }
-
-    //replace the submit field with a smiley after submission
-    var table_rows = document.getElementById('food_list_table').rows;
-    var table_cells = table_rows[rc].cells;
-    var cell = table_cells[2]
-    cell.innerHTML = '<img src= "http://i.imgur.com/2MzKVnC.png" id="smiley">'
-
-
-
-
-    //$.ajax({
-        //url: '/ajax/update_prices/',
-        //data: {'food_id': food_id, 'store_id': store_id, 'user_price': price},
-        //dataType: 'json',
-        //success: function(data) {
-            //addFoodtoTable(data);
-           // }
-       // });
-//});
-    //ajax: food_id, store_id, user_price
-
-   //some function that updates the model with the price
-});

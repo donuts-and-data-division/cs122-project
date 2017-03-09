@@ -51,3 +51,4 @@ class UserData(models.Model):
     store_id = models.IntegerField()
     food_id = models.IntegerField()
     user_price = models.FloatField()
+

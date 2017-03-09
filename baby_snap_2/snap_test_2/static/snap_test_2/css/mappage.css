@@ -65,9 +65,10 @@
       #title {
         font-weight: 900;
         margin-left: 10px;
-        color: #636b46;
+        color: #666666;
         font-size: 25px;
         padding: 6px 12px;
+        margin-top: 15px;
       }
 
       ul {
@@ -208,4 +209,23 @@
 
 #left_table {
   float: left;
+}
+
+#menu-header {
+  margin-left: 25px;
+  font-family: 'Pacifico', cursive;
+  color: #636b46;
+  text-decoration: none;
+  font-size: 30px;
+  font-weight: 900;
+  -o-transition:1s;
+  -ms-transition:1s;
+  -moz-transition:1s;
+  -webkit-transition:1s;
+  letter-spacing: 4px
+}
+
+#menu-header:hover {
+  color: #a5ae84;
+  letter-spacing: 10px
 }

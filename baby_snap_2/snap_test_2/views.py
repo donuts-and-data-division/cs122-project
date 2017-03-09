@@ -133,9 +133,10 @@ def update_price(request):
     store_id = request.GET.get('store_id', None)
     user_price = request.GET.get('user_price',None)
 
-    pricesAPI.update_price_estimate(store_id,food_id,user_price)
-    
-    data = {"thanks": "thanks"}
+    data = {'bounds_error': 0}
+
+    if pricesAPI.update_price_estimate(store_id,food_id,user_price):
+        data['bounds_error'] = 'out of bounds error'
 
     return JsonResponse(data)
 
