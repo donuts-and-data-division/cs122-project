@@ -1,13 +1,15 @@
 from snap_test_2.models import SnapLocations, FoodPrices, Multipliers, StorePriceModel,UserData
 
-TOO_HIGH = 2
+TOO_HIGH = 3
 TOO_LOW = .5
 THRESHOLD = 8
 
 def update_price_estimate(store_id, food_id, new_price_data):
     '''
-    Assumes big model with a current price estimate ('price_estimate') 
-    and list of user-inputted prices ('user_input)
+    Update price estimate in StorePrice database.
+
+    Note: the StorePrice database only stores the mean of user input
+    and does not keep any record of CPI price or multipliers
     '''
     # Store the input data for future analysis
     new_price_data = float(new_price_data)
@@ -47,9 +49,11 @@ def update_price_estimate(store_id, food_id, new_price_data):
 
 def get_StorePrice(store_id, food_id):
     '''
-    On the fly database entry. If we've never looked up the store + food combo, 
+    Retrieves entry from StorePriceModel.
+
+    Supports on the fly database entry. If we've never looked up the store + food combo, 
     create a new entry. Then return the model instance.
-.    '''
+    '''
     try:
        data = StorePriceModel.objects.get(store_id=store_id, food_id=food_id)
     except:
@@ -70,20 +74,16 @@ def estimate_out_of_bounds(current_estimate, new_price_data):
 
 def get_price_estimate(store_id, food_id):
     '''
-    Assumes big model with a current price estimate ('price_estimate') 
-    and list of user-inputted prices ('user_input)
+    For given food item and store, calculate and return the estimated price 
     '''
-    print("I'm in")
     try:
         data = get_StorePrice(store_id=store_id, food_id=food_id)
-        print("I got", data)
     except:
         return "Exception Raised store_id or food id not valid"
     
 
     current_estimate = data.users_mean #a float
     n = data.n
-    print('N =',n)
 
     if n >= THRESHOLD:
         return round(current_estimate,2)
@@ -100,7 +100,6 @@ def get_price_estimate(store_id, food_id):
         store = SnapLocations.objects.get(store_id=store_id)
         store_category = store.store_category
         price_level = store.price_level
-        print("price_level=", price_level, "  store_category=", store_category)
         multiplier =  Multipliers.objects.get(store_category=store_category, price_level=price_level).multiplier
         base_estimate = FoodPrices.objects.get(id=food_id).food_price
         return round(((1- (n/THRESHOLD))*(base_estimate*multiplier) + 
