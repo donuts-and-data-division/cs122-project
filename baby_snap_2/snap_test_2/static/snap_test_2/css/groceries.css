@@ -32,7 +32,7 @@ body {
   left: 0;
   bottom: 0;
   background: url('http://i.imgur.com/FPnuTwT.jpg');
-  background-position: 50% 88%;
+  background-position: 50% 80%;
   font-family: 'Source Sans Pro', sans-serif;
   font-weight: 900;
   font-size: 16px;
@@ -57,28 +57,7 @@ body {
   letter-spacing: 10px
 }
 
-.header {
-  margin: 0;
-  color: #1d1f20;
-  text-align: center;
-  padding: 1em 0;
-  border-bottom: 1px solid #eee;
-  font-family: 'Slabo 27px', serif;
-}
 
-.header h1 {
-  margin: 0.2em 0;
-  font-size: 3em;
-  font-weight: 300;
-}
-     
-.header h2 {
-  font-weight: 300;
-  color: #ccc;
-  padding: 0;
-  margin-top: 0;
-  font-family: 'Source Sans Pro', sans-serif;
-}
 
 #store_name {
   font-family: 'Source Sans Pro', sans-serif;
@@ -93,6 +72,15 @@ body {
   font-size: 14px;
   margin-left: 30px;
   margin-top: -15px;
+}
+
+#heading {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-weight: 900;
+  font-size: 15px;
+  margin-left: 30px;
+  margin-top: 25px;
+  color: #666666;
 }
 
 .grocery-form {

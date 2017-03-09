@@ -17,5 +17,6 @@ urlpatterns = [
     url(r'^submit-prices$', views.submit_prices, name='submit_prices'),
     url(r'^submit-prices/(?P<store_id>\w+)/(?P<food_string>[\d+&?]+)/$', views.submit_prices, name='price_page'),
     url(r'^submit-prices/(?P<store_id>\w+)/$', views.submit_prices_blank, name='blank_price_page'),
+    url(r'^ajax/update_price/$', views.update_price, name='update_price')
 ]
 

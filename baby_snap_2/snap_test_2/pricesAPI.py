@@ -10,6 +10,7 @@ def update_price_estimate(store_id, food_id, new_price_data):
     and list of user-inputted prices ('user_input)
     '''
     # Store the input data for future analysis
+    new_price_data = float(new_price_data)
     UserData(store_id=store_id, food_id=food_id, user_price=new_price_data).save()
     # Update current estimates.
     # Using a roundabout way to avoid unneeded database calls.
@@ -34,8 +35,8 @@ def update_price_estimate(store_id, food_id, new_price_data):
         # note FoodPrices is the one database where we use the auto generated id.
 
         base_estimate = FoodPrices.objects.get(id=food_id).food_price   
-        current_estimate =  (1 -(n/THRESHOLD))*(base_estimate*multiplier) +(n/THRESHOLD)*current_estimate  
-        if estimate_out_of_bounds(current_estimate, new_price_data):
+        averaged_estimate =  (1 -(n/THRESHOLD))*(base_estimate*multiplier) +(n/THRESHOLD)*current_estimate  
+        if estimate_out_of_bounds(averaged_estimate, new_price_data):
             return "Estimate out of bounds" 
     print("Updating")
     data.n = n
