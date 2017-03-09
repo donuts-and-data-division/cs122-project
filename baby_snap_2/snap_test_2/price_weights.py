@@ -5,7 +5,7 @@ import random
 from sklearn import linear_model 
 import numpy as np
 import math
-import statsmodels.api as sm
+#import statsmodels.api as sm
 from snap_test_2.models import SnapLocations
 
 
@@ -46,10 +46,6 @@ def get_coefficients(array):
 
 result = get_coefficients(array)
 
-constant = result["intercept_"]
-coefficients = result["coef_"]
-print (constant)
-print (coefficients)
 
 
 #X = sm.add_constant(X)
@@ -71,7 +67,38 @@ Y is list of normalized prices
 X is list of dummy values for categories and prices 
 """
 
+def get_multiplier(cat, price):
+    '''
+    helper function to calculate multiplier based on estimated regression coefficients
+    '''
+    d = {c: 0 for c in categories}
+    d1 = {p: 0 for p in price_levels}
+    d.update(d1)
 
+    # if price level is unavailable, treat is as $
+    # assuming that Farmer's Markets have same multiplier as $$ Grocery Store
+    if cat == "Farmer's Market":
+        d['Grocery Store'] = 1
+        d['$$'] = 1
+    # assuming that Unknown store types have same multiplier as Other
+    elif cat == 'Not available':
+        d['Other'] = 1
+        d[price] = 1
+    else:
+        d[cat] = 1
+        d[price] = 1
+    
+    yhat = INTERCEPT \
+        + COEFF[0]*d['Convenience Store'] \
+        + COEFF[1]*d['Gas Station'] \
+        + COEFF[2]*d['Other'] \
+        + COEFF[3]*d['$$'] \
+        + COEFF[4]*d['$$$'] \
+        + COEFF[5]*d['$$$$'] 
+    yhat = math.exp(yhat)
+    return yhat
+
+# grab distinct categories and price levels from model and turn into list
 qs_cats = SnapLocations.objects.values_list('store_category').distinct() 
 qs_price_levels = SnapLocations.objects.values_list('price_level').distinct() 
 categories = []
@@ -81,22 +108,20 @@ for i in qs_cats:
 for i in qs_price_levels:
     price_levels.append(i[0])
 
-COEFF = reg.coef_
-INTERCEPT = reg.intercept_
-INTERCEPT_6 = 3 # made up number for $$$$/$$$$$ based on patterns from other dollar signs
-print(cats)
-print(price_levels)
-
+INTERCEPT = result["intercept_"]
+COEFF = list(result["coef_"])
+COEFF_6 = 0.35 # made up number for $$$$/$$$$$ based on patterns from other dollar signs
+COEFF.append(COEFF_6)
 multipliers = {}
 for cat in categories:
     for price in price_levels:
-        d[cat][price] = get_multiplier(cat, price)
+        if multipliers.get(cat) is None: 
+            multipliers[cat] = {}
+        if multipliers[cat].get(price) is None:
+            multipliers[cat][price] = {}
+        multipliers[cat][price] = get_multiplier(cat, price)
+     
 
-def get_multiplier(cat, price):
-    # helper function to calculate multiplier based on estimated regression coefficients
-    
-    d = {c: 0 for c in categories}
-    d1 = {p: 0 for p in price_levels}
-    d.update(d1)
+
 
     
