@@ -99,6 +99,7 @@ def get_price_estimate(store_id, food_id):
         store = SnapLocations.objects.get(store_id=store_id)
         store_category = store.store_category
         price_level = store.price_level
+        print("price_level=", price_level, "  store_category=", store_category)
         multiplier =  Multipliers.objects.get(store_category=store_category, price_level=price_level).multiplier
         base_estimate = FoodPrices.objects.get(id=food_id).food_price
         return round(((1- (n/THRESHOLD))*(base_estimate*multiplier) + 

@@ -160,7 +160,7 @@ def submit_prices(request, store_id, food_string=0):
 
 
     return render(request, 'snap_test_2/submit-prices.html', {'form': form, \
-        'store_name': store_name, 'address': store_address, 'food_list': food_id_list})
+        'store_name': store_name, 'address': store_address, 'food_list': food_id_list, 'store_id': store_id})
 
 
 def submit_prices_blank(request, store_id):
@@ -177,5 +177,5 @@ def submit_prices_blank(request, store_id):
     food_list = []
 
     return render(request, 'snap_test_2/submit-prices.html', {'form': form, \
-        'store_name': store_name, 'address': store_address, 'food_list': food_list})
+        'store_name': store_name, 'address': store_address, 'food_list': food_list, 'store_id': store_id})
 

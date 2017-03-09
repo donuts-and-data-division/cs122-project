@@ -4,8 +4,7 @@ from snap_test_2.models import SnapLocations, Multipliers, UserData, FoodPrices
 data = UserData.objects.all()
 # Unpack data into numpy array
 
-
-
+Multipliers.objects.all().delete()
 
 qs = SnapLocations.objects.all()
 categories = {q.store_category for q in qs} ## will need to unpack query set
