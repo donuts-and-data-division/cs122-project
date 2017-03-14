@@ -4,16 +4,19 @@
 1) Snap Retailer Locations: https://www.fns.usda.gov/snap/retailerlocator
 Downloaded 1/10/2017
 
-2) Google Places API
-Through snapmap2.py, we connect the data downloaded from 1) to the appropriate place ID, location, address, and cost category. We do this through an inital Nearby Search using the given address, followed by Searches using the given retailer name. This information will later be used for Place Details requests that return information like formatted address and phone number.
+2) Farmers markets with double value coupons:
+Farmer's Markets included in this source but not in the USDA database were added. In addition, those that accept double value coupons were matched with the USDA entry and flagged.
 
-Note: Need to decide how to handle requests that return no results and requests that return more than one results. Currently, the first 100 retailers in Illinois return 8 "none" and 19 "more than one".  
+3) Google Places API
+Through snapmap2.py, we connect the data downloaded from 1) to the appropriate place ID, location, address, and cost category. We do this through an inital Nearby Search using the given address, followed by Searches using the given retailer name. The matched place ID is used in a Place Details search return information like formatted address and phone number.
 
+If a retailer from 1) does not return any results from the Google API search, only the information from the USDA is included in the database. The same is done for retailers that return results considered a "bad match" based on a comparison of address and name in Google's information. 
 
-2) Food prices: https://data.bls.gov/cgi-bin/dsrv?ap
+4) Yelp API
+For retailers that were matched with Place ID's from Google and have phone numbers returned from the Place Details search, Yelp cost (ranging from $ to $$$$$) are added to retailer information.
+
+5) Food prices: https://data.bls.gov/cgi-bin/dsrv?ap
 Selected U.S. City Average, All food items (155 total selected), Dec 2016 price, filtered down to items with available pricing data
-
-3) Farmers markets with double value coupons:
 
 
 ##Links to policy related content:
