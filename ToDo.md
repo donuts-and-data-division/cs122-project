@@ -6,7 +6,7 @@ Split up tasks know what we are saying.
 ## Main map
 
 Tuesday:
-DEDUP
+DEDUP - JOAN IN PROGRESS, doing it manually for 30+
 There are currently duplicate places (i.e. 2 Hyde Park Produce results) (maybe updating database will fix this)
 
 Add about page
@@ -44,5 +44,7 @@ Organize repository
 
 ### Joan updates 3/13
 changed all references to auto --> home
+
 can't easily change name snap_test_2 without redoing migrations, so I didn't do anything with that
+
 Regarding pull_user_data integration with price_weights: not all categories show up in the pandas df from pull_user_data, presumably because users have not submitted prices for all category types and you used the get dummies method? That could be problematic because we want a standardized df coming out of that script. Could you modify it? Ideatlly it would output the same column order as the csv. I've written a few lines in price_weights to read in the pull_user_data output, but I'm not sure how to make this py file flexible enough for one time use (initial seeding of multipliers) as well as automated scriped. Probably something in __main__?
