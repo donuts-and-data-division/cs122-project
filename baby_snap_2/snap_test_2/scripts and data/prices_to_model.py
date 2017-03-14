@@ -1,3 +1,9 @@
+'''
+Reads data from csv to models.FoodPrices
+
+Inputs: csv_file
+'''
+
 from snap_test_2.models import FoodPrices
 import csv
 

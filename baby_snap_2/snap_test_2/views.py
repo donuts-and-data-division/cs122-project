@@ -1,13 +1,12 @@
-from django.shortcuts import render
-from django.http import HttpResponse
 from .models import SnapLocations, FoodPrices
-from django.core.serializers import serialize
+from .forms import PricesForm, GroceryForm, FilterForm
 from . import placesAPI as pa
 from . import pricesAPI as pricesAPI
-from django.contrib.gis.geos import Polygon
-from django.contrib import messages
-from .forms import PricesForm, GroceryForm, FilterForm
+
+from django.shortcuts import render
+from django.core.serializers import serialize
 from django.http import JsonResponse
+from django.contrib.gis.geos import Polygon
 
 
 def home(request):

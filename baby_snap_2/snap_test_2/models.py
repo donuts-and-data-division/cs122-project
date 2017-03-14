@@ -4,8 +4,6 @@ from django.utils import timezone
 from django.forms import ModelForm
 from django.contrib.auth.models import User
 
-
-# Create your models here.
 class SnapLocations(models.Model):
     store_id = models.IntegerField()
     double_value = models.CharField(max_length = 5000)
