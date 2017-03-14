@@ -22,12 +22,12 @@ For retailers that were matched with Place ID's from Google and have phone numbe
 5) Food prices: https://data.bls.gov/cgi-bin/dsrv?ap
 Selected U.S. City Average, All food items (155 total selected), Dec 2016 price, filtered down to items with available pricing data
 
-6) Field research: We visited seven stores of varying categories and price levels to record prices of available food items from the CPI list. The stores were: CVS on 53rd (convenience store $$), Hyde Park Produce (grocery $), Whole Foods (grocery $$$), BP (gas unknown), 7-eleven on 58 E Lake St. (convenience store $$), Open Produce (grocery $$), and Target (other $$). Recorded price points can be found here (https://docs.google.com/spreadsheets/d/1XIhF04hT3vKJzueRmdIF5lUWUIPM8AxkgeCzGnTnn7c/edit?usp=sharing).
+6) Field research: We visited seven stores of varying categories and price levels to record prices of available food items from the CPI list. The stores were: CVS on 53rd (convenience store $$), Hyde Park Produce (grocery $), Whole Foods (grocery $$$), BP (gas unknown), 7-eleven on 58 E Lake St. (convenience store $$), Open Produce (grocery $$), and Target (other $$). Recorded price points can be found [here](https://docs.google.com/spreadsheets/d/1XIhF04hT3vKJzueRmdIF5lUWUIPM8AxkgeCzGnTnn7c/edit?usp=sharing).
 
 ## File Descriptions
 - building_price_model.py
 - data_to_model.py: Transfers the record linkage results from snapresultsChicago2.csv into a Django model (model name: SnapLocations)
-- placesAPI.py
+- placesAPI.py: 
 - price_weights.py: Process price points collected through fieldwork by simulation additional data points, running regression to estimate multipliers, and transferring multipliers into a Django model (model name: multiplier)
 - pricesAPI.py
 - prices_to_model.py
@@ -36,6 +36,8 @@ Selected U.S. City Average, All food items (155 total selected), Dec 2016 price,
 - snapmap2.py
 - farmers_markets.py: Web scraping of farmers markets from DHS website, including additional locations not in main retailer data source and double value coupon indicator
 - linking_markets.py: Record linkage of scraped farmers market details to main retailer data source
+- auto_multipliers.py: a management script that (in theory) automatically updates the multipliers
+- crontab_text.txt: the crontab text that would run auto_multipliers.py every two weeks
 
 ## Links to policy related content:
 *Original Snap maps*
