@@ -11,11 +11,18 @@ from django.http import JsonResponse
 
 
 def home(request):
+    '''
+    home page
+    '''
     form = FilterForm()
     return render(request, 'snap_test_2/home.html', {'form':form})
 
 def get_places(request):
-    print("Roger. Getting places.")
+    '''
+    filters places based on ajax call
+    optional inputs: bounding box, filters on price level, retailer type and rating
+    returns: query set with location information (lat/lon and details)
+    '''
     sw_lon = request.GET.get('sw_lon',None)
     sw_lat = request.GET.get('sw_lat',None)
     ne_lon = request.GET.get('ne_lon',None)
@@ -48,16 +55,11 @@ def get_places(request):
 
     return JsonResponse(data)
 
-
-def prices(request):
-    if request.method == "POST":
-        prices = PricesForm(request.POST)
-    else:
-        prices = PricesForm()
-    return render(request, "snap_test_2/prices.html", {'prices': prices})
-
-
 def submit_grocery_list(request, store_id):
+    '''
+    grocery list base page
+    input: store_id (from url)
+    '''
 
     if request.method == "POST":
         form = GroceryForm(request.POST)     
@@ -71,14 +73,16 @@ def submit_grocery_list(request, store_id):
         'store_name': store_name, 'address': store_address, 'store_id': store_id})
 
 def cash_register(request):
-    print("hello cash_register")
+    '''
+    returns prices to ajax call 
+    (input: food_id and store_id)
+    '''
     food_id = request.GET.get('food_id', None)
     store_id = request.GET.get('store_id', None)
     price_estimate = pricesAPI.get_price_estimate(store_id,food_id)
-    print(price_estimate)
+    
     data = {
             'food_price': price_estimate,
-            #'food_price': FoodPrices.objects.get(id=food_id).food_price,
             'food_quantity': FoodPrices.objects.get(id=food_id).food_quantity,
             'food_name': FoodPrices.objects.get(id=food_id).food_name
             }
@@ -86,6 +90,11 @@ def cash_register(request):
     return JsonResponse(data)
 
 def update_price(request):
+    '''
+    updates database prices based on user input 
+    (input: food_id, store_id and a price)
+    returns "out of bounds error" or False (0)
+    '''
     food_id = request.GET.get('food_id', None)
     store_id = request.GET.get('store_id', None)
     user_price = request.GET.get('user_price',None)
@@ -99,9 +108,12 @@ def update_price(request):
 
 
 def submit_prices(request, store_id, food_string=0):
+    '''
+    site to submit user prices to model prepopulated with grocery list
 
-    '''Assumption we have SnapLocation informtion'''
-
+    input: store_id (from url)
+    food_string (from url) 
+    '''
     if request.method == "POST":
         form = GroceryForms(request.POST)
     else:
@@ -122,8 +134,12 @@ def submit_prices(request, store_id, food_string=0):
 
 
 def submit_prices_blank(request, store_id):
+    '''
+    site to submit user prices to model (no grocery list)
 
-    '''Assumption we have SnapLocation informtion'''
+    input: store_id (from url)
+    '''
+    
 
     if request.method == "POST":
         form = GroceryForms(request.POST)
