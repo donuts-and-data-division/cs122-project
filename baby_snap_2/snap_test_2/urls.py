@@ -1,7 +1,5 @@
-from django.views.generic import TemplateView
 from django.conf.urls import url
-from djgeojson.views import GeoJSONLayerView
-from .models import SnapLocations
+#from .models import SnapLocations
 from . import views
 
 

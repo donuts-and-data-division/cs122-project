@@ -56,6 +56,10 @@ def get_places(request):
     return JsonResponse(data)
 
 def submit_grocery_list(request, store_id):
+    '''
+    grocery list base page
+    input: store_id (from url)
+    '''
 
     if request.method == "POST":
         form = GroceryForm(request.POST)     
@@ -104,9 +108,12 @@ def update_price(request):
 
 
 def submit_prices(request, store_id, food_string=0):
+    '''
+    site to submit user prices to model prepopulated with grocery list
 
-    '''Assumption we have SnapLocation informtion'''
-
+    input: store_id (from url)
+    food_string (from url) 
+    '''
     if request.method == "POST":
         form = GroceryForms(request.POST)
     else:
@@ -127,8 +134,12 @@ def submit_prices(request, store_id, food_string=0):
 
 
 def submit_prices_blank(request, store_id):
+    '''
+    site to submit user prices to model (no grocery list)
 
-    '''Assumption we have SnapLocation informtion'''
+    input: store_id (from url)
+    '''
+    
 
     if request.method == "POST":
         form = GroceryForms(request.POST)
