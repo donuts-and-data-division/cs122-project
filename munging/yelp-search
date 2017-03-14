@@ -1,5 +1,5 @@
 #Donuts-and-Data-Division
-#Price search through Yelp Phone Search API
+#Practice doing price search through Yelp Phone Search API
 
 import requests
 import string

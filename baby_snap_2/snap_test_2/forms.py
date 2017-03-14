@@ -16,7 +16,7 @@ class FilterForm(forms.Form):
     rating = forms.ChoiceField(choices=stars, label='Average Rating', required = False)
 
     participating = types_list(['Participating locations'])
-    double_value = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, label = "Double Value Coupon Program (farmers markets only)", required=False, choices= participating)
+    double_value = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), label = "Double Value Coupon Program (farmers markets only)", required=False, choices= participating)
 
 class PricesForm(forms.Form):
     name = forms.CharField( widget=forms.HiddenInput(attrs={'id':'name'}))

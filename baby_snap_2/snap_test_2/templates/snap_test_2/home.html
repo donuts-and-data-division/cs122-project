@@ -36,9 +36,6 @@
                 <p class='field'> Minimum Rating:<p> {% for field in form.rating %}
                 {{ field }}
                 {% endfor %}</p>
-                <p class='field'> Double Value Coupon Program <br /> (farmers markets only):<p> {% for field in form.double_value %}
-                {{ field }}
-                {% endfor %}</p>
                 </table>
                 <input type="submit"  value="Filter results" id="filter-btn" />
             </form>
@@ -326,7 +323,10 @@
       document.getElementById('iw-address').textContent = place.address;  
       document.getElementById('iw-phone').textContent = place.phone;
       document.getElementById('iw-rating').textContent = rating;
-      document.getElementById('iw-website').textContent = place.website;
+      if (place.website == "Not available"){
+        document.getElementById('iw-website').textContent = place.website;
+      } else {
+      document.getElementById('iw-website').innerHTML = '<a href="' + place.website +'"> website</a>';};
       document.getElementById('iw-hours').textContent = place.hours;
       document.getElementById('iw-category').textContent = place.store_category;
       document.getElementById('iw-double').textContent = place.double_value;
