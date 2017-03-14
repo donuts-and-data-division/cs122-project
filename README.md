@@ -27,7 +27,7 @@ Selected U.S. City Average, All food items (155 total selected), Dec 2016 price,
 ## File Descriptions
 - building_price_model.py
 - data_to_model.py: Transfers the record linkage results from snapresultsChicago2.csv into a Django model (model name: SnapLocations)
-- placesAPI.py
+- placesAPI.py: 
 - price_weights.py: Process price points collected through fieldwork by simulation additional data points, running regression to estimate multipliers, and transferring multipliers into a Django model (model name: multiplier)
 - pricesAPI.py
 - prices_to_model.py
@@ -36,6 +36,8 @@ Selected U.S. City Average, All food items (155 total selected), Dec 2016 price,
 - snapmap2.py
 - farmers_markets.py: Web scraping of farmers markets from DHS website, including additional locations not in main retailer data source and double value coupon indicator
 - linking_markets.py: Record linkage of scraped farmers market details to main retailer data source
+- auto_multipliers.py: a management script that (in theory) automatically updates the multipliers
+- crontab_text.txt: the crontab text that would run auto_multipliers.py every two weeks
 
 ## Links to policy related content:
 *Original Snap maps*
