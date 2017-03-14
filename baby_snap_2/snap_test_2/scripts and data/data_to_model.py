@@ -40,7 +40,7 @@ with open(csv_file) as f:
 
             hours_list = line[headers.index('hours')]
             if hours_list != '':
-                hours = hours_list.replace(',', '\n').replace(']', '').replace('[', '').replace("'", "")
+                hours = hours_list.replace(']', '').replace('[', '').replace("'", "")
             else:
                 hours = 'Not available'
 
@@ -75,8 +75,8 @@ with open(csv_file) as f:
             price_level = 'Not available'
         
         farmers_mkt = line[headers.index('Farmers Market?')]
-        if farmers_mkt == True: 
-            if line[headers.index('Double Value')] == True:
+        if farmers_mkt == 'True': 
+            if line[headers.index('Double Value')] == 'True':
                 double_value = 'Yes'
             else:
                 double_value = 'No'

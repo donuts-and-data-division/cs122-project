@@ -32,6 +32,7 @@ def get_places(request):
     price_levels = []
     categories = []
     min_rating = 0
+    double = []
     # extract form data from dictionary; unique formatting requires extra work
     for i in range(0,14):
         if form_data.get('data['+str(i)+'][name]') is not None:
@@ -43,14 +44,17 @@ def get_places(request):
                 rating = float(form_data['data['+str(i)+'][value]'][0])
                 if rating > min_rating:
                     min_rating = rating
+            elif form_data['data['+str(i)+'][name]'][0] == 'double_value':
+                double = ['Yes']
     # default lists for filters: include all
     if price_levels == []:
         price_levels = SnapLocations.objects.values_list('price_level').distinct() 
     if categories == []:
         categories = SnapLocations.objects.values_list('store_category').distinct() 
-        
+    if double == []:
+        double = SnapLocations.objects.values_list('double_value').distinct()  
     viewport = pa.get_viewport_poly((sw_lon, sw_lat, ne_lon, ne_lat))
-    data = {"data": serialize('geojson',SnapLocations.objects.filter(geom__contained = viewport).filter(price_level__in = price_levels).filter(store_category__in = categories).filter(rating__gte = min_rating))}
+    data = {"data": serialize('geojson',SnapLocations.objects.filter(geom__contained = viewport).filter(price_level__in = price_levels).filter(store_category__in = categories).filter(double_value__in = double).filter(rating__gte = min_rating))}
 
     return JsonResponse(data)
 
