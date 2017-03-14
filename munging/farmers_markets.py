@@ -7,6 +7,10 @@ import requests
 
 
 def get_markets(filename):
+    """
+    From DHS website, create dataframe with Farmer's Markets name, latitude/longitude
+    address, phone number, and whether market accepts double value coupons. 
+    """
 
     pm = urllib3.PoolManager()
     html = pm.urlopen(url="http://www.dhs.state.il.us/page.aspx?item=44172", method="GET").data
@@ -84,6 +88,9 @@ def get_markets(filename):
 
 
 def get_url(address, city, state):
+    """
+    Returns URL for google search. 
+    """
 
     query_lst = address.split() + city.split() + state.split()
     query = "+".join(query_lst)
@@ -95,6 +102,9 @@ def get_url(address, city, state):
 
 
 def get_lat_lon(url):
+    """
+    Returns latitude and longitude from Google API response. 
+    """
     r = requests.get(url)
     json = r.json()
 
