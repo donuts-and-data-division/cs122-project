@@ -6,18 +6,13 @@ from . import placesAPI as pa
 from . import pricesAPI as pricesAPI
 from django.contrib.gis.geos import Polygon
 from django.contrib import messages
-from .forms import PricesForm, GroceryForm
-from .forms import FilterForm
+from .forms import PricesForm, GroceryForm, FilterForm
 from django.http import JsonResponse
-#import simplejson as json
 
-#def index(request):
-#    return render(request, 'snap_test_2/index.html',{})
 
-def index(request):
-    qs_results = SnapLocations.objects.all()
-    return render(request, "snap_test_2/index.html", 
-        {"qs_results":qs_results})
+def home(request):
+    form = FilterForm()
+    return render(request, 'snap_test_2/home.html', {'form':form})
 
 def get_places(request):
     print("Roger. Getting places.")
@@ -31,6 +26,7 @@ def get_places(request):
     price_levels = []
     categories = []
     min_rating = 0
+    # extract form data from dictionary; unique formatting requires extra work
     for i in range(0,14):
         if form_data.get('data['+str(i)+'][name]') is not None:
             if form_data['data['+str(i)+'][name]'][0] == 'price':
@@ -41,54 +37,17 @@ def get_places(request):
                 rating = float(form_data['data['+str(i)+'][value]'][0])
                 if rating > min_rating:
                     min_rating = rating
-    #default lists for filters: include all
+    # default lists for filters: include all
     if price_levels == []:
         price_levels = SnapLocations.objects.values_list('price_level').distinct() 
     if categories == []:
         categories = SnapLocations.objects.values_list('store_category').distinct() 
         
-    print('price_levels: ', price_levels, 'categories: ', categories, 'min_rating: ', min_rating)
     viewport = pa.get_viewport_poly((sw_lon, sw_lat, ne_lon, ne_lat))
     data = {"data": serialize('geojson',SnapLocations.objects.filter(geom__contained = viewport).filter(price_level__in = price_levels).filter(store_category__in = categories).filter(rating__gte = min_rating))}
 
     return JsonResponse(data)
 
-def gmapdata(request):
-    qs_results = SnapLocations.objects.all()
-    qs_results = serialize('geojson', qs_results)
-    return HttpResponse(qs_results, content_type= 'json')
-
-def auto(request):
-    form = FilterForm()
-    return render(request, 'snap_test_2/auto.html', {'form':form})
-'''
-def auto2(request):
-    qs_results = {}
-    qs_results_ser = serialize('geojson', qs_results)
-    if request.method == 'POST': 
-        form = SearchForm(request.POST)        
-        if form.is_valid():
-            location = form.cleaned_data['location']
-            retailer_type = form.cleaned_data['retailer_type']
-            price = form.cleaned_data['price']
-            radius = form.cleaned_data['radius']
-            sw_lat = form.cleaned_data['sw_lat']
-            sw_lon = form.cleaned_data['sw_lon']
-            ne_lat = form.cleaned_data['ne_lat']
-            ne_lon = form.cleaned_data['ne_lon']
-            
-            viewport = pa.get_viewport_poly((sw_lon, sw_lat, ne_lon, ne_lat))
-            #qs_results = SnapLocations.objects.filter(=price).filter(=retailer_type)
-            # fill in filters with model fields after jazz updates
-            qs_results = SnapLocations.objects.filter(geom__contained = viewport)
-            qs_results_ser = serialize('geojson', qs_results)
-        
-    else:
-        form = SearchForm()
-    # put this in different view?!!
-
-    return render(request, 'snap_test_2/auto2.html', {'form': form, 'qs_results': qs_results_ser})
-'''
 
 def prices(request):
     if request.method == "POST":
@@ -110,8 +69,6 @@ def submit_grocery_list(request, store_id):
 
     return render(request, 'snap_test_2/grocery_list_2.html', {'form': form, \
         'store_name': store_name, 'address': store_address, 'store_id': store_id})
-
-
 
 def cash_register(request):
     print("hello cash_register")

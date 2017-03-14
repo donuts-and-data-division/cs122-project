@@ -6,7 +6,12 @@ from sklearn import linear_model
 import numpy as np
 import math
 from snap_test_2.models import SnapLocations, Multipliers
+from pull_user_data import get_user_data
 
+# get user data and turn into array
+out_table = get_user_data()
+out_table.columns = [] # DECLARE COLUMN NAMES HERE
+array = np.array(out_table) # THIS SHOULD OVERWRITE THE FILE + ARRAY BELOW?
 
 #prices for each category type taken by field research
 FILE = "store_prices.csv"

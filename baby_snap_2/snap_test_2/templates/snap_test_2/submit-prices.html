@@ -10,7 +10,7 @@
 
   <div class="menu">
 
-    <a class="menu-header" href="#">snapmap</a>
+    <a class="menu-header" href="/home">snapmap</a>
     <p id = "store_name"> {{store_name}} </p>
     <p id = "store_address"> {{address}} </p>
     <p id = "heading">Contribute prices:</p>
@@ -105,7 +105,6 @@ $('#id_food, #id_other, #id_grains, #id_dairy, #id_meat_and_fish, #id_fruits_and
 $('#food_list_table').on('click', '#checkmark', function () {
     //get row id for the selected row
     var rc = $(this).parent().parent().attr('id');
-    console.log(rc)
 
     //get the user input value from that row 
     var price = document.querySelectorAll('.price_input')[rc].value;
@@ -116,12 +115,7 @@ $('#food_list_table').on('click', '#checkmark', function () {
     } 
 
     //replace the submit field with a smiley after submission
-    
-
-
-
         var food_id = $(this).parent().next('td').text();
-        console.log(food_id);
         var store_id = {{store_id}};
 
     $.ajax({

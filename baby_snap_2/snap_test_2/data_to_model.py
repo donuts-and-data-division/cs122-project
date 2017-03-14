@@ -1,7 +1,7 @@
 '''
 Reads data from csv to models.SnapLocations
 
-Inputs: csv_file with columns that match models.SnapLocations
+Inputs: csv_file
 '''
 
 from snap_test_2.models import SnapLocations
@@ -31,6 +31,7 @@ with open(csv_file) as f:
             website = line[headers.index('website')]
             if website == '':
                 website = 'Not available'
+            
             store_category = line[headers.index('category')]
             
             rating = line[headers.index('rating')]
@@ -39,9 +40,7 @@ with open(csv_file) as f:
 
             hours_list = line[headers.index('hours')]
             if hours_list != '':
-                hours = hours_list.replace(',', '\n')
-                hours = hours_list.replace(']', '') # this isn't working...
-                hours = hours_list.replace('[', '') 
+                hours = hours_list.replace(',', '\n').replace(']', '').replace('[', '').replace("'", "")
             else:
                 hours = 'Not available'
 
@@ -102,3 +101,6 @@ with open(csv_file) as f:
             ).save()
         except:
             print("Trouble in row {}".format(ind), farmers_mkt, store_name)
+
+# deduplicate known errors manually 
+SnapLocations.objects.filter(store_id = 1331).delete()

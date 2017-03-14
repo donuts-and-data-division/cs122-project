@@ -145,14 +145,12 @@
             map.setZoom(17);  
           }
            var data = $('#form').serializeArray();
-           console.log(data);
            get_places(data);
         });
 
       
         $("#form").on("submit", function(){
           var data = $(this).serializeArray();
-          console.log("serialized filter data: ", data);
           get_places(data);
         });
 
@@ -166,9 +164,6 @@
           var sw_lon = bounds.west;
           var ne_lat = bounds.north;
           var ne_lon = bounds.east;  
-
-          
-         // console.log("You are passing", data)
           
           $.ajax({
             url: '/ajax/get_places/',
@@ -182,7 +177,6 @@
             success: function(data) {
               
             var results = JSON.parse(data.data).features;
-            console.log(results);
             placeMarkers(results);
             }
           });
@@ -199,7 +193,6 @@
       for (var i = 0; i < results.length; i++) {
 
         var type = results[i].properties.store_category;
-        console.log(type)
           
         var markerIcon = ''
         markerIcon = selectIcon(type);
@@ -310,7 +303,6 @@
     var marker = this;
     infoWindow.open(map, marker);
     var place = marker.placeResult.properties;
-    console.log(place.store_id)
     buildIWContent(place);
     }
 

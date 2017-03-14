@@ -1,34 +1,10 @@
 from django import forms
 from .models import FoodPrices
+
 #Inspired by ui in pa3
 def types_list(lst):
     return [(x,x) for x in lst]
     
-
-'''
-class SearchForm(forms.Form):
-    location = forms.CharField(widget = forms.TextInput(), label='Near', max_length=100)
-    
-    types = [('Grocery', 'Grocery'), 
-        ('Convenience Store', "Convenience Store"),
-        ('Farmers Market', "Farmer's Market"), 
-        ('Gas Station', "Gas Station"),
-        ('Other', "Other")]
-    retailer_type = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=types, label='Retailer Type', required = False)
-    
-    dollar_signs = [(1, '$'), (2, '$$'), (3,'$$$'), (4,'$$$$'), (5, '$$$$$')]
-    price = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=dollar_signs, label='Price', required = False)
-    
-    # could we make these actual stars?
-    stars = [('1 star', '1 star'),('2 stars', '2 stars'),('3 stars', '3 stars'), ('4 stars', '4 stars'), ('5 stars', '5 stars')]
-    rating = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=stars, label='Average Rating', required = False)
-    
-    sw_lat = forms.FloatField( widget=forms.HiddenInput(attrs={'id':'sw_lat'}))
-    sw_lon = forms.FloatField( widget=forms.HiddenInput(attrs={'id':'sw_lon'}))
-    ne_lat = forms.FloatField( widget=forms.HiddenInput(attrs={'id':'ne_lat'}))
-    ne_lon = forms.FloatField( widget=forms.HiddenInput(attrs={'id':'ne_lon'}))
-   # Need to remove bullet points from check boxes with CSS
-'''
 class FilterForm(forms.Form):
     types = types_list(['Grocery',"Farmer's Market", 'Convenience Store', 'Gas Station', 'Other'])
     retailer_type = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple(), choices=types, label='Retailer Type', required = False)
@@ -38,7 +14,6 @@ class FilterForm(forms.Form):
      
     stars = [(0,""), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5)]
     rating = forms.ChoiceField(choices=stars, label='Average Rating', required = False)
-
 
 class PricesForm(forms.Form):
     name = forms.CharField( widget=forms.HiddenInput(attrs={'id':'name'}))

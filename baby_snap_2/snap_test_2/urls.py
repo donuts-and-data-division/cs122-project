@@ -6,8 +6,7 @@ from . import views
 
 
 urlpatterns = [
-    url(r'^auto$', views.auto),
-    #url(r'^auto2$', views.auto2),
+    url(r'^home$', views.home),
     url(r'^ajax/get_places/$', views.get_places),
     url(r'^ajax/go_to_prices$', views.prices),
     url(r'^groceries/(?P<store_id>\w+)/$', views.submit_grocery_list, name='grocery_list'),
