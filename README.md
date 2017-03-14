@@ -22,7 +22,7 @@ For retailers that were matched with Place ID's from Google and have phone numbe
 5) Food prices: https://data.bls.gov/cgi-bin/dsrv?ap
 Selected U.S. City Average, All food items (155 total selected), Dec 2016 price, filtered down to items with available pricing data
 
-6) Field research: We visited seven stores of varying categories and price levels to record prices of available food items from the CPI list. The stores were: CVS on 53rd (convenience store $$), Hyde Park Produce (grocery $), Whole Foods (grocery $$$), BP (gas unknown), 7-eleven on 58 E Lake St. (convenience store $$), Open Produce (grocery $$), and Target (other $$). Recorded price points can be found [here] (https://docs.google.com/spreadsheets/d/1XIhF04hT3vKJzueRmdIF5lUWUIPM8AxkgeCzGnTnn7c/edit?usp=sharing).
+6) Field research: We visited seven stores of varying categories and price levels to record prices of available food items from the CPI list. The stores were: CVS on 53rd (convenience store $$), Hyde Park Produce (grocery $), Whole Foods (grocery $$$), BP (gas unknown), 7-eleven on 58 E Lake St. (convenience store $$), Open Produce (grocery $$), and Target (other $$). Recorded price points can be found [here](https://docs.google.com/spreadsheets/d/1XIhF04hT3vKJzueRmdIF5lUWUIPM8AxkgeCzGnTnn7c/edit?usp=sharing).
 
 ## File Descriptions
 - building_price_model.py
