@@ -36,6 +36,9 @@
                 <p class='field'> Minimum Rating:<p> {% for field in form.rating %}
                 {{ field }}
                 {% endfor %}</p>
+                <p class='field'> Double Value Coupon Program <br /> (farmers markets only):<p> {% for field in form.double_value %}
+                {{ field }}
+                {% endfor %}</p>
                 </table>
                 <input type="submit"  value="Filter results" id="filter-btn" />
             </form>

@@ -3,6 +3,10 @@ import recordlinkage as rl
 import farmers_markets
 
 def get_matches(filename):
+    """
+    Match farmer's markets scraped from DHS website with retailers in USDA database. 
+    Add missing retailers to comprehensive database and add double value column with T/F value. 
+    """
 
     #create dataframes
     markets_df = pd.read_csv('Farmers_Markets_Final.csv') 

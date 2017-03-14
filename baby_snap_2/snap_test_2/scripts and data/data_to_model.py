@@ -15,9 +15,12 @@ DOLLAR_SIGNS = {'': 'Not available', '1.0': '$', '2.0': '$$', '3.0': '$$$', '4.0
 with open(csv_file) as f:
     ls = list(csv.reader(f))
     headers = ls[0]
+    # manual deduping unique locations in original data source that matched to duplicate place ids
+    duplicates = [1508, 1306, 139, 167, 738, 1434, 125, 540, 1214, 1250, 1367, 1503, 306, 518, 835, 522, 982,
+    284, 393, 588, 274, 1745, 287, 1432, 1076, 1138, 189, 931, 1910, 316, 512, 1189, 490, 1338, 895, 332, 586, 2034]
     for ind, line in enumerate(ls[1:]):
         store_id = line[0]
-        if line[headers.index('place_id')]:
+        if line[headers.index('place_id')] and store_id not in duplicates:
             # found record linkage to google; use google places information
             # 94% of Chicago retailers fall into this category
             store_name = line[headers.index('googlename')]
@@ -102,5 +105,6 @@ with open(csv_file) as f:
         except:
             print("Trouble in row {}".format(ind), farmers_mkt, store_name)
 
-# deduplicate known errors manually 
-SnapLocations.objects.filter(store_id = 1331).delete()
+# manually deduping obvious duplicates in original data source 
+to_remove = [1331, 2179, 2182, 724, 2029]
+SnapLocations.objects.filter(store_id__in = to_remove).delete()
