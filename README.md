@@ -1,6 +1,6 @@
 # Snap map
 
-##Data Sources:
+## Data Sources:
 1) Snap Retailer Locations: https://www.fns.usda.gov/snap/retailerlocator
 Downloaded 1/10/2017 as store_locations_IL.csv
 
@@ -11,7 +11,7 @@ Farmer's Markets included in this source but not in the USDA database were added
 3) Google Places API
 Through snapmap2.py, we connect the data downloaded from 1) to the appropriate place ID, location, address, and cost category. We do this through an inital Nearby Search using the given address, followed by Searches using the given retailer name. The matched place ID is used in a Place Details search return information including formatted address and phone number.
 
-If a retailer from 1) does not return any results from the Google API search, only the information from the USDA is included in the database. The same is done for retailers that return results considered a "bad match" based on a comparison of address and name in Google's information. 
+If a retailer from 1) does not return any results from the Google API search, only the information from the original data source is included in the database. The same is done for retailers that return results considered a "bad match" based on a comparison of Google address and name vs original data source. 
 
 Final results are in snapresultstestChicago2.csv. 
 
@@ -22,7 +22,17 @@ For retailers that were matched with Place ID's from Google and have phone numbe
 Selected U.S. City Average, All food items (155 total selected), Dec 2016 price, filtered down to items with available pricing data
 
 
-##Links to policy related content:
+## File Descriptions
+- building_price_model.py
+- data_to_model.py: Transfers the record linkage results from snapresultsChicago2.csv into a Django model (model name: SnapLocations)
+- placesAPI.py
+- price_weights.py: Process price points collected through fieldwork by simulation additional data points, running regression to estimate multipliers, and transferring multipliers into a Django model (model name: multiplier)
+- pricesAPI.py
+- prices_to_model.py
+- replace_field_data_to_model.py
+- pull_user_data.py
+
+## Links to policy related content:
 *Original Snap maps*
 
 [Inside Gov](http://snap-retailers.insidegov.com/#main)
