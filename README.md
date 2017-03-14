@@ -3,6 +3,7 @@
 ## Data Sources:
 1) Snap Retailer Locations: https://www.fns.usda.gov/snap/retailerlocator
 Downloaded 1/10/2017 as store_locations_IL.csv
+Main retailer data source
 
 2) Farmers markets with double value coupons: 
     http://www.dhs.state.il.us/page.aspx?item=44172
@@ -31,6 +32,9 @@ Selected U.S. City Average, All food items (155 total selected), Dec 2016 price,
 - prices_to_model.py
 - replace_field_data_to_model.py
 - pull_user_data.py
+- snapmap2.py
+- farmers_markets.py: Web scraping of farmers markets from DHS website, including additional locations not in main retailer data source and double value coupon indicator
+- linking_markets.py: Record linkage of scraped farmers market details to main retailer data source
 
 ## Links to policy related content:
 *Original Snap maps*
