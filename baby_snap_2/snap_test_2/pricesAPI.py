@@ -23,24 +23,26 @@ def update_price_estimate(store_id, food_id, new_price_data):
         return "Exception Raised store_id or food id not valid"
 
     current_estimate = data.users_mean #a float
+    
     m = data.n
     n = m + 1
     if n >= THRESHOLD:
         if estimate_out_of_bounds(current_estimate, new_price_data):
             return "Estimate out of bounds"      
     else:
+
         store = SnapLocations.objects.get(store_id=store_id)
         store_category = store.store_category
         price_level = store.price_level
         multiplier =  Multipliers.objects.get(store_category=store_category, 
                                               price_level=price_level).multiplier
         # note FoodPrices is the one database where we use the auto generated id.
-
         base_estimate = FoodPrices.objects.get(id=food_id).food_price   
-        averaged_estimate =  (1 -(n/THRESHOLD))*(base_estimate*multiplier) +(n/THRESHOLD)*current_estimate  
+        averaged_estimate =  (1 -(m/THRESHOLD))*(base_estimate*multiplier) +\
+                             (m/THRESHOLD)*current_estimate  
         if estimate_out_of_bounds(averaged_estimate, new_price_data):
             return "Estimate out of bounds" 
-    print("Updating")
+    
     data.n = n
     data.users_mean =  (current_estimate*m + new_price_data)/n
     data.save()
@@ -69,7 +71,8 @@ def estimate_out_of_bounds(current_estimate, new_price_data):
     '''
     Test whether the estimate is "reasonable" based on our TOO_HIGH and TOO_LOW multipliers
     '''
-    return (current_estimate*TOO_HIGH < new_price_data) or (current_estimate*TOO_LOW > new_price_data)
+    return (current_estimate*TOO_HIGH < new_price_data) or \
+           (current_estimate*TOO_LOW > new_price_data)
 
 
 def get_price_estimate(store_id, food_id):
