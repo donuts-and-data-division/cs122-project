@@ -3,6 +3,7 @@
 ## Data Sources:
 1) Snap Retailer Locations: https://www.fns.usda.gov/snap/retailerlocator
 Downloaded 1/10/2017 as store_locations_IL.csv
+Main retailer data source
 
 2) Farmers markets with double value coupons: 
     http://www.dhs.state.il.us/page.aspx?item=44172
@@ -31,6 +32,9 @@ Selected U.S. City Average, All food items (155 total selected), Dec 2016 price,
 - prices_to_model.py
 - replace_field_data_to_model.py
 - pull_user_data.py
+- snapmap2.py
+- farmers_markets.py: Web scraping of farmers markets from DHS website, including additional locations not in main retailer data source and double value coupon indicator
+- linking_markets.py: Record linkage of scraped farmers market details to main retailer data source
 
 ## Links to policy related content:
 *Original Snap maps*
@@ -44,17 +48,7 @@ Selected U.S. City Average, All food items (155 total selected), Dec 2016 price,
 [Policy report about SNAP & Farmer's Markets (2010)](http://cclhdn.org/wp-content/uploads/2013/02/RealFoodRealChoice_SNAP_FarmersMarkets.pdf)
 
 
-*Nutritious, Delicious and Affordable*
-
-[What's a serving (heart.org)](http://www.heart.org/HEARTORG/Caregiver/Replenish/WhatisaServing/What-is-a-Serving_UCM_301838_Article.jsp#.WIqWZvkrJhE)
-
-[Fruit and Veg Prices (USDA)](https://www.ers.usda.gov/data-products/fruit-and-vegetable-prices/)
-
-[Food Pyramid](https://www.cnpp.usda.gov/sites/default/files/archived_projects/FGPPamphlet.pdf)
-
-## Links to technical documents:
-[Our Page!](http://donutsanddatadivision.pythonanywhere.com/)
-
+## Links to technical documents we utilized:
 [Google Place Search documentation](https://developers.google.com/places/web-service/search)
 
 [Google Maps API](https://developers.google.com/maps/documentation/javascript/importing_data#data)
