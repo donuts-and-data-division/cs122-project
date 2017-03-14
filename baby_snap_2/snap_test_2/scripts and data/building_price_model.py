@@ -1,3 +1,9 @@
+'''
+Script to build StorePriceModel 
+-- note we can reinitiated with or without running this code
+because the model priceAPI file will automatically create new rows
+'''
+
 from snap_test_2.models import SnapLocations, FoodPrices, StorePriceModel
 
 qs = SnapLocations.objects.all()
