@@ -1,0 +1,7 @@
+# To make updates of multipliers automatic
+# credit: https://www.davidfischer.name/2010/02/django-scripting-and-the-crontab-2/
+#
+# Edit the crontab
+# crontab -e
+m h dom mon dow
+* * 10,25 * *  cd $home/donuts-and-data/cs122-project/baby_snap_2 &&  python manage.py automultipliers 
