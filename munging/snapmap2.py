@@ -12,51 +12,12 @@ import string
 import re
 
 
-#def get_url(lat, lon, keyword, radius, key):
-    #url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location\
-#={},{}&keyword={}&radius={}&key={}".format(lat, lon, keyword, radius, key)
-    #return url
-
-@backoff.on_exception(backoff.expo, requests.exceptions.ConnectionError, max_tries=3)
-def get_place_url(lat, lon, keyword, radius, key):
-    url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location\
-={},{}&keyword={}&radius={}&key={}".format(lat, lon, keyword, radius, key)
-    print (url)
-    r = requests.get(url)
-    return r.json()
-
-def get_place_details_url(placeid, key):
-    url = "https://maps.googleapis.com/maps/api/place/details/json?\
-placeid={}&key={}".format(placeid, key)
-    print (url)
-    r = requests.get(url)
-    return r.json()
-
-def get_yelp_keys():
-    app_id = "uc-LC0hKhl1jNEwzmyafRQ"
-    app_secret = "cCisYBB8tDDnVD2qn7MNdUx3mv5McEggAkvWcIHoG7WiJbVtDgl4qnqYLNM3P7Sg"
-
-    data = {'grant_type': 'client_credentials', "client_id": app_id, "client_secret": app_secret}
-
-    token = requests.post('https://api.yelp.com/oauth2/token', data=data)
-    access_token = token.json()['access_token']
-    headers = {'Authorization': 'bearer %s' % access_token}
-    return headers
-
-def get_yelp_price(phone, headers, url = 'https://api.yelp.com/v3/businesses/search/phone'):
-    for character in string.punctuation + " ":
-        phone = phone.replace(character, "")
-    format_phone = "+1" + phone
-    param = {'phone': format_phone}
-    resp = requests.get(url=url, params=param, headers=headers)
-
-    if resp.json()['businesses'] == []:
-        return None
-    elif "price" not in resp.json()["businesses"][0]:
-        return None
-    return resp.json()['businesses'][0]['price']
-
 def get_info(num):
+    """
+    Inputs: Num (integer), number of rows to collect information on. 
+    Returns:  None; writes created dataframe with Google and Yelp information to CSV. 
+    """
+    
     IL_filename = "Snap_With_Markets.csv"
     #IL = pd.read_csv(IL_filename)
     df = pd.read_csv(IL_filename)
@@ -66,17 +27,6 @@ def get_info(num):
     headers = get_yelp_keys()
 
     KEY_INDEX = 0
-    #developerKeys = ["AIzaSyCGt79JrG0sym4cyrs6YabCyy76zpnB828",\
-    #"AIzaSyBUDrUeEyJyUNwQl1oVJCydSFPb5fCMQvw", "AIzaSyC9dbLTJ-aU2VL0r1Zhpzlxx99TrW-tpMM",\
-    #"AIzaSyBkWTxpnmygafi2mFETLRumyw0OlY_ftwM", "AIzaSyC-_IRZoDqHowcopoCBFvQFGG7wU9CNOPw", \
-    #"AIzaSyDJUsXYFdat1urw-QLkvbZu17gmEj45its", "AIzaSyDef0qoVNWFiIhSf2DIcI6s393w2ikTj2E", \
-    #"AIzaSyBbj_MRDIQC-GiOLuttSbCyht4cG-CkSjU", "AIzaSyAHH7pVva_7a2Ue4kWVkIvJPoihOvGPdqY", \
-    #,"AIzaSyC7ukvijmGEqmfRIPZiNlFsXS436eXJs18", \
-    #"AIzaSyCls1mcmSzQnNPbTjeYrLA8yyde4AsH0rU", "AIzaSyCBAgvlKZoVQ9TYzizDA21aNvmk3z5BgLc",\
-    #"AIzaSyA99nqCOeT0ouZkmlIl89Ysl-8l5Su67SY",  "AIzaSyBZiNslXrtBSQe75scT7K1Mb0pmyxIGM2M",\
-    #"AIzaSyBytEe914saHxkWTfI71kqbVINrg2RWMhE", " AIzaSyC0D12kQSiYdc0oioMEKMXJfR-QPALhzYQ"\
-    #"AIzaSyBiTMni2hEjQCIkmq8wVjyqBda2ZGgpTwg"]
-
 
     developerKeys = ["AIzaSyBiTMni2hEjQCIkmq8wVjyqBda2ZGgpTwg", "AIzaSyC0D12kQSiYdc0oioMEKMXJfR-QPALhzYQ"\
     "AIzaSyBytEe914saHxkWTfI71kqbVINrg2RWMhE", "AIzaSyBZiNslXrtBSQe75scT7K1Mb0pmyxIGM2M", \
@@ -109,9 +59,7 @@ def get_info(num):
     yelp_prices = [0]*len(IL.index)
     jaro = [0]*len(IL.index)
     
-    #typeset = set()
-    completed = 0
-    #for i in range(1255,1265):
+    #completed = 0
     for i in range(len(IL[:num])):
         sleep(1)
 
@@ -120,7 +68,7 @@ def get_info(num):
         lat = IL.loc[i]["Latitude"]
         lon = IL.loc[i]["Longitude"]
 
-        #specific search for Farmer's Market locations
+        #specific search term for Farmer's Market locations
         if IL.loc[i]["Farmers Market?"] == True:
             keyword = "Market"
         else:    
@@ -137,7 +85,7 @@ def get_info(num):
             check[i] = "Changed Key"
 
         if len(json["results"]) > 1:
-            print ("more than one")
+            #print ("more than one")
             sleep(1.25)
 
             """
@@ -165,7 +113,7 @@ def get_info(num):
 
         if json["results"] == []:
             sleep(1.25)
-            print ("oh no!") 
+            #print ("oh no!") 
             keyword = name.split()[0]
 
             json = get_place_url(lat, lon, keyword, 300, key)
@@ -180,7 +128,7 @@ def get_info(num):
             how[i] = 'name first word'
             
             if len(json["results"]) > 1:
-                print ("more than one")
+                #print ("more than one")
                 sleep(1.25)
                 """
                 if len(name.split()) >= 2:
@@ -205,7 +153,7 @@ def get_info(num):
         
         if json["results"] == []:
             sleep(1.25)
-            print ("oh no again!")
+            #print ("oh no again!")
             if len(name.split()) >= 2:
                 keyword = name.split()[1]
                 json = get_place_url(lat, lon, keyword, 300, key)
@@ -226,14 +174,14 @@ def get_info(num):
             how[i] = 'name second word'
 
             if len(json["results"]) > 1:
-                print ("more than one")
+                #print ("more than one")
                 json["results"][0] = best_result(json, name)
 
                 multiple[i] = len(json["results"])
                 how[i] = 'name second word, >1 results'
           
         if json["results"] == []:
-            print("NOOO")
+            #print("NOOO")
             ids[i]=None
             names[i]=None
             lats[i]=None
@@ -322,13 +270,9 @@ def get_info(num):
         if "price_level" in json["results"][0]:
             costs[i] = json["results"][0]["price_level"]
         else:
-            costs[i] = None
+            costs[i] = None      
 
-        #if "restaurant" in json["results"][0]["types"]:
-            #check[i] = "Double Check- invalid type"
-        
-
-        #USE ID TO GET PLACES INFO
+        #use placed ID to get Place Details Info 
         add_d, phone_d, hours_d, website_d, url_d, rating_d, price_d = get_details_info(json["results"][0]["place_id"],\
          key, KEY_INDEX, developerKeys)
         form_adds[i] = add_d
@@ -339,17 +283,15 @@ def get_info(num):
         rating[i] = rating_d
         price_level[i] = price_d
 
-        #USE PHONE NUMBER TO GET YELP PRICE
+        #use phone number from google to get Yelp price
         if phone_d != None:
             yelp_price = get_yelp_price(phone_d, headers, url = 'https://api.yelp.com/v3/businesses/search/phone')
             yelp_prices[i] = yelp_price
         else:
             yelp_prices[i] = None
         
-
-        #typeset.add(tuple(json["results"][0]["types"]))
-        completed += 1
-        print (completed)
+        #completed += 1
+        #print (completed)
 
     #Add collected info to dataframe
     IL["place_id"] = ids
@@ -373,13 +315,73 @@ def get_info(num):
     IL['how'] = how
     IL["jaro"] = jaro
     
-    #print(typeset)
+
     IL.to_csv("snapresultstestChicago2.csv")
 
+@backoff.on_exception(backoff.expo, requests.exceptions.ConnectionError, max_tries=3)
+def get_place_url(lat, lon, keyword, radius, key):
+    """
+    Performs Google Nearby Search Request based on parameters and returns json of responses. 
+    """
+    
+    url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location\
+={},{}&keyword={}&radius={}&key={}".format(lat, lon, keyword, radius, key)
+    #print (url)
+    r = requests.get(url)
+    return r.json()
+
+def get_place_details_url(placeid, key):
+    """
+    Performs Google Place Details request and returns json of response. 
+    """
+    
+    url = "https://maps.googleapis.com/maps/api/place/details/json?\
+placeid={}&key={}".format(placeid, key)
+    #print (url)
+    r = requests.get(url)
+    return r.json()
+
+def get_yelp_keys():
+    """
+    Returns header required to use Yelp API. 
+    """
+    
+    app_id = "uc-LC0hKhl1jNEwzmyafRQ"
+    app_secret = "cCisYBB8tDDnVD2qn7MNdUx3mv5McEggAkvWcIHoG7WiJbVtDgl4qnqYLNM3P7Sg"
+
+    data = {'grant_type': 'client_credentials', "client_id": app_id, "client_secret": app_secret}
+
+    token = requests.post('https://api.yelp.com/oauth2/token', data=data)
+    access_token = token.json()['access_token']
+    headers = {'Authorization': 'bearer %s' % access_token}
+    return headers
+
+def get_yelp_price(phone, headers, url = 'https://api.yelp.com/v3/businesses/search/phone'):
+    """
+    Given retailer phone number, performs Yelp Phone Search and return retailer price.
+    """
+
+    for character in string.punctuation + " ":
+        phone = phone.replace(character, "")
+    format_phone = "+1" + phone
+    param = {'phone': format_phone}
+    resp = requests.get(url=url, params=param, headers=headers)
+
+    if resp.json()['businesses'] == []:
+        return None
+    elif "price" not in resp.json()["businesses"][0]:
+        return None
+    return resp.json()['businesses'][0]['price']
+
 def get_details_info(place_id, key, KEY_INDEX, developerKeys):
-    #print (key)
+    """
+    Use developer key to perform Place Details Search on the matched Place ID \
+    from the Nearby search. When info is available, returns formatted address, \
+    phone number, hours, website, url, rating, price for given Place ID. 
+
+    """
     json = get_place_details_url(place_id, key)
-    #if json["status"] == "OVER_QUERY_LIMIT":
+    #if reached requests limit for key, find next valid key in the list. 
     while json["status"] == "OVER_QUERY_LIMIT":
         KEY_INDEX += 1
         key = developerKeys[KEY_INDEX]
@@ -408,22 +410,12 @@ def get_details_info(place_id, key, KEY_INDEX, developerKeys):
     else:
         price = None
     return form_add, phone, hours, website, url, rating, price
-
-"""
-def get_details_info(i, place_id, key, forms_adds, phone, hours, website, url, rating):
-    print (form_adds)
-    json = get_place_details_url(place_id, key)
-
-    form_adds[i] = json["result"]["formatted_address"]
-    phone[i] = json["result"]["formatted_phone_number"]
-    hours[i] = json["result"]["opening_hours"]["weekday_text"]
-    if ["website"] in json["result"]:
-        website[i] = json["result"]["website"]
-    url[i] = json["result"]["url"]
-    rating[i] = json["result"]["rating"]
-"""
     
 def categorize(json):
+    """
+    Given information in json returned from Google Places Nearby Search, \
+    returns appropriate category for retailer. 
+    """
     types_list = json["results"][0]["types"]
 
     if "gas_station" in types_list: 
@@ -440,20 +432,19 @@ def categorize(json):
     return category
 
 def best_result(json, name):
+    """
+    Compares name of entry in USDA database to json, which includes all results \
+    returned by nearby search. Returns the entry in json that best matches given name. 
+    """
     best = 0
     best_dist = 0
-    #print (name)
     for i in range(len(json["results"])):
         result = json["results"][i]["name"]
         g_name = name.lower()
-        #g_name = re.findall(r'(.*)\s[0-9]', g_name)
         g_name = re.sub("\s\d*\w?$", "", g_name)
-        #print (g_name)
-        print (result)
         if jellyfish.jaro_distance(result.lower(), g_name) > best_dist:
             best = i
             best_dist = jellyfish.jaro_distance(result.lower(), g_name)
-            print (best_dist)
     json = json["results"][best]
 
     return json
