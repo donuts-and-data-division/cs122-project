@@ -10,12 +10,13 @@ from pull_user_data import get_user_data
 
 # get user data and turn into array
 out_table = get_user_data()
-out_table.columns = [] # DECLARE COLUMN NAMES HERE
+out_table = out_table[
+[0,1,"Grocery","Convenience Store","Gas Station","Other","$$","$$$","$"]] # DECLARE COLUMN NAMES HERE
 array = np.array(out_table) # THIS SHOULD OVERWRITE THE FILE + ARRAY BELOW?
 
 #prices for each category type taken by field research
-FILE = "store_prices.csv"
-array = np.loadtxt(FILE, delimiter=",", skiprows=1)
+#FILE = "store_prices.csv"
+#array = np.loadtxt(FILE, delimiter=",", skiprows=1)
 
 # import distinct categories and prices from Snap Locations
 qs = SnapLocations.objects.all()
@@ -53,7 +54,7 @@ def get_coefficients(array):
     #dummy variables for each categegory and price minus 1
     X = []
     for row in array3:
-        X.append(row[5:10])
+        X.append(row[3:8])
 
     reg = linear_model.LinearRegression(fit_intercept=True)
     reg.fit(X, Y)
