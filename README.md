@@ -32,12 +32,12 @@ Selected U.S. City Average, All food items (155 total selected), Dec 2016 price,
 - pricesAPI.py: Retrieves and updates data from the StorePriceModel based on user inputs
 - prices_to_model.py: Reads data from the csv into the FoodPrices model
 - replace_field_data_to_model.py: Reads data from the csv into a Django model (model name: UserData)
-- pull_user_data.py
 - snapmap2.py: Connects the database to Places IDs
 - farmers_markets.py: Web scraping of farmers markets from DHS website, including additional locations not in main retailer data source and double value coupon indicator
 - linking_markets.py: Record linkage of scraped farmers market details to main retailer data source
-- auto_multipliers.py: a management script that (in theory) automatically updates the multipliers
-- crontab_text.txt: the crontab text that would run auto_multipliers.py every two weeks
+- pull_user_data.py: Pulls user data from userdata model
+- auto_multipliers.py: A management script that (in theory) automatically updates the multipliers
+- crontab_text.txt: The crontab text that would run auto_multipliers.py every two weeks
 
 ## Links to policy related content:
 *Original Snap maps*
