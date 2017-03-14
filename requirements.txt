@@ -15,3 +15,13 @@ requests
 sklearn
 sqlite3
 string
+
+libspatialite
+gdal
+geos
+proj-4
+libgdal-dev 
+libproj-dev 
+libgeos-dev 
+libspatialite-dev 
+spatialite-bin
