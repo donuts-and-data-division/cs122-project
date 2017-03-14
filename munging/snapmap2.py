@@ -12,10 +12,13 @@ import string
 import re
 
 
-def get_info(num):
+def get_info(num, filename):
     """
-    Inputs: Num (integer), number of rows to collect information on. 
-    Returns:  None; writes created dataframe with Google and Yelp information to CSV. 
+    From USDA data, creates dataframe with all SNAP retailers in Chicago and adds 
+    information from Google and Yelp APIs, when available. 
+
+    Inputs: num (integer), number of rows to collect information for 
+    Returns:  None; writes created dataframe to CSV. 
     """
     
     IL_filename = "Snap_With_Markets.csv"
@@ -27,7 +30,6 @@ def get_info(num):
     headers = get_yelp_keys()
 
     KEY_INDEX = 0
-
     developerKeys = ["AIzaSyBiTMni2hEjQCIkmq8wVjyqBda2ZGgpTwg", "AIzaSyC0D12kQSiYdc0oioMEKMXJfR-QPALhzYQ"\
     "AIzaSyBytEe914saHxkWTfI71kqbVINrg2RWMhE", "AIzaSyBZiNslXrtBSQe75scT7K1Mb0pmyxIGM2M", \
     "AIzaSyA99nqCOeT0ouZkmlIl89Ysl-8l5Su67SY", "AIzaSyCBAgvlKZoVQ9TYzizDA21aNvmk3z5BgLc", \
@@ -87,7 +89,9 @@ def get_info(num):
         if len(json["results"]) > 1:
             #print ("more than one")
             sleep(1.25)
+            json["results"][0] = best_result(json, name)
 
+            #these are extra calls to Google, currently using best_result instead
             """
             if IL.loc[i]["Farmers Market?"] == True:
                 new_keyword = name.split()[0] + "Market" 
@@ -98,7 +102,6 @@ def get_info(num):
 
             json = get_place_url(lat, lon, new_keyword, 200, key)
             """
-            json["results"][0] = best_result(json, name)
             
             if json["status"] == "OVER_QUERY_LIMIT":
                 KEY_INDEX += 1
@@ -130,6 +133,8 @@ def get_info(num):
             if len(json["results"]) > 1:
                 #print ("more than one")
                 sleep(1.25)
+                json["results"][0] = best_result(json, name)
+
                 """
                 if len(name.split()) >= 2:
                     keyword0 = name.split()[0]
@@ -140,7 +145,6 @@ def get_info(num):
                 else: 
                     json = get_place_url(lat, lon, keyword, 200, key)
                 """
-                json["results"][0] = best_result(json, name)
 
                 if json["status"] == "OVER_QUERY_LIMIT":
                     KEY_INDEX += 1
@@ -204,17 +208,15 @@ def get_info(num):
 
             continue
     
-        #check if googleaddress closely matches input address
-        #firstthree = address.split()[0] + "" + address.split()[1] + "" + address.split()[2]
-        #googfirstthree = json["results"][0]["vicinity"].split()[0] + "" + json["results"][0]["vicinity"].split()[1] \
-        #+ "" + json["results"][0]["vicinity"].split()[2]
+        
+        #check if response from Google closely matches retailer 
         add1 = address.split()[0]
         add2 = json["results"][0]["vicinity"].split()[0]
 
+        #compare ignoring capitalization and ignoring unnecessary identifying #s from USDA entry
         name = name.lower()
         name = re.sub("\s\d*\w?$", "", name)
         jaro[i] = jellyfish.jaro_distance(name, json["results"][0]["name"].lower())
-
 
         if add1.lower() != add2.lower():
             check[i] = "Address mismatch"
@@ -241,21 +243,9 @@ def get_info(num):
                 types[i] = None
 
                 continue
-        #if len(address.split()) < 3 or len(json["results"][0]["vicinity"].split()) < 3:
-            #add1 = address.split()[0] + address.split()[1] 
-            #add2 = json["results"][0]["vicinity"].split()[0] + json["results"][0]["vicinity"].split()[1] 
-        
-        #if len(address.split()) > 3 and len(json["results"][0]["vicinity"].split()) >= 3: 
-            #add1 = address.split()[0] + address.split()[1] + address.split()[2]
-            #add2 = json["results"][0]["vicinity"].split()[0] + json["results"][0]["vicinity"].split()[1] + json["results"][0]["vicinity"].split()[2]
-        
-        #if jellyfish.levenshtein_distance(add1.lower(), add2.lower()) > 0.5*len(add1):
 
 
-        #if multiple[i] > 5:
-            #check[i] = "Double Check- Many results"
-
-        #will be accurate if one result
+        #add Google info to intermediary lists 
         ids[i] = json["results"][0]["place_id"]
         names[i] = json["results"][0]["name"]
         lats[i] = json["results"][0]["geometry"]["location"]["lat"]
@@ -272,7 +262,7 @@ def get_info(num):
         else:
             costs[i] = None      
 
-        #use placed ID to get Place Details Info 
+        #use placed ID to add Place Details Info to lists
         add_d, phone_d, hours_d, website_d, url_d, rating_d, price_d = get_details_info(json["results"][0]["place_id"],\
          key, KEY_INDEX, developerKeys)
         form_adds[i] = add_d
@@ -316,8 +306,11 @@ def get_info(num):
     IL["jaro"] = jaro
     
 
-    IL.to_csv("snapresultstestChicago2.csv")
+    IL.to_csv(filename)
 
+
+
+#Below are the helper functions used within get_info!
 @backoff.on_exception(backoff.expo, requests.exceptions.ConnectionError, max_tries=3)
 def get_place_url(lat, lon, keyword, radius, key):
     """
@@ -453,10 +446,10 @@ def best_result(json, name):
 
 
 
+#################################################################
 
 
-
-
+#This is code that may be used in the future for record linkage. 
 """
 #make recordlinkage dataframe from more than one result
 dict = {"place_id":[], "googlename": [], "googlelat": [], "googlelon":[], \
