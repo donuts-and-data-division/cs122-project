@@ -40,7 +40,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'snap_test_2',
-    'djgeojson',
 )
 
 MIDDLEWARE_CLASSES = (
