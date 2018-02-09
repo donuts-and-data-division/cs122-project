@@ -1,5 +1,7 @@
 # Snap map
 
+Temporary link to web app: http://ec2-52-34-2-17.us-west-2.compute.amazonaws.com:8080/home  
+
 ## Data Sources:
 1) Snap Retailer Locations: https://www.fns.usda.gov/snap/retailerlocator
 Downloaded 1/10/2017 as store_locations_IL.csv
